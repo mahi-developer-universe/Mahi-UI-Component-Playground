@@ -156,6 +156,12 @@ Themes can be switched programmatically via `document.documentElement.setAttribu
 
 ---
 
+## 🗺️ Roadmap & Future Enhancements
+
+Track the full feature audit, current limitations, and upcoming enhancements in [docs/roadmap.md](./docs/roadmap.md).
+
+---
+
 ## 🤝 Community & Contributing
 
 Contributions are warmly welcomed! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) to learn how to add new components, interactive tools, or resources.
