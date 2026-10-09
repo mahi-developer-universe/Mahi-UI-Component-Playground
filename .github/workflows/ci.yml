@@ -2,7 +2,7 @@ name: CI Validation Suite
 
 on:
   push:
-    branches: [main]
+    branches: [main, refactor/organize-project-architecture]
   pull_request:
     branches: [main]
 
@@ -11,15 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
 
       - name: Run Catalog & Resource Audits
         run: node scripts/validate-catalog.js
 
       - name: Run Ecosystem Integration Tests
         run: node scripts/test-ecosystem.js
+
+      - name: Run E2E Simulation Tests
+        run: node tests/e2e-simulation.js
+
+      - name: Run TypeScript Type Check
+        run: npm run typecheck
+
+      - name: Build Next.js Production App
+        run: npm run build

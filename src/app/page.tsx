@@ -11,7 +11,7 @@ import { ProjectModal } from '@/features/project-gallery/ProjectModal';
 import { FrontendProject, ThemeName } from '@/types';
 
 export default function HomePage() {
-  const { theme, setTheme, favorites, toggleFavorite, isThreeLabOpen, setThreeLabOpen } = useAppStore();
+  const { theme, setTheme, favorites, toggleFavorite, recentProjects, addRecentProject, isThreeLabOpen, setThreeLabOpen } = useAppStore();
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [projectFilter, setProjectFilter] = useState('all');
@@ -291,6 +291,7 @@ export default function HomePage() {
                   key={proj.id}
                   project={proj}
                   onLaunch={() => {
+                    addRecentProject(proj.id);
                     setSelectedProject(proj);
                     showToast(`Opened ${proj.title}`);
                   }}
