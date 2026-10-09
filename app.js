@@ -429,56 +429,6 @@ function setupModalHandlers() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (backdrop && backdrop.classList.contains('open')) closeModal();
-      if (humanBackdrop && humanBackdrop.classList.contains('open')) window.closeHumanModal();
-    }
-  });
-
-  // /human Community Hub Modal Handlers
-  const humanBackdrop = document.getElementById('human-hub-modal-backdrop');
-  const closeHumanX = document.getElementById('close-human-hub-x');
-  const closeHumanBtn = document.getElementById('close-human-hub-btn');
-  const navHumanLink = document.getElementById('nav-human-link');
-
-  window.openHumanModal = function() {
-    if (humanBackdrop) {
-      humanBackdrop.classList.add('open');
-      showToast('Welcome to the /human Community Hub!');
-    }
-  };
-
-  window.closeHumanModal = function() {
-    if (humanBackdrop) humanBackdrop.classList.remove('open');
-    if (window.location.hash === '#/human') {
-      history.pushState('', document.title, window.location.pathname + window.location.search);
-    }
-  };
-
-  if (closeHumanX) closeHumanX.addEventListener('click', window.closeHumanModal);
-  if (closeHumanBtn) closeHumanBtn.addEventListener('click', window.closeHumanModal);
-
-  if (humanBackdrop) {
-    humanBackdrop.addEventListener('click', (e) => {
-      if (e.target === humanBackdrop) window.closeHumanModal();
-    });
-  }
-
-  if (navHumanLink) {
-    navHumanLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.openHumanModal();
-    });
-  }
-
-  // Handle direct url hash: /human or #/human
-  if (window.location.hash === '#/human' || window.location.pathname.endsWith('/human')) {
-    setTimeout(() => {
-      window.openHumanModal();
-    }, 300);
-  }
-
-  window.addEventListener('hashchange', () => {
-    if (window.location.hash === '#/human') {
-      window.openHumanModal();
     }
   });
 }

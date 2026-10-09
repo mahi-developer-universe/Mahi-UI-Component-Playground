@@ -39,9 +39,8 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 assert.ok(html.includes('id="three-modal-backdrop"'), 'Three.js 3D modal dialog present in index.html');
 assert.ok(html.includes('id="three-canvas"'), 'Three.js canvas present in index.html');
 assert.ok(html.includes('three.min.js'), 'Three.js CDN script linked');
-assert.ok(html.includes('id="human-hub-modal-backdrop"'), '/human Community Hub modal present in index.html');
 assert.ok(html.includes('id="interactive-live-sandbox"'), 'Live sandbox mount present');
-console.log('✅ 3. Verified HTML DOM architecture, Three.js 3D studio, and /human hub');
+console.log('✅ 3. Verified HTML DOM architecture and Three.js 3D spatial studio');
 
 // 4. Verify CSS Design Tokens & Studio Styles
 const css = fs.readFileSync(path.join(__dirname, '..', 'style.css'), 'utf8');

@@ -26,7 +26,6 @@ const criticalIds = [
   'resources-section',
   'resource-search-input',
   'resource-category-filter',
-  'human-hub-modal-backdrop',
   'three-modal-backdrop',
   'three-canvas'
 ];
@@ -42,7 +41,6 @@ assert.ok(appJs.includes('setupThemeSwitcher'), 'Theme switcher setup handler pr
 assert.ok(appJs.includes('resizeCardPreview'), 'Viewport resizing handler present');
 assert.ok(appJs.includes('copyComponentCode'), 'Component code copier handler present');
 assert.ok(appJs.includes('initResourceDirectory'), 'Resource catalog search/filter handler present');
-assert.ok(appJs.includes('openHumanModal'), '/human modal router present');
 console.log('✅ 2. Verified core application event handlers & user flow controllers');
 
 // 3. Validate Theme CSS Token consistency
