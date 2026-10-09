@@ -1,8 +1,19 @@
 # Mahi UI Component Playground 🚀
 
-A comprehensive, interactive frontend developer playground and resource catalog inspired by **Cult UI, Forge UI, 21st.dev, Magic UI, Aceternity UI, and Evil Charts**.
+A comprehensive, production-oriented frontend developer platform and interactive 3D laboratory built on **Next.js App Router, React 19, TypeScript, Three.js, and Lucide Icons**. Inspired by **Cult UI, Forge UI, 21st.dev, Magic UI, Aceternity UI, and Evil Charts**.
 
-Built with modern vanilla web technologies (HTML5, CSS3 Custom Properties & Grid, ES6+ Modular JavaScript), **Mahi UI Component Playground** offers a zero-dependency, ultra-fast developer workspace featuring interactive UI components, 30 real-world frontend projects, live sandboxes, and a curated catalog of **459 design and frontend resources**.
+---
+
+## 🛠️ Technology Stack & Architecture
+
+- **Primary Application Framework**: Next.js 16 (App Router + Turbopack)
+- **UI Engine**: React 19 + TypeScript
+- **3D Spatial Graphics**: Three.js WebGL Engine (Interactive Geometry & React Three Fiber Exporter)
+- **State Management**: React Client Boundaries + Zustand
+- **Schema Validation**: Zod
+- **Styling & Design Tokens**: CSS Custom Properties (5 Curated Themes) + Tailwind Token Export
+- **Icons**: Lucide React + Human Vector SVG Artisans (No generic emojis)
+- **Testing & Auditing**: Node.js Automated E2E & Catalog Audit Suite (`npm test`)
 
 ---
 

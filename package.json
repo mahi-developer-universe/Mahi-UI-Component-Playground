@@ -4,8 +4,10 @@
   "description": "Comprehensive, interactive platform for UI components, UI/UX design systems, theme customization, background generation, animation exploration, 3D experiences, code generation, and frontend resource discovery.",
   "main": "app.js",
   "scripts": {
-    "dev": "serve -l 3000",
-    "start": "serve -l 3000",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "legacy:serve": "serve -l 3000",
     "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/e2e-simulation.js",
     "test:catalog": "node scripts/validate-catalog.js",
     "test:ecosystem": "node scripts/test-ecosystem.js",
@@ -27,6 +29,20 @@
   "author": "Mahi Developer Universe",
   "license": "MIT",
   "devDependencies": {
-    "serve": "^14.2.4"
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "serve": "^14.2.4",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@types/three": "^0.186.0",
+    "lucide-react": "^1.54.0",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1",
+    "zod": "^4.6.5",
+    "zustand": "^5.0.15"
   }
 }
