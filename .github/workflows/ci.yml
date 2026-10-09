@@ -28,6 +28,12 @@ jobs:
       - name: Run Ecosystem Integration Tests
         run: node scripts/test-ecosystem.js
 
+      - name: Run Unit Tests
+        run: node tests/unit/contrast-calculator.test.js
+
+      - name: Run Accessibility Tests
+        run: node tests/accessibility/a11y-check.test.js
+
       - name: Run E2E Simulation Tests
         run: node tests/e2e-simulation.js
 

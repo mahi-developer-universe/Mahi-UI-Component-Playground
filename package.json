@@ -10,8 +10,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint || echo 'Lint passed'",
     "legacy:serve": "serve -l 3000",
-    "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/e2e-simulation.js && tsc --noEmit",
+    "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/unit/contrast-calculator.test.js && node tests/accessibility/a11y-check.test.js && node tests/e2e-simulation.js && tsc --noEmit",
     "test:catalog": "node scripts/validate-catalog.js",
+    "test:unit": "node tests/unit/contrast-calculator.test.js",
+    "test:a11y": "node tests/accessibility/a11y-check.test.js",
     "test:ecosystem": "node scripts/test-ecosystem.js",
     "test:e2e": "node tests/e2e-simulation.js",
     "clean-urls": "node scripts/clean-urls.js"
