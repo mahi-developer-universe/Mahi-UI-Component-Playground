@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.tsbuildinfo": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/*.tsbuildinfo": true
+  },
+  "git.ignoreLimitWarning": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
