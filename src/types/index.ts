@@ -10,14 +10,16 @@ export type ComponentCategory =
   | 'dropdowns';
 
 export interface ComponentSuite {
-  id: ComponentCategory;
+  id: string;
   title: string;
-  category: ComponentCategory;
+  category: string;
   description: string;
   tags: string[];
   previewHtml: string;
-  codeHtml: string;
-  codeCss: string;
+  htmlCode?: string;
+  cssCode?: string;
+  codeHtml?: string;
+  codeCss?: string;
 }
 
 export interface FrontendProject {

@@ -1,21 +1,22 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import componentsData from '@/data/components.json';
-import projectsData from '@/data/projects.json';
-import resourcesData from '@/data/resources.json';
+import { componentsData, projectsData, resourcesData, themePresets } from '@/data';
+import { ComponentCard } from '@/components/ui/ComponentCard';
+import { ProjectCard } from '@/components/ui/ProjectCard';
+import { ResourceCard } from '@/components/ui/ResourceCard';
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
+import { useAppStore } from '@/stores/appStore';
+import { ThemeName } from '@/types';
 
 export default function HomePage() {
-  const [theme, setTheme] = useState<'dark' | 'light' | 'cyberpunk' | 'emerald' | 'sunset'>('dark');
+  const { theme, setTheme, favorites, toggleFavorite, isThreeLabOpen, setThreeLabOpen } = useAppStore();
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [projectFilter, setProjectFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [resourceSearch, setResourceSearch] = useState('');
   const [resourceCategory, setResourceCategory] = useState('all');
-  const [isThreeLabOpen, setIsThreeLabOpen] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -23,7 +24,7 @@ export default function HomePage() {
     setTimeout(() => setToastMessage(null), 2500);
   };
 
-  const switchTheme = (newTheme: typeof theme) => {
+  const handleThemeChange = (newTheme: ThemeName) => {
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     setThemeMenuOpen(false);
@@ -31,40 +32,36 @@ export default function HomePage() {
   };
 
   const filteredComponents = useMemo(() => {
-    return componentsData.filter(c => {
+    return componentsData.filter((c) => {
       const matchesCat = categoryFilter === 'all' || c.category === categoryFilter;
-      const matchesQuery = !searchQuery || 
-        c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      const matchesQuery =
+        !searchQuery ||
+        c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCat && matchesQuery;
     });
   }, [categoryFilter, searchQuery]);
 
   const filteredProjects = useMemo(() => {
-    return projectsData.filter(p => {
+    return projectsData.filter((p) => {
       return projectFilter === 'all' || p.section === projectFilter;
     });
   }, [projectFilter]);
 
   const filteredResources = useMemo(() => {
     const q = resourceSearch.toLowerCase().trim();
-    return resourcesData.filter(r => {
-      const matchesCat = resourceCategory === 'all' || r.category === resourceCategory;
-      const matchesQ = !q || r.name.toLowerCase().includes(q) || r.url.toLowerCase().includes(q);
-      return matchesCat && matchesQ;
-    }).slice(0, 72);
+    return resourcesData
+      .filter((r) => {
+        const matchesCat = resourceCategory === 'all' || r.category === resourceCategory;
+        const matchesQ = !q || r.name.toLowerCase().includes(q) || r.url.toLowerCase().includes(q);
+        return matchesCat && matchesQ;
+      })
+      .slice(0, 72);
   }, [resourceSearch, resourceCategory]);
-
-  const toggleFavorite = (id: string) => {
-    setFavorites(prev => 
-      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
-    );
-    showToast('Updated favorites bookmark');
-  };
 
   return (
     <>
-      {/* Toast Notification Mount */}
+      {/* Toast Notification Container */}
       {toastMessage && (
         <div id="toast-container" style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999 }}>
           <div className="toast">
@@ -79,7 +76,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Navigation Header */}
+      {/* Top Navbar */}
       <header className="navbar" id="app-navbar">
         <div className="nav-left">
           <a href="#" className="brand-logo" id="brand-logo">
@@ -90,11 +87,11 @@ export default function HomePage() {
             </div>
             <div className="brand-text">
               <span className="brand-title">Mahi <span className="brand-badge">UI</span></span>
-              <span className="brand-subtitle">Next.js App Router Edition</span>
+              <span className="brand-subtitle">Modular Next.js Platform</span>
             </div>
           </a>
           <div className="nav-divider"></div>
-          <span className="version-tag">v2.0 • React + Three.js</span>
+          <span className="version-tag">v2.0 • Feature Architecture</span>
         </div>
 
         <div className="nav-center">
@@ -108,14 +105,14 @@ export default function HomePage() {
               id="global-search"
               placeholder="Search components, buttons, tabs, resources... (Ctrl + K)"
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <kbd className="shortcut-badge">⌘K</kbd>
           </div>
         </div>
 
         <div className="nav-right">
-          {/* Theme Selector Menu */}
+          {/* Theme Selector */}
           <div className="theme-dropdown-container">
             <button
               className="theme-btn"
@@ -137,10 +134,10 @@ export default function HomePage() {
 
             {themeMenuOpen && (
               <div className="theme-dropdown-menu show" id="theme-menu">
-                {(['dark', 'light', 'cyberpunk', 'emerald', 'sunset'] as const).map(t => (
-                  <button key={t} className="theme-option" onClick={() => switchTheme(t)}>
-                    <span className="theme-indicator" style={{ background: t === 'dark' ? '#0f172a' : t === 'light' ? '#f8fafc' : t === 'cyberpunk' ? '#ff007f' : t === 'emerald' ? '#064e3b' : '#4a154b' }}></span>
-                    <span style={{ textTransform: 'capitalize' }}>{t}</span>
+                {themePresets.map((t) => (
+                  <button key={t.id} className="theme-option" onClick={() => handleThemeChange(t.id as ThemeName)}>
+                    <span className="theme-indicator" style={{ background: t.color }}></span>
+                    <span>{t.label}</span>
                   </button>
                 ))}
               </div>
@@ -149,8 +146,13 @@ export default function HomePage() {
 
           <button
             className="action-btn"
-            onClick={() => setIsThreeLabOpen(true)}
-            style={{ background: 'rgba(236, 72, 153, 0.15)', color: '#ec4899', border: '1px solid rgba(236, 72, 153, 0.3)', fontWeight: 700 }}
+            onClick={() => setThreeLabOpen(true)}
+            style={{
+              background: 'rgba(236, 72, 153, 0.15)',
+              color: '#ec4899',
+              border: '1px solid rgba(236, 72, 153, 0.3)',
+              fontWeight: 700
+            }}
           >
             Three.js 3D Lab
           </button>
@@ -165,7 +167,7 @@ export default function HomePage() {
 
       {/* Main Workspace Layout */}
       <div className="layout-body">
-        {/* Sidebar Navigation */}
+        {/* Sidebar */}
         <aside className="sidebar" id="app-sidebar">
           <div className="sidebar-section">
             <div className="sidebar-heading">COMPONENTS</div>
@@ -177,7 +179,7 @@ export default function HomePage() {
                 <span>All Components</span>
                 <span className="nav-count">{componentsData.length}</span>
               </button>
-              {componentsData.map(c => (
+              {componentsData.map((c) => (
                 <button
                   key={c.id}
                   className={`nav-item ${categoryFilter === c.category ? 'active' : ''}`}
@@ -198,7 +200,7 @@ export default function HomePage() {
               </a>
               <button
                 className="nav-item"
-                onClick={() => setIsThreeLabOpen(true)}
+                onClick={() => setThreeLabOpen(true)}
                 style={{ background: 'transparent', border: 'none', width: '100%', textAlign: 'left' }}
               >
                 <span>Three.js 3D Studio</span>
@@ -208,7 +210,7 @@ export default function HomePage() {
           </div>
         </aside>
 
-        {/* Main Canvas Content */}
+        {/* Main Canvas Area */}
         <main className="main-content" id="main-content">
           {/* Hero Banner */}
           <section className="hero-banner">
@@ -225,7 +227,7 @@ export default function HomePage() {
 
             <div className="toolbar-wrapper">
               <div className="category-pills">
-                {['all', 'buttons', 'cards', 'badges', 'tooltips', 'modals', 'tabs', 'dropdowns'].map(cat => (
+                {['all', 'buttons', 'cards', 'badges', 'tooltips', 'modals', 'tabs', 'dropdowns'].map((cat) => (
                   <button
                     key={cat}
                     className={`filter-pill ${categoryFilter === cat ? 'active' : ''}`}
@@ -244,25 +246,8 @@ export default function HomePage() {
 
           {/* Component Showcase */}
           <section className="showcase-container" id="showcase-container">
-            {filteredComponents.map(comp => (
-              <article key={comp.id} className="component-card" id={`card-${comp.id}`}>
-                <div className="card-header">
-                  <div className="header-left">
-                    <span className="card-category-tag">{comp.category}</span>
-                    <h2 className="component-title">{comp.title}</h2>
-                  </div>
-                </div>
-                <p className="card-description">{comp.description}</p>
-                <div className="card-tags-row">
-                  {comp.tags.map(t => (
-                    <span key={t} className="tag-pill">{t}</span>
-                  ))}
-                </div>
-                <div
-                  className="preview-viewport"
-                  dangerouslySetInnerHTML={{ __html: comp.previewHtml }}
-                />
-              </article>
+            {filteredComponents.map((comp) => (
+              <ComponentCard key={comp.id} component={comp} />
             ))}
           </section>
 
@@ -287,7 +272,7 @@ export default function HomePage() {
                 { id: 'dev-tools', label: '4. Productivity' },
                 { id: 'portfolio-apps', label: '5. Portfolios' },
                 { id: 'creative-plus', label: '6. Experiments' }
-              ].map(f => (
+              ].map((f) => (
                 <button
                   key={f.id}
                   className={`proj-tab-btn ${projectFilter === f.id ? 'active' : ''}`}
@@ -299,23 +284,8 @@ export default function HomePage() {
             </div>
 
             <div className="projects-grid">
-              {filteredProjects.map(proj => (
-                <div key={proj.id} className="project-item-card">
-                  <div className="proj-header">
-                    <span className="proj-num-badge">#{proj.num}</span>
-                    <span className={`proj-diff-badge diff-${proj.difficulty.toLowerCase()}`}>{proj.difficulty}</span>
-                  </div>
-                  <h3 className="proj-title">{proj.title}</h3>
-                  <p className="proj-desc">{proj.description}</p>
-                  <div className="proj-features-wrap">
-                    {proj.features.map(f => (
-                      <span key={f} className="proj-feature-chip">{f}</span>
-                    ))}
-                  </div>
-                  <div className="proj-inspiration-meta">
-                    <strong>Inspired by:</strong> {proj.inspiredBy}
-                  </div>
-                </div>
+              {filteredProjects.map((proj) => (
+                <ProjectCard key={proj.id} project={proj} onLaunch={() => showToast(`Launched ${proj.title}`)} />
               ))}
             </div>
           </section>
@@ -338,14 +308,14 @@ export default function HomePage() {
                   type="text"
                   placeholder="Search 450+ resources by name or URL..."
                   value={resourceSearch}
-                  onChange={e => setResourceSearch(e.target.value)}
+                  onChange={(e) => setResourceSearch(e.target.value)}
                 />
               </div>
 
               <select
                 className="resource-category-select"
                 value={resourceCategory}
-                onChange={e => setResourceCategory(e.target.value)}
+                onChange={(e) => setResourceCategory(e.target.value)}
               >
                 <option value="all">All Categories (450+)</option>
                 <option value="Component Libraries & UI Kits">Component Libraries & UI Kits</option>
@@ -360,35 +330,22 @@ export default function HomePage() {
             </div>
 
             <div className="resource-cards-grid">
-              {filteredResources.map(res => (
-                <div key={res.id} className="resource-card">
-                  <div className="resource-header-row">
-                    <span className="resource-tag-pill">{res.tag}</span>
-                    <button
-                      className={`resource-fav-btn ${favorites.includes(res.id) ? 'active' : ''}`}
-                      onClick={() => toggleFavorite(res.id)}
-                      title="Bookmark"
-                    >
-                      ★
-                    </button>
-                  </div>
-                  <h4 className="resource-name">{res.name}</h4>
-                  <div className="resource-url-display">{res.url}</div>
-                  <div className="resource-footer-row">
-                    <a href={res.url} target="_blank" rel="noopener noreferrer" className="resource-visit-btn">
-                      Visit Website →
-                    </a>
-                  </div>
-                </div>
+              {filteredResources.map((res) => (
+                <ResourceCard
+                  key={res.id}
+                  resource={res}
+                  isFavorite={favorites.includes(res.id)}
+                  onToggleFavorite={toggleFavorite}
+                />
               ))}
             </div>
           </section>
         </main>
       </div>
 
-      {/* Interactive 3D Lab Modal Dialog */}
+      {/* 3D Lab Modal Dialog */}
       {isThreeLabOpen && (
-        <ThreeLab onClose={() => setIsThreeLabOpen(false)} />
+        <ThreeLab onClose={() => setThreeLabOpen(false)} />
       )}
     </>
   );
