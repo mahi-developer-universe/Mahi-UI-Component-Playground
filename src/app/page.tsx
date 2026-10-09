@@ -7,7 +7,8 @@ import { ProjectCard } from '@/components/ui/ProjectCard';
 import { ResourceCard } from '@/components/ui/ResourceCard';
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 import { useAppStore } from '@/stores/appStore';
-import { ThemeName } from '@/types';
+import { ProjectModal } from '@/features/project-gallery/ProjectModal';
+import { FrontendProject, ThemeName } from '@/types';
 
 export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite, isThreeLabOpen, setThreeLabOpen } = useAppStore();
@@ -18,6 +19,7 @@ export default function HomePage() {
   const [resourceSearch, setResourceSearch] = useState('');
   const [resourceCategory, setResourceCategory] = useState('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<FrontendProject | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -285,7 +287,14 @@ export default function HomePage() {
 
             <div className="projects-grid">
               {filteredProjects.map((proj) => (
-                <ProjectCard key={proj.id} project={proj} onLaunch={() => showToast(`Launched ${proj.title}`)} />
+                <ProjectCard
+                  key={proj.id}
+                  project={proj}
+                  onLaunch={() => {
+                    setSelectedProject(proj);
+                    showToast(`Opened ${proj.title}`);
+                  }}
+                />
               ))}
             </div>
           </section>
@@ -346,6 +355,15 @@ export default function HomePage() {
       {/* 3D Lab Modal Dialog */}
       {isThreeLabOpen && (
         <ThreeLab onClose={() => setThreeLabOpen(false)} />
+      )}
+
+      {/* Interactive Project Application Modal */}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          onToast={showToast}
+        />
       )}
     </>
   );
