@@ -1,26 +1,19 @@
 // scripts/validate-catalog.js
-// Automated verification script for Mahi UI Component Playground resources & projects
+// Safe, non-eval automated verification script for Mahi UI Component Playground
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔍 Starting catalog & project verification...\n');
+console.log('🔍 Starting safe catalog & project verification...\n');
 
-// 1. Validate resources-data.js
-const resourcesPath = path.join(__dirname, '..', 'resources-data.js');
-const resourcesContent = fs.readFileSync(resourcesPath, 'utf-8');
-const resourcesMatch = resourcesContent.match(/const RESOURCE_DIRECTORY = (\[[\s\S]*?\]);/);
+// 1. Validate resources from canonical JSON source (src/data/resources/resources.json)
+const jsonResourcesPath = path.join(__dirname, '..', 'src', 'data', 'resources', 'resources.json');
+let resources = [];
 
-if (!resourcesMatch) {
-  console.error('❌ Failed to parse RESOURCE_DIRECTORY from resources-data.js');
-  process.exit(1);
-}
-
-let resources;
-try {
-  resources = eval(resourcesMatch[1]);
-  console.log(`✅ Loaded ${resources.length} resources from resources-data.js`);
-} catch (e) {
-  console.error('❌ Error evaluating RESOURCE_DIRECTORY:', e.message);
+if (fs.existsSync(jsonResourcesPath)) {
+  resources = JSON.parse(fs.readFileSync(jsonResourcesPath, 'utf-8'));
+  console.log(`✅ Loaded ${resources.length} resources from src/data/resources/resources.json (safe JSON parse)`);
+} else {
+  console.error('❌ Missing canonical resources.json');
   process.exit(1);
 }
 
@@ -40,7 +33,7 @@ resources.forEach((r, idx) => {
     console.warn(`⚠️ Invalid URL in ${r.name}: ${r.url}`);
     invalidUrls++;
   }
-  
+
   const normUrl = r.url.toLowerCase().replace(/\/$/, '');
   if (seenUrls.has(normUrl)) {
     duplicates++;
@@ -53,26 +46,21 @@ resources.forEach((r, idx) => {
 console.log(`📊 Total unique URLs: ${seenUrls.size} (duplicate URLs detected: ${duplicates})`);
 console.log(`📊 Invalid URLs: ${invalidUrls}`);
 console.log('\n📁 Resource Category Breakdown:');
-Object.entries(categoryCounts).sort((a,b) => b[1] - a[1]).forEach(([cat, count]) => {
-  console.log(`  - ${cat}: ${count}`);
-});
+Object.entries(categoryCounts)
+  .sort((a, b) => b[1] - a[1])
+  .forEach(([cat, count]) => {
+    console.log(`  - ${cat}: ${count}`);
+  });
 
-// 2. Validate all-projects-data.js
-const projectsPath = path.join(__dirname, '..', 'all-projects-data.js');
-const projectsContent = fs.readFileSync(projectsPath, 'utf-8');
-const projectsMatch = projectsContent.match(/const ALL_30_PROJECTS = (\[[\s\S]*?\]);/);
+// 2. Validate projects from canonical JSON source (src/data/projects/projects.json)
+const jsonProjectsPath = path.join(__dirname, '..', 'src', 'data', 'projects', 'projects.json');
+let projects = [];
 
-if (!projectsMatch) {
-  console.error('❌ Failed to parse ALL_30_PROJECTS from all-projects-data.js');
-  process.exit(1);
-}
-
-let projects;
-try {
-  projects = eval(projectsMatch[1]);
-  console.log(`\n✅ Loaded ${projects.length} frontend projects from all-projects-data.js`);
-} catch (e) {
-  console.error('❌ Error evaluating ALL_30_PROJECTS:', e.message);
+if (fs.existsSync(jsonProjectsPath)) {
+  projects = JSON.parse(fs.readFileSync(jsonProjectsPath, 'utf-8'));
+  console.log(`\n✅ Loaded ${projects.length} frontend projects from src/data/projects/projects.json (safe JSON parse)`);
+} else {
+  console.error('❌ Missing canonical projects.json');
   process.exit(1);
 }
 
@@ -89,23 +77,16 @@ Object.entries(projectCategories).forEach(([cat, count]) => {
   console.log(`  - ${cat}: ${count}`);
 });
 
-// 3. Validate components-data.js
-const componentsPath = path.join(__dirname, '..', 'components-data.js');
-const componentsContent = fs.readFileSync(componentsPath, 'utf-8');
-const componentsMatch = componentsContent.match(/const COMPONENTS_DATA = (\[[\s\S]*?\]);/);
+// 3. Validate component suites from canonical JSON source (src/data/components/components.json)
+const jsonComponentsPath = path.join(__dirname, '..', 'src', 'data', 'components', 'components.json');
+let components = [];
 
-if (!componentsMatch) {
-  console.error('❌ Failed to parse COMPONENTS_DATA from components-data.js');
-  process.exit(1);
-}
-
-let components;
-try {
-  components = eval(componentsMatch[1]);
-  console.log(`\n✅ Loaded ${components.length} component suites from components-data.js:`);
-  components.forEach(c => console.log(`  - ${c.title} (${c.id})`));
-} catch (e) {
-  console.error('❌ Error evaluating COMPONENTS_DATA:', e.message);
+if (fs.existsSync(jsonComponentsPath)) {
+  components = JSON.parse(fs.readFileSync(jsonComponentsPath, 'utf-8'));
+  console.log(`\n✅ Loaded ${components.length} component suites from src/data/components/components.json (safe JSON parse):`);
+  components.forEach((c) => console.log(`  - ${c.title} (${c.id})`));
+} else {
+  console.error('❌ Missing canonical components.json');
   process.exit(1);
 }
 
