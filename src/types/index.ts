@@ -34,6 +34,7 @@ export interface FrontendProject {
   features: string[];
   inspiredBy: string;
   interactiveModule?: string;
+  route?: string;
 }
 
 export interface ResourceItem {

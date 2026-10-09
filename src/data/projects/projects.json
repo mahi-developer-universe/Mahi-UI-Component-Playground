@@ -16,7 +16,8 @@
     ],
     "inspiredBy": "Cult UI, Forge UI, 21st.dev, Shadcn UI",
     "activeType": "interactive-builder",
-    "previewType": "component-suite"
+    "previewType": "component-suite",
+    "route": "/projects/proj-1"
   },
   {
     "id": "proj-2",
@@ -34,7 +35,8 @@
       "Speed Slider"
     ],
     "inspiredBy": "UI Verse, React Bits, Motion Primitives",
-    "interactiveModule": "button-gallery"
+    "interactiveModule": "button-gallery",
+    "route": "/projects/proj-2"
   },
   {
     "id": "proj-3",
@@ -52,7 +54,8 @@
       "CSS Easing Export"
     ],
     "inspiredBy": "Movements.dev, Animos, 60fps.design",
-    "interactiveModule": "motion-lab"
+    "interactiveModule": "motion-lab",
+    "route": "/projects/proj-3"
   },
   {
     "id": "proj-4",
@@ -70,7 +73,8 @@
       "Zero-Dependency CSS"
     ],
     "inspiredBy": "Craft UI, Loadmo, Magic UI",
-    "interactiveModule": "loader-lab"
+    "interactiveModule": "loader-lab",
+    "route": "/projects/proj-4"
   },
   {
     "id": "proj-5",
@@ -88,7 +92,8 @@
       "SVG/JSON Export"
     ],
     "inspiredBy": "Evil Charts, Generative Charts, Charts Supply",
-    "interactiveModule": "chart-playground"
+    "interactiveModule": "chart-playground",
+    "route": "/projects/proj-5"
   },
   {
     "id": "proj-6",
@@ -106,7 +111,8 @@
       "Fullscreen Mode"
     ],
     "inspiredBy": "Gradientool, Web.dev Gradient Studio, MagicPattern",
-    "interactiveModule": "gradient-studio"
+    "interactiveModule": "gradient-studio",
+    "route": "/projects/proj-6"
   },
   {
     "id": "proj-7",
@@ -124,7 +130,8 @@
       "Background Tile CSS"
     ],
     "inspiredBy": "Tabbied, MagicPattern, Hero Patterns",
-    "interactiveModule": "pattern-studio"
+    "interactiveModule": "pattern-studio",
+    "route": "/projects/proj-7"
   },
   {
     "id": "proj-8",
@@ -142,7 +149,8 @@
       "Export Canvas PNG"
     ],
     "inspiredBy": "Dither Garden, Halftone Maker, Ditter",
-    "interactiveModule": "dither-studio"
+    "interactiveModule": "dither-studio",
+    "route": "/projects/proj-8"
   },
   {
     "id": "proj-9",
@@ -160,7 +168,8 @@
       "CSS Code Snippet"
     ],
     "inspiredBy": "Type Field, Space Type Generator, Modern Web",
-    "interactiveModule": "typography-lab"
+    "interactiveModule": "typography-lab",
+    "route": "/projects/proj-9"
   },
   {
     "id": "proj-10",
@@ -178,7 +187,8 @@
       "Copy Clean SVG"
     ],
     "inspiredBy": "DesignEvo, Book of Shapes, Minimal Logo",
-    "interactiveModule": "logo-maker"
+    "interactiveModule": "logo-maker",
+    "route": "/projects/proj-10"
   },
   {
     "id": "proj-11",
@@ -196,7 +206,8 @@
       "Direct Link"
     ],
     "inspiredBy": "Siteinspire, Land-book, Godly, Mobbin",
-    "interactiveModule": "inspiration-hub"
+    "interactiveModule": "inspiration-hub",
+    "route": "/projects/proj-11"
   },
   {
     "id": "proj-12",
@@ -214,7 +225,8 @@
       "Full-width Toggle"
     ],
     "inspiredBy": "Land-book, CTA Gallery, 21st.dev",
-    "interactiveModule": "hero-gallery"
+    "interactiveModule": "hero-gallery",
+    "route": "/projects/proj-12"
   },
   {
     "id": "proj-13",
@@ -232,7 +244,8 @@
       "HTML/CSS Export"
     ],
     "inspiredBy": "Navbar Gallery, Shadcn Navbar, Cult UI",
-    "interactiveModule": "navbar-playground"
+    "interactiveModule": "navbar-playground",
+    "route": "/projects/proj-13"
   },
   {
     "id": "proj-14",
@@ -250,7 +263,8 @@
       "Responsive Preview"
     ],
     "inspiredBy": "CTA Gallery, Forge UI, 21st.dev",
-    "interactiveModule": "cta-footer-gallery"
+    "interactiveModule": "cta-footer-gallery",
+    "route": "/projects/proj-14"
   },
   {
     "id": "proj-15",
@@ -268,7 +282,8 @@
       "Export/Import JSON"
     ],
     "inspiredBy": "Marqly, Save Design, Refero",
-    "interactiveModule": "bookmark-manager"
+    "interactiveModule": "bookmark-manager",
+    "route": "/projects/proj-15"
   },
   {
     "id": "proj-16",
@@ -286,7 +301,8 @@
       "Human SVG Only"
     ],
     "inspiredBy": "Flowbite Icons, Lucide, Keyline Icons",
-    "interactiveModule": "icon-explorer"
+    "interactiveModule": "icon-explorer",
+    "route": "/projects/proj-16"
   },
   {
     "id": "proj-17",
@@ -304,7 +320,8 @@
       "Download PNG"
     ],
     "inspiredBy": "Ogimage CN, Vercel OG, MagicPattern",
-    "interactiveModule": "og-generator"
+    "interactiveModule": "og-generator",
+    "route": "/projects/proj-17"
   },
   {
     "id": "proj-18",
@@ -322,7 +339,8 @@
       "Copy Clean CSS"
     ],
     "inspiredBy": "CSSPro, UI Verse, Generator.io",
-    "interactiveModule": "css-generator"
+    "interactiveModule": "css-generator",
+    "route": "/projects/proj-18"
   },
   {
     "id": "proj-19",
@@ -340,7 +358,8 @@
       "Suggested Fixes"
     ],
     "inspiredBy": "WebAIM, Medium A11y, Contrast Checker",
-    "interactiveModule": "a11y-checker"
+    "interactiveModule": "a11y-checker",
+    "route": "/projects/proj-19"
   },
   {
     "id": "proj-20",
@@ -358,7 +377,8 @@
       "Star Ratings"
     ],
     "inspiredBy": "Shadcn Registry, 21st.dev, Cult UI Registry",
-    "interactiveModule": "registry-explorer"
+    "interactiveModule": "registry-explorer",
+    "route": "/projects/proj-20"
   },
   {
     "id": "proj-21",
@@ -376,7 +396,8 @@
       "Download CSV"
     ],
     "inspiredBy": "Blink Analytics, Tremor, XY Analytics",
-    "interactiveModule": "saas-dashboard"
+    "interactiveModule": "saas-dashboard",
+    "route": "/projects/proj-21"
   },
   {
     "id": "proj-22",
@@ -394,7 +415,8 @@
       "Interactive Drag"
     ],
     "inspiredBy": "React Flow, ASI Create, Langflow",
-    "interactiveModule": "workflow-builder"
+    "interactiveModule": "workflow-builder",
+    "route": "/projects/proj-22"
   },
   {
     "id": "proj-23",
@@ -412,7 +434,8 @@
       "Copy Payload"
     ],
     "inspiredBy": "AIVORA, OpenAI Playground, Anthropic Workbench",
-    "interactiveModule": "prompt-playground"
+    "interactiveModule": "prompt-playground",
+    "route": "/projects/proj-23"
   },
   {
     "id": "proj-24",
@@ -430,7 +453,8 @@
       "Human Assignees"
     ],
     "inspiredBy": "Linear, Notion, Ovious.Studio",
-    "interactiveModule": "kanban-workspace"
+    "interactiveModule": "kanban-workspace",
+    "route": "/projects/proj-24"
   },
   {
     "id": "proj-25",
@@ -448,7 +472,8 @@
       "Contact Form"
     ],
     "inspiredBy": "Agentfolio, Brittany Chiang, Rauno Freiberg",
-    "interactiveModule": "developer-portfolio"
+    "interactiveModule": "developer-portfolio",
+    "route": "/projects/proj-25"
   },
   {
     "id": "proj-26",
@@ -466,7 +491,8 @@
       "Live Nested View"
     ],
     "inspiredBy": "Responsively, Sizzy, Chrome DevTools",
-    "interactiveModule": "device-previewer"
+    "interactiveModule": "device-previewer",
+    "route": "/projects/proj-26"
   },
   {
     "id": "proj-27",
@@ -484,7 +510,8 @@
       "Tailwind Config Export"
     ],
     "inspiredBy": "Radix Colors, Tailwind Config, Open Props",
-    "interactiveModule": "tokens-generator"
+    "interactiveModule": "tokens-generator",
+    "route": "/projects/proj-27"
   },
   {
     "id": "proj-28",
@@ -502,7 +529,8 @@
       "Direct Source Links"
     ],
     "inspiredBy": "Minimal Gallery, A1 Gallery, Godly",
-    "interactiveModule": "screenshot-gallery"
+    "interactiveModule": "screenshot-gallery",
+    "route": "/projects/proj-28"
   },
   {
     "id": "proj-29",
@@ -520,7 +548,8 @@
       "Interactive CTA Plan Select"
     ],
     "inspiredBy": "Stripe Pricing, Vercel Pricing, Cult UI Pricing",
-    "interactiveModule": "pricing-builder"
+    "interactiveModule": "pricing-builder",
+    "route": "/projects/proj-29"
   },
   {
     "id": "proj-30",
@@ -538,6 +567,7 @@
       "Instant Code View"
     ],
     "inspiredBy": "30 Seconds of Code, React Bits, CSS-Tricks",
-    "interactiveModule": "snippet-library"
+    "interactiveModule": "snippet-library",
+    "route": "/projects/proj-30"
   }
 ]

@@ -27,15 +27,35 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLaunch }) =
       <div className="proj-inspiration-meta">
         <strong>Inspired by:</strong> {project.inspiredBy}
       </div>
-      {onLaunch && (
-        <button
-          className="proj-action-btn"
-          style={{ marginTop: 'auto' }}
-          onClick={() => onLaunch(project.id)}
+      <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+        {onLaunch && (
+          <button
+            className="proj-action-btn"
+            style={{ flex: 1 }}
+            onClick={() => onLaunch(project.id)}
+          >
+            Launch Preview
+          </button>
+        )}
+        <a
+          href={project.route || `/projects/${project.id}`}
+          className="action-btn"
+          style={{
+            padding: '8px 12px',
+            borderRadius: '6px',
+            fontSize: '0.8rem',
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text-main)',
+            border: '1px solid var(--border-color)'
+          }}
+          title="Open Dedicated Page"
         >
-          Launch Tool Preview
-        </button>
-      )}
+          ↗
+        </a>
+      </div>
     </div>
   );
 };
