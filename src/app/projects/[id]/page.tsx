@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { projectsData } from '@/data';
 import interactiveRendered from '@/data/projects/interactive-rendered.json';
+import { ProjectClientRunner } from './ProjectClientRunner';
 
 export function generateStaticParams() {
   return projectsData.map((project) => ({
@@ -148,10 +149,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
 
           {renderedHtml ? (
-            <div
-              className="interactive-mount-wrapper"
-              dangerouslySetInnerHTML={{ __html: renderedHtml }}
-            />
+            <ProjectClientRunner renderedHtml={renderedHtml} projectId={project.id} />
           ) : (
             <div
               style={{
