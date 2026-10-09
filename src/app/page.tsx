@@ -216,10 +216,6 @@ export default function HomePage() {
         <main className="main-content" id="main-content">
           {/* Hero Banner */}
           <section className="hero-banner">
-            <div className="hero-badge">
-              <span className="badge-dot"></span>
-              <span>Next.js App Router Architecture</span>
-            </div>
             <h1 className="hero-title">
               Mahi UI <span className="gradient-text">Component Playground & 3D Lab</span>
             </h1>
