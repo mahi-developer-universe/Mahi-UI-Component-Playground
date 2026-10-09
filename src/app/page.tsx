@@ -15,12 +15,16 @@ export default function HomePage() {
   const [displayLimit, setDisplayLimit] = useState(48);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Global Ctrl+K / Cmd+K search focus shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         const searchInput = document.getElementById('global-search') as HTMLInputElement | null;
-        if (searchInput) searchInput.focus();
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -72,7 +76,7 @@ export default function HomePage() {
   const handleToggleFavoriteWithToast = (id: string) => {
     const willBeFavorited = !favorites.includes(id);
     toggleFavorite(id);
-    showToast(willBeFavorited ? 'Added to favorites' : 'Removed from favorites');
+    showToast(willBeFavorited ? 'Saved to bookmarks ⭐' : 'Removed from bookmarks');
   };
 
   return (
@@ -103,11 +107,11 @@ export default function HomePage() {
             </div>
             <div className="brand-text">
               <span className="brand-title">Mahi <span className="brand-badge">UI</span></span>
-              <span className="brand-subtitle">450+ Resource Hub</span>
+              <span className="brand-subtitle">Resource Hub</span>
             </div>
           </a>
           <div className="nav-divider"></div>
-          <span className="version-tag">{resourcesData.length} Curated Resources</span>
+          <span className="version-tag">{resourcesData.length} Verified Resources</span>
         </div>
 
         <div className="nav-center">
@@ -119,7 +123,7 @@ export default function HomePage() {
             <input
               type="text"
               id="global-search"
-              placeholder="Search 450+ UI kits, tools, animations, libraries... (Ctrl + K)"
+              placeholder="Search by name, category, or URL... (Ctrl + K)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -225,10 +229,66 @@ export default function HomePage() {
         </aside>
 
         {/* Main Resource Hub Area */}
-        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', paddingTop: '1.5rem' }}>
+        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', padding: '1.75rem 2rem' }}>
           {/* 450+ Resource Directory Grid */}
           <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
-            <div className="resource-search-filter-box">
+            
+            {/* Top Toolbar: Filter Bar & Live Counters */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                marginBottom: '1.25rem',
+                paddingBottom: '0.75rem',
+                borderBottom: '1px solid var(--border-color)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {selectedCategory === 'all' ? 'All Resources' : selectedCategory}
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontFamily: 'var(--font-mono)',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'var(--accent-light)',
+                    color: 'var(--accent-primary)',
+                    fontWeight: 700
+                  }}
+                >
+                  {filteredResources.length} items
+                </span>
+              </div>
+
+              {/* Category Quick Pills */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <button
+                  className={`filter-pill ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setOnlyFavorites(false);
+                  }}
+                  style={{ fontSize: '0.78rem', padding: '4px 10px' }}
+                >
+                  All ({resourcesData.length})
+                </button>
+                <button
+                  className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
+                  onClick={() => setOnlyFavorites(!onlyFavorites)}
+                  style={{ fontSize: '0.78rem', padding: '4px 10px', color: onlyFavorites ? '#fff' : '#f59e0b' }}
+                >
+                  ★ Saved ({favorites.length})
+                </button>
+              </div>
+            </div>
+
+            {/* Search & Category Filter Box */}
+            <div className="resource-search-filter-box" style={{ marginTop: 0 }}>
               <div className="resource-search-input-wrap">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)' }}>
                   <circle cx="11" cy="11" r="8"></circle>
@@ -236,10 +296,19 @@ export default function HomePage() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Filter by keyword, title, category, or URL..."
+                  placeholder="Filter resources by name, category, or URL..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '2px 6px', fontSize: '0.8rem' }}
+                    title="Clear filter"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
 
               <select
@@ -267,6 +336,7 @@ export default function HomePage() {
               </button>
             </div>
 
+            {/* Cards Grid or Empty State */}
             {filteredResources.length === 0 ? (
               <div
                 style={{
