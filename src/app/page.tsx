@@ -225,53 +225,7 @@ export default function HomePage() {
         </aside>
 
         {/* Main Resource Hub Area */}
-        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
-          {/* Hero Banner */}
-          <section className="hero-banner" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
-            <h1 className="hero-title">
-              450+ Curated <span className="gradient-text">Design & Frontend Resource Hub</span>
-            </h1>
-            <p className="hero-desc">
-              Comprehensive directory of design systems, CSS micro-interactions, AI design intelligence, SVG icon kits, 3D WebGL tooling, and production frontend utilities.
-            </p>
-
-            <div className="toolbar-wrapper" style={{ marginTop: '1.25rem' }}>
-              <div className="category-pills">
-                <button
-                  className={`filter-pill ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedCategory('all');
-                    setOnlyFavorites(false);
-                  }}
-                >
-                  All ({resourcesData.length})
-                </button>
-                <button
-                  className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
-                  onClick={() => setOnlyFavorites(!onlyFavorites)}
-                  style={{ color: onlyFavorites ? '#fff' : '#f59e0b' }}
-                >
-                  ★ Favorites ({favorites.length})
-                </button>
-                {categories.slice(0, 6).map((cat) => (
-                  <button
-                    key={cat}
-                    className={`filter-pill ${selectedCategory === cat && !onlyFavorites ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setOnlyFavorites(false);
-                    }}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-              <span className="result-count-text">
-                Showing {filteredResources.length} of {resourcesData.length} items
-              </span>
-            </div>
-          </section>
-
+        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', paddingTop: '1.5rem' }}>
           {/* 450+ Resource Directory Grid */}
           <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
             <div className="resource-search-filter-box">
