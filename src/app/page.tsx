@@ -1,27 +1,21 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { componentsData, projectsData, resourcesData, themePresets } from '@/data';
-import { ComponentCard } from '@/components/ui/ComponentCard';
-import { ProjectCard } from '@/components/ui/ProjectCard';
+import React, { useState, useMemo, useEffect } from 'react';
+import { resourcesData, themePresets } from '@/data';
 import { ResourceCard } from '@/components/ui/ResourceCard';
-import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 import { useAppStore } from '@/stores/appStore';
-import { ProjectModal } from '@/features/project-gallery/ProjectModal';
-import { FrontendProject, ThemeName } from '@/types';
+import { ThemeName } from '@/types';
 
 export default function HomePage() {
-  const { theme, setTheme, favorites, toggleFavorite, recentProjects, addRecentProject, isThreeLabOpen, setThreeLabOpen } = useAppStore();
+  const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [projectFilter, setProjectFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [resourceSearch, setResourceSearch] = useState('');
-  const [resourceCategory, setResourceCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const [displayLimit, setDisplayLimit] = useState(48);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<FrontendProject | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
@@ -45,33 +39,41 @@ export default function HomePage() {
     showToast(`Switched theme: ${newTheme.toUpperCase()}`);
   };
 
-  const filteredComponents = useMemo(() => {
-    return componentsData.filter((c) => {
-      const matchesCat = categoryFilter === 'all' || c.category === categoryFilter;
-      const matchesQuery =
-        !searchQuery ||
-        c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.description.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCat && matchesQuery;
+  // Distinct categories available in resources
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    resourcesData.forEach((r) => {
+      if (r.category) set.add(r.category);
     });
-  }, [categoryFilter, searchQuery]);
+    return Array.from(set).sort();
+  }, []);
 
-  const filteredProjects = useMemo(() => {
-    return projectsData.filter((p) => {
-      return projectFilter === 'all' || p.section === projectFilter;
-    });
-  }, [projectFilter]);
-
+  // Filtered resources
   const filteredResources = useMemo(() => {
-    const q = resourceSearch.toLowerCase().trim();
-    return resourcesData
-      .filter((r) => {
-        const matchesCat = resourceCategory === 'all' || r.category === resourceCategory;
-        const matchesQ = !q || r.name.toLowerCase().includes(q) || r.url.toLowerCase().includes(q);
-        return matchesCat && matchesQ;
-      })
-      .slice(0, 72);
-  }, [resourceSearch, resourceCategory]);
+    const q = searchQuery.toLowerCase().trim();
+    return resourcesData.filter((r) => {
+      const matchesCategory = selectedCategory === 'all' || r.category === selectedCategory;
+      const matchesFavorite = !onlyFavorites || favorites.includes(r.id);
+      const matchesQuery =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.url.toLowerCase().includes(q) ||
+        (r.category && r.category.toLowerCase().includes(q)) ||
+        (r.tag && r.tag.toLowerCase().includes(q));
+
+      return matchesCategory && matchesFavorite && matchesQuery;
+    });
+  }, [searchQuery, selectedCategory, onlyFavorites, favorites]);
+
+  const visibleResources = useMemo(() => {
+    return filteredResources.slice(0, displayLimit);
+  }, [filteredResources, displayLimit]);
+
+  const handleToggleFavoriteWithToast = (id: string) => {
+    const willBeFavorited = !favorites.includes(id);
+    toggleFavorite(id);
+    showToast(willBeFavorited ? 'Added to favorites' : 'Removed from favorites');
+  };
 
   return (
     <>
@@ -101,11 +103,11 @@ export default function HomePage() {
             </div>
             <div className="brand-text">
               <span className="brand-title">Mahi <span className="brand-badge">UI</span></span>
-              <span className="brand-subtitle">Modular Next.js Platform</span>
+              <span className="brand-subtitle">450+ Resource Hub</span>
             </div>
           </a>
           <div className="nav-divider"></div>
-          <span className="version-tag">v2.0 • Feature Architecture</span>
+          <span className="version-tag">{resourcesData.length} Curated Resources</span>
         </div>
 
         <div className="nav-center">
@@ -117,7 +119,7 @@ export default function HomePage() {
             <input
               type="text"
               id="global-search"
-              placeholder="Search components, buttons, tabs, resources... (Ctrl + K)"
+              placeholder="Search 450+ UI kits, tools, animations, libraries... (Ctrl + K)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -158,20 +160,13 @@ export default function HomePage() {
             )}
           </div>
 
-          <button
-            className="action-btn"
-            onClick={() => setThreeLabOpen(true)}
-            style={{
-              background: 'rgba(236, 72, 153, 0.15)',
-              color: '#ec4899',
-              border: '1px solid rgba(236, 72, 153, 0.3)',
-              fontWeight: 700
-            }}
+          <a
+            href="https://github.com/mahi-developer-universe/Mahi-UI-Component-Playground"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="icon-link-btn"
+            title="GitHub Repository"
           >
-            Three.js 3D Lab
-          </button>
-
-          <a href="https://github.com/mahi-developer-universe/Mahi-UI-Component-Playground" target="_blank" className="icon-link-btn" title="GitHub">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
             </svg>
@@ -181,199 +176,197 @@ export default function HomePage() {
 
       {/* Main Workspace Layout */}
       <div className="layout-body">
-        {/* Sidebar */}
+        {/* Sidebar Filter for Resource Categories */}
         <aside className="sidebar" id="app-sidebar">
           <div className="sidebar-section">
-            <div className="sidebar-heading">COMPONENTS</div>
+            <div className="sidebar-heading">CATEGORIES</div>
             <nav className="sidebar-nav" id="sidebar-nav">
               <button
-                className={`nav-item ${categoryFilter === 'all' ? 'active' : ''}`}
-                onClick={() => setCategoryFilter('all')}
+                className={`nav-item ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
+                onClick={() => {
+                  setSelectedCategory('all');
+                  setOnlyFavorites(false);
+                }}
               >
-                <span>All Components</span>
-                <span className="nav-count">{componentsData.length}</span>
+                <span>All Resources</span>
+                <span className="nav-count">{resourcesData.length}</span>
               </button>
-              {componentsData.map((c) => (
-                <button
-                  key={c.id}
-                  className={`nav-item ${categoryFilter === c.category ? 'active' : ''}`}
-                  onClick={() => setCategoryFilter(c.category)}
-                >
-                  <span style={{ textTransform: 'capitalize' }}>{c.title}</span>
-                </button>
-              ))}
+
+              <button
+                className={`nav-item ${onlyFavorites ? 'active' : ''}`}
+                onClick={() => setOnlyFavorites(!onlyFavorites)}
+              >
+                <span>Bookmarked / Saved</span>
+                <span className="nav-count" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', fontWeight: 700 }}>
+                  {favorites.length}
+                </span>
+              </button>
 
               <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }}></div>
-              <a href="#projects-section" className="nav-item" style={{ textDecoration: 'none' }}>
-                <span>30 Projects Hub</span>
-                <span className="nav-count" style={{ background: 'var(--accent-light)', color: 'var(--accent-primary)', fontWeight: 700 }}>30</span>
-              </a>
-              <a href="#resources-section" className="nav-item" style={{ textDecoration: 'none' }}>
-                <span>450+ Resource Hub</span>
-                <span className="nav-count" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--success)', fontWeight: 700 }}>459</span>
-              </a>
-              <button
-                className="nav-item"
-                onClick={() => setThreeLabOpen(true)}
-                style={{ background: 'transparent', border: 'none', width: '100%', textAlign: 'left' }}
-              >
-                <span>Three.js 3D Studio</span>
-                <span className="nav-count" style={{ background: 'rgba(236, 72, 153, 0.2)', color: '#ec4899', fontWeight: 700 }}>3D</span>
-              </button>
+
+              {categories.map((cat) => {
+                const count = resourcesData.filter((r) => r.category === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    className={`nav-item ${selectedCategory === cat && !onlyFavorites ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setOnlyFavorites(false);
+                    }}
+                  >
+                    <span style={{ fontSize: '0.825rem' }}>{cat}</span>
+                    <span className="nav-count">{count}</span>
+                  </button>
+                );
+              })}
             </nav>
           </div>
         </aside>
 
-        {/* Main Canvas Area */}
-        <main className="main-content" id="main-content">
+        {/* Main Resource Hub Area */}
+        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
           {/* Hero Banner */}
-          <section className="hero-banner">
+          <section className="hero-banner" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
             <h1 className="hero-title">
-              Mahi UI <span className="gradient-text">Component Playground & 3D Lab</span>
+              450+ Curated <span className="gradient-text">Design & Frontend Resource Hub</span>
             </h1>
             <p className="hero-desc">
-              Explore interactive buttons, cards, badges, tooltips, modals, tabs, dropdowns, and Three.js WebGL spatial scenes. Powered by Next.js, React 19, and TypeScript.
+              Comprehensive directory of design systems, CSS micro-interactions, AI design intelligence, SVG icon kits, 3D WebGL tooling, and production frontend utilities.
             </p>
 
-            <div className="toolbar-wrapper">
+            <div className="toolbar-wrapper" style={{ marginTop: '1.25rem' }}>
               <div className="category-pills">
-                {['all', 'buttons', 'cards', 'badges', 'tooltips', 'modals', 'tabs', 'dropdowns'].map((cat) => (
+                <button
+                  className={`filter-pill ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setOnlyFavorites(false);
+                  }}
+                >
+                  All ({resourcesData.length})
+                </button>
+                <button
+                  className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
+                  onClick={() => setOnlyFavorites(!onlyFavorites)}
+                  style={{ color: onlyFavorites ? '#fff' : '#f59e0b' }}
+                >
+                  ★ Favorites ({favorites.length})
+                </button>
+                {categories.slice(0, 6).map((cat) => (
                   <button
                     key={cat}
-                    className={`filter-pill ${categoryFilter === cat ? 'active' : ''}`}
-                    onClick={() => setCategoryFilter(cat)}
-                    style={{ textTransform: 'capitalize' }}
+                    className={`filter-pill ${selectedCategory === cat && !onlyFavorites ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setOnlyFavorites(false);
+                    }}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
               <span className="result-count-text">
-                Showing {filteredComponents.length} component collections
+                Showing {filteredResources.length} of {resourcesData.length} items
               </span>
             </div>
           </section>
 
-          {/* Component Showcase */}
-          <section className="showcase-container" id="showcase-container">
-            {filteredComponents.map((comp) => (
-              <ComponentCard key={comp.id} component={comp} />
-            ))}
-          </section>
-
-          {/* 30 Projects Section */}
-          <section className="projects-directory-section" id="projects-section">
-            <div className="directory-header">
-              <span className="directory-tag">Roadmap</span>
-              <h2 className="directory-title">
-                30 Frontend Developer Projects <span className="gradient-text">Catalog</span>
-              </h2>
-              <p className="directory-desc">
-                Real-world projects inspired by Cult UI, Forge UI, 21st.dev, Magic UI, and Evil Charts.
-              </p>
-            </div>
-
-            <div className="projects-filter-bar">
-              {[
-                { id: 'all', label: 'All 30 Projects' },
-                { id: 'ui-animation', label: '1. UI & Animations' },
-                { id: 'design-tools', label: '2. Creative Tools' },
-                { id: 'inspiration-hub', label: '3. Inspiration' },
-                { id: 'dev-tools', label: '4. Productivity' },
-                { id: 'portfolio-apps', label: '5. Portfolios' },
-                { id: 'creative-plus', label: '6. Experiments' }
-              ].map((f) => (
-                <button
-                  key={f.id}
-                  className={`proj-tab-btn ${projectFilter === f.id ? 'active' : ''}`}
-                  onClick={() => setProjectFilter(f.id)}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="projects-grid">
-              {filteredProjects.map((proj) => (
-                <ProjectCard
-                  key={proj.id}
-                  project={proj}
-                  onLaunch={() => {
-                    addRecentProject(proj.id);
-                    setSelectedProject(proj);
-                    showToast(`Opened ${proj.title}`);
-                  }}
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* 450+ Resource Directory */}
-          <section className="resource-directory-section" id="resources-section">
-            <div className="directory-header">
-              <span className="directory-tag">Resource Catalog</span>
-              <h2 className="directory-title">
-                450+ Verified Frontend & <span className="gradient-text">Design Resources</span>
-              </h2>
-              <p className="directory-desc">
-                Curated directory of design systems, AI tools, animation libraries, and developer utilities.
-              </p>
-            </div>
-
+          {/* 450+ Resource Directory Grid */}
+          <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
             <div className="resource-search-filter-box">
               <div className="resource-search-input-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)' }}>
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
                 <input
                   type="text"
-                  placeholder="Search 450+ resources by name or URL..."
-                  value={resourceSearch}
-                  onChange={(e) => setResourceSearch(e.target.value)}
+                  placeholder="Filter by keyword, title, category, or URL..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
               <select
                 className="resource-category-select"
-                value={resourceCategory}
-                onChange={(e) => setResourceCategory(e.target.value)}
+                value={selectedCategory}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setOnlyFavorites(false);
+                }}
               >
-                <option value="all">All Categories (450+)</option>
-                <option value="Component Libraries & UI Kits">Component Libraries & UI Kits</option>
-                <option value="Animation & Visual Effects">Animation & Visual Effects</option>
-                <option value="UI/UX Inspiration & Galleries">UI/UX Inspiration & Galleries</option>
-                <option value="Design Utilities & Generators">Design Utilities & Generators</option>
-                <option value="Developer Productivity & Tools">Developer Productivity & Tools</option>
-                <option value="AI & Creative Intelligence">AI & Creative Intelligence</option>
-                <option value="Icons & Vector Assets">Icons & Vector Assets</option>
-                <option value="Charts & Data Visualization">Charts & Data Visualization</option>
+                <option value="all">All Categories ({resourcesData.length})</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat} ({resourcesData.filter((r) => r.category === cat).length})
+                  </option>
+                ))}
               </select>
+
+              <button
+                className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
+                onClick={() => setOnlyFavorites(!onlyFavorites)}
+                style={{ height: '38px', borderRadius: 'var(--radius-md)' }}
+              >
+                ★ Bookmarks ({favorites.length})
+              </button>
             </div>
 
-            <div className="resource-cards-grid">
-              {filteredResources.map((res) => (
-                <ResourceCard
-                  key={res.id}
-                  resource={res}
-                  isFavorite={favorites.includes(res.id)}
-                  onToggleFavorite={toggleFavorite}
-                />
-              ))}
-            </div>
+            {filteredResources.length === 0 ? (
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '4rem 2rem',
+                  background: 'var(--bg-card)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-muted)'
+                }}
+              >
+                <p style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>No resources found</p>
+                <p style={{ fontSize: '0.9rem' }}>Try clearing the search query or switching categories.</p>
+                <button
+                  className="filter-pill active"
+                  style={{ marginTop: '1rem' }}
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCategory('all');
+                    setOnlyFavorites(false);
+                  }}
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="resource-cards-grid">
+                  {visibleResources.map((res) => (
+                    <ResourceCard
+                      key={res.id}
+                      resource={res}
+                      isFavorite={favorites.includes(res.id)}
+                      onToggleFavorite={handleToggleFavoriteWithToast}
+                    />
+                  ))}
+                </div>
+
+                {visibleResources.length < filteredResources.length && (
+                  <div style={{ textAlign: 'center', marginTop: '2.5rem', marginBottom: '3rem' }}>
+                    <button
+                      className="proj-tab-btn active"
+                      style={{ padding: '0.75rem 2rem', fontSize: '0.9rem', cursor: 'pointer' }}
+                      onClick={() => setDisplayLimit((prev) => prev + 48)}
+                    >
+                      Load More Resources ({visibleResources.length} of {filteredResources.length})
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </section>
         </main>
       </div>
-
-      {/* 3D Lab Modal Dialog */}
-      {isThreeLabOpen && (
-        <ThreeLab onClose={() => setThreeLabOpen(false)} />
-      )}
-
-      {/* Interactive Project Application Modal */}
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-          onToast={showToast}
-        />
-      )}
     </>
   );
 }
