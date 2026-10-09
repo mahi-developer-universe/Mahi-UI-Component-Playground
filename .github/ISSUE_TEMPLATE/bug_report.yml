@@ -1,0 +1,34 @@
+name: Bug report
+description: Create a report to help us improve Mahi UI Component Playground
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report an issue!
+  - type: input
+    id: component
+    attributes:
+      label: Affected Component or Tool
+      description: What component, studio, or resource link has a problem?
+      placeholder: e.g. Button glowing border, Three.js 3D lab, Resource #42
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this behavior?
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & OS
+      description: Chrome, Safari, Firefox, Edge, etc.

@@ -1,0 +1,32 @@
+{
+  "name": "mahi-ui-component-playground",
+  "version": "1.0.0",
+  "description": "Comprehensive, interactive platform for UI components, UI/UX design systems, theme customization, background generation, animation exploration, 3D experiences, code generation, and frontend resource discovery.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "serve -l 3000",
+    "start": "serve -l 3000",
+    "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/e2e-simulation.js",
+    "test:catalog": "node scripts/validate-catalog.js",
+    "test:ecosystem": "node scripts/test-ecosystem.js",
+    "test:e2e": "node tests/e2e-simulation.js",
+    "clean-urls": "node scripts/clean-urls.js"
+  },
+  "keywords": [
+    "ui-components",
+    "design-system",
+    "threejs",
+    "webgl",
+    "animations",
+    "charts",
+    "frontend-resources",
+    "playground",
+    "shadcn",
+    "cult-ui"
+  ],
+  "author": "Mahi Developer Universe",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

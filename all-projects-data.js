@@ -1,0 +1,416 @@
+// ==========================================================================
+// MAHI UI - 30 FRONTEND DEVELOPER PROJECTS DIRECTORY & REGISTRY
+// Inspired by Evil Charts, Forge UI, Cult UI, React Bits, 21st.dev, Magic UI
+// Categories:
+// 1. UI Component & Animation Projects (#1 to #5)
+// 2. Creative Design Tools & Generators (#6 to #10)
+// 3. Website Inspiration & Discovery (#11 to #15)
+// 4. Developer Productivity Tools (#16 to #20)
+// 5. Advanced Portfolio Web Apps (#21 to #25)
+// 6. Next-Gen Creative Experiments (#26 to #30)
+// ==========================================================================
+
+const ALL_30_PROJECTS = [
+  // SECTION 1: UI Component & Animation Projects
+  {
+    id: "proj-1",
+    num: 1,
+    title: "Mahi UI Component Playground",
+    section: "ui-animation",
+    sectionLabel: "UI & Animation",
+    difficulty: "Beginner",
+    mode: "hybrid",
+    description: "Showcase buttons, cards, badges, tooltips, modals, tabs, and dropdowns with live resizable previews and theme toggling.",
+    features: ["Copy Code", "Switch 5 Themes", "Resize Viewport", "⌘K Search"],
+    inspiredBy: "Cult UI, Forge UI, 21st.dev, Shadcn UI",
+    activeType: "interactive-builder",
+    previewType: "component-suite"
+  },
+  {
+    id: "proj-2",
+    num: 2,
+    title: "CSS Button Effects Gallery",
+    section: "ui-animation",
+    sectionLabel: "UI & Animation",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Curated collection of 25–50 animated buttons with hover, focus, loading, gradient shimmer, and magnetic bounce effects.",
+    features: ["Live Hover Preview", "Effect Categories", "CSS Copy Button", "Speed Slider"],
+    inspiredBy: "UI Verse, React Bits, Motion Primitives",
+    interactiveModule: "button-gallery"
+  },
+  {
+    id: "proj-3",
+    num: 3,
+    title: "Motion & Transition Playground",
+    section: "ui-animation",
+    sectionLabel: "UI & Animation",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Experiment with cubic-bezier easing curves, spring physics, duration controls, and interactive motion blocks.",
+    features: ["Custom Bezier Curve", "Spring Controls", "Realtime Runner", "CSS Easing Export"],
+    inspiredBy: "Movements.dev, Animos, 60fps.design",
+    interactiveModule: "motion-lab"
+  },
+  {
+    id: "proj-4",
+    num: 4,
+    title: "Loader & Skeleton Generator",
+    section: "ui-animation",
+    sectionLabel: "UI & Animation",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Generate pulsing skeleton wireframes, orbital spinners, progress bars, and shimmer pulse placeholders with customizable speeds.",
+    features: ["Speed & Size Sliders", "Card Skeleton", "Avatar Pulse", "Zero-Dependency CSS"],
+    inspiredBy: "Craft UI, Loadmo, Magic UI",
+    interactiveModule: "loader-lab"
+  },
+  {
+    id: "proj-5",
+    num: 5,
+    title: "Interactive Chart Playground",
+    section: "ui-animation",
+    sectionLabel: "UI & Animation",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Interactive data visualization studio with live bar, sparkline, and area charts. Edit datasets in real-time.",
+    features: ["Live Data Editor", "Color Palettes", "Bar & Line Views", "SVG/JSON Export"],
+    inspiredBy: "Evil Charts, Generative Charts, Charts Supply",
+    interactiveModule: "chart-playground"
+  },
+
+  // SECTION 2: Creative Design Tools & Generators
+  {
+    id: "proj-6",
+    num: 6,
+    title: "Gradient Studio",
+    section: "design-tools",
+    sectionLabel: "Design Tools & Generators",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Studio-grade gradient designer with dual/multi color stops, 360° angle wheel, curated presets, and instant CSS export.",
+    features: ["360° Angle Slider", "Curated Palettes", "Copy CSS Rule", "Fullscreen Mode"],
+    inspiredBy: "Gradientool, Web.dev Gradient Studio, MagicPattern",
+    interactiveModule: "gradient-studio"
+  },
+  {
+    id: "proj-7",
+    num: 7,
+    title: "Pattern Generator Studio",
+    section: "design-tools",
+    sectionLabel: "Design Tools & Generators",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Generate mathematical SVG background patterns including dot matrices, isometric grids, chevrons, and geometric meshes.",
+    features: ["Grid Spacing Slider", "Dot/Cross/Grid Switcher", "SVG Export", "Background Tile CSS"],
+    inspiredBy: "Tabbied, MagicPattern, Hero Patterns",
+    interactiveModule: "pattern-studio"
+  },
+  {
+    id: "proj-8",
+    num: 8,
+    title: "Image Dither & Halftone Editor",
+    section: "design-tools",
+    sectionLabel: "Design Tools & Generators",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Client-side Canvas pixelation and retro dithering processor with contrast control, matrix thresholds, and export.",
+    features: ["HTML5 Canvas", "Bayer Dither Sim", "Dot Halftone", "Export Canvas PNG"],
+    inspiredBy: "Dither Garden, Halftone Maker, Ditter",
+    interactiveModule: "dither-studio"
+  },
+  {
+    id: "proj-9",
+    num: 9,
+    title: "Typography Playground",
+    section: "design-tools",
+    sectionLabel: "Design Tools & Generators",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Fine-tune font pairings, variable font weights, letter tracking, line heights, and gradient headings with live responsive test beds.",
+    features: ["Font Scaling", "Letter-spacing Control", "Heading Styles", "CSS Code Snippet"],
+    inspiredBy: "Type Field, Space Type Generator, Modern Web",
+    interactiveModule: "typography-lab"
+  },
+  {
+    id: "proj-10",
+    num: 10,
+    title: "Mini Logo Maker",
+    section: "design-tools",
+    sectionLabel: "Design Tools & Generators",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Vector brandmark generator combining geometric badges, custom human iconography, brand typography, and SVG export.",
+    features: ["Live Canvas Preview", "Icon Badge Switcher", "Palette Presets", "Copy Clean SVG"],
+    inspiredBy: "DesignEvo, Book of Shapes, Minimal Logo",
+    interactiveModule: "logo-maker"
+  },
+
+  // SECTION 3: Website Inspiration & Discovery Platforms
+  {
+    id: "proj-11",
+    num: 11,
+    title: "UI Inspiration Hub",
+    section: "inspiration-hub",
+    sectionLabel: "Inspiration & Discovery",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Searchable directory of award-winning website architectures categorized by SaaS, Fintech, AI Studio, and Developer Tools.",
+    features: ["Masonry Cards", "Filter by Category", "Favorite Bookmarks", "Direct Link"],
+    inspiredBy: "Siteinspire, Land-book, Godly, Mobbin",
+    interactiveModule: "inspiration-hub"
+  },
+  {
+    id: "proj-12",
+    num: 12,
+    title: "Hero Section Gallery",
+    section: "inspiration-hub",
+    sectionLabel: "Inspiration & Discovery",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Showcase of SaaS, Startup, Portfolio, and Agency hero section patterns with floating badges and CTA placements.",
+    features: ["Live Responsive View", "4 Hero Layouts", "Copy Section HTML", "Full-width Toggle"],
+    inspiredBy: "Land-book, CTA Gallery, 21st.dev",
+    interactiveModule: "hero-gallery"
+  },
+  {
+    id: "proj-13",
+    num: 13,
+    title: "Navbar Design Playground",
+    section: "inspiration-hub",
+    sectionLabel: "Inspiration & Discovery",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Interactive navigation architecture tester: sticky glassmorphic, floating island, sidebar dock, and mobile bottom sheet.",
+    features: ["Floating Island", "Glassmorphic Blur", "Mobile Drawer Test", "HTML/CSS Export"],
+    inspiredBy: "Navbar Gallery, Shadcn Navbar, Cult UI",
+    interactiveModule: "navbar-playground"
+  },
+  {
+    id: "proj-14",
+    num: 14,
+    title: "CTA & Footer Gallery",
+    section: "inspiration-hub",
+    sectionLabel: "Inspiration & Discovery",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Collection of high-conversion call-to-action sections and responsive multi-column footer layouts.",
+    features: ["Interactive CTA Triggers", "Footer Columns", "Copy Layout Code", "Responsive Preview"],
+    inspiredBy: "CTA Gallery, Forge UI, 21st.dev",
+    interactiveModule: "cta-footer-gallery"
+  },
+  {
+    id: "proj-15",
+    num: 15,
+    title: "Design Bookmark Manager",
+    section: "inspiration-hub",
+    sectionLabel: "Inspiration & Discovery",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Personal bookmark manager with tags, custom notes, localStorage persistence, and JSON backup export/import.",
+    features: ["Add Custom URL", "Tagging System", "localStorage Sync", "Export/Import JSON"],
+    inspiredBy: "Marqly, Save Design, Refero",
+    interactiveModule: "bookmark-manager"
+  },
+
+  // SECTION 4: Developer Productivity Tools
+  {
+    id: "proj-16",
+    num: 16,
+    title: "Icon Explorer (Human Icons Only)",
+    section: "dev-tools",
+    sectionLabel: "Developer Productivity Tools",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Browse, filter, resize, and copy 100% human-crafted vector SVG icons with zero dependencies and one-click SVG copy.",
+    features: ["Stroke & Size Sliders", "Copy Raw SVG", "Category Search", "Human SVG Only"],
+    inspiredBy: "Flowbite Icons, Lucide, Keyline Icons",
+    interactiveModule: "icon-explorer"
+  },
+  {
+    id: "proj-17",
+    num: 17,
+    title: "OG Image Generator",
+    section: "dev-tools",
+    sectionLabel: "Developer Productivity Tools",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Generate 1200x630 social share preview images with custom titles, author tags, gradients, and instant PNG download.",
+    features: ["1200x630 Canvas", "Live Typography", "Gradient Backgrounds", "Download PNG"],
+    inspiredBy: "Ogimage CN, Vercel OG, MagicPattern",
+    interactiveModule: "og-generator"
+  },
+  {
+    id: "proj-18",
+    num: 18,
+    title: "CSS Generator Toolkit",
+    section: "dev-tools",
+    sectionLabel: "Developer Productivity Tools",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Multi-tool utility generating box-shadow elevations, glassmorphic backdrop filters, border-radius corners, and CSS transforms.",
+    features: ["Box-shadow Layering", "Backdrop Filter Blur", "Live Box Preview", "Copy Clean CSS"],
+    inspiredBy: "CSSPro, UI Verse, Generator.io",
+    interactiveModule: "css-generator"
+  },
+  {
+    id: "proj-19",
+    num: 19,
+    title: "Color Accessibility Checker",
+    section: "dev-tools",
+    sectionLabel: "Developer Productivity Tools",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "WCAG 2.1 contrast ratio calculator evaluating AA/AAA compliance for normal text, large text, and UI components in real time.",
+    features: ["Realtime Ratio Calc", "WCAG AA / AAA Badges", "Live Contrast Preview", "Suggested Fixes"],
+    inspiredBy: "WebAIM, Medium A11y, Contrast Checker",
+    interactiveModule: "a11y-checker"
+  },
+  {
+    id: "proj-20",
+    num: 20,
+    title: "Component Registry Explorer",
+    section: "dev-tools",
+    sectionLabel: "Developer Productivity Tools",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Directory of popular frontend design systems and component registries with install commands, NPM stats, and direct links.",
+    features: ["Framework Filters", "Copy CLI Command", "Docs Deep-links", "Star Ratings"],
+    inspiredBy: "Shadcn Registry, 21st.dev, Cult UI Registry",
+    interactiveModule: "registry-explorer"
+  },
+
+  // SECTION 5: Advanced Portfolio Web Apps
+  {
+    id: "proj-21",
+    num: 21,
+    title: "SaaS Analytics Dashboard",
+    section: "portfolio-apps",
+    sectionLabel: "Advanced Portfolio Projects",
+    difficulty: "Advanced",
+    mode: "interactive-tool",
+    description: "Enterprise SaaS monitoring interface featuring MRR growth charts, conversion metrics, server uptime, and CSV export.",
+    features: ["Dynamic KPI Cards", "Interactive Chart Canvas", "Data Range Filter", "Download CSV"],
+    inspiredBy: "Blink Analytics, Tremor, XY Analytics",
+    interactiveModule: "saas-dashboard"
+  },
+  {
+    id: "proj-22",
+    num: 22,
+    title: "Visual Workflow Node Builder",
+    section: "portfolio-apps",
+    sectionLabel: "Advanced Portfolio Projects",
+    difficulty: "Advanced",
+    mode: "interactive-tool",
+    description: "Interactive visual pipeline editor connecting trigger inputs, validation processing blocks, and edge node outputs.",
+    features: ["Connectable Nodes", "Trigger Status Check", "Simulate Pipeline", "Interactive Drag"],
+    inspiredBy: "React Flow, ASI Create, Langflow",
+    interactiveModule: "workflow-builder"
+  },
+  {
+    id: "proj-23",
+    num: 23,
+    title: "AI Prompt Playground",
+    section: "portfolio-apps",
+    sectionLabel: "Advanced Portfolio Projects",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Structured prompt testing studio with temperature controls, system role customization, sample libraries, and token estimators.",
+    features: ["Prompt Variables", "Temperature Slider", "Token Counter", "Copy Payload"],
+    inspiredBy: "AIVORA, OpenAI Playground, Anthropic Workbench",
+    interactiveModule: "prompt-playground"
+  },
+  {
+    id: "proj-24",
+    num: 24,
+    title: "Project Management Workspace",
+    section: "portfolio-apps",
+    sectionLabel: "Advanced Portfolio Projects",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Interactive Kanban board with task cards, human member assignees, priority indicators, and column task addition.",
+    features: ["Interactive Task Columns", "Add New Task", "Priority Badges", "Human Assignees"],
+    inspiredBy: "Linear, Notion, Ovious.Studio",
+    interactiveModule: "kanban-workspace"
+  },
+  {
+    id: "proj-25",
+    num: 25,
+    title: "Interactive Developer Portfolio",
+    section: "portfolio-apps",
+    sectionLabel: "Advanced Portfolio Projects",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Showcase portfolio section featuring career timeline, live skill radars, interactive case studies, and terminal contact form.",
+    features: ["Experience Timeline", "Interactive Project Cards", "Live Terminal Mode", "Contact Form"],
+    inspiredBy: "Agentfolio, Brittany Chiang, Rauno Freiberg",
+    interactiveModule: "developer-portfolio"
+  },
+
+  // SECTION 6: Five More Creative Projects
+  {
+    id: "proj-26",
+    num: 26,
+    title: "Responsive Device Previewer",
+    section: "creative-plus",
+    sectionLabel: "Creative Experiments",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Preview any responsive layout across Mobile (375px), Tablet (768px), and Laptop (1280px) realistic device bezels.",
+    features: ["Device Frames", "Rotate Orientation", "Scale Controls", "Live Nested View"],
+    inspiredBy: "Responsively, Sizzy, Chrome DevTools",
+    interactiveModule: "device-previewer"
+  },
+  {
+    id: "proj-27",
+    num: 27,
+    title: "Design System Token Generator",
+    section: "creative-plus",
+    sectionLabel: "Creative Experiments",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Generate CSS Custom Properties and Tailwind theme configurations for color ramps, font scales, and spacing tokens.",
+    features: ["Base Color Picker", "H-Scale Generation", "Copy CSS Variables", "Tailwind Config Export"],
+    inspiredBy: "Radix Colors, Tailwind Config, Open Props",
+    interactiveModule: "tokens-generator"
+  },
+  {
+    id: "proj-28",
+    num: 28,
+    title: "Website Screenshot Gallery",
+    section: "creative-plus",
+    sectionLabel: "Creative Experiments",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Visual thumbnail showcase of high-aesthetic web applications with tags, quick zooms, and category filters.",
+    features: ["High-res Card Grid", "Tag Filters", "Full Preview Modal", "Direct Source Links"],
+    inspiredBy: "Minimal Gallery, A1 Gallery, Godly",
+    interactiveModule: "screenshot-gallery"
+  },
+  {
+    id: "proj-29",
+    num: 29,
+    title: "Interactive Pricing Page Builder",
+    section: "creative-plus",
+    sectionLabel: "Creative Experiments",
+    difficulty: "Intermediate",
+    mode: "interactive-tool",
+    description: "Configurable SaaS pricing table with Monthly/Yearly toggle (20% discount calculation), feature checklists, and recommended plan glow.",
+    features: ["Monthly/Annual Toggle", "20% Discount Math", "Feature Checklist", "Interactive CTA Plan Select"],
+    inspiredBy: "Stripe Pricing, Vercel Pricing, Cult UI Pricing",
+    interactiveModule: "pricing-builder"
+  },
+  {
+    id: "proj-30",
+    num: 30,
+    title: "Frontend Code Snippet Library",
+    section: "creative-plus",
+    sectionLabel: "Creative Experiments",
+    difficulty: "Beginner",
+    mode: "interactive-tool",
+    description: "Production-ready repository of reusable HTML, CSS, and React snippets for glassmorphism, responsive grids, and micro-interactions.",
+    features: ["Search by Tag", "Language Tabs (HTML/CSS/JS)", "One-Click Copy", "Instant Code View"],
+    inspiredBy: "30 Seconds of Code, React Bits, CSS-Tricks",
+    interactiveModule: "snippet-library"
+  }
+];

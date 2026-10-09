@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahi UI — Modern Component Playground</title>
+  <meta name="description" content="Explore, preview, customize, and copy modern interactive UI components inspired by Cult UI, Forge UI, 21st.dev, and Shadcn UI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="components.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Ambient Glow Backgrounds -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar" id="app-navbar">
+      <div class="nav-left">
+        <a href="#" class="brand-logo" id="brand-logo">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">Mahi <span class="brand-badge">UI</span></span>
+            <span class="brand-subtitle">Component Playground</span>
+          </div>
+        </a>
+        <div class="nav-divider"></div>
+        <span class="version-tag">v1.0 • Modern Web Edition</span>
+      </div>
+
+      <div class="nav-center">
+        <div class="search-bar-wrapper">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="global-search" placeholder="Search components, badges, modals... (Ctrl + K)" autocomplete="off">
+          <kbd class="shortcut-badge">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <!-- Theme Selector Menu -->
+        <div class="theme-dropdown-container">
+          <button class="theme-btn" id="theme-menu-toggle" aria-label="Toggle theme">
+            <svg class="theme-icon sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span id="current-theme-label">Midnight Dark</span>
+            <svg class="chevron-down" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="theme-menu" id="theme-menu">
+            <button class="theme-option active" data-theme="dark">
+              <span class="theme-indicator" style="background: #0f172a;"></span>
+              <span>Midnight Dark</span>
+            </button>
+            <button class="theme-option" data-theme="light">
+              <span class="theme-indicator" style="background: #f8fafc; border: 1px solid #cbd5e1;"></span>
+              <span>Clean Light</span>
+            </button>
+            <button class="theme-option" data-theme="cyberpunk">
+              <span class="theme-indicator" style="background: #0d0221; border: 1px solid #ff007f;"></span>
+              <span>Cyberpunk Neon</span>
+            </button>
+            <button class="theme-option" data-theme="emerald">
+              <span class="theme-indicator" style="background: #064e3b;"></span>
+              <span>Emerald Forest</span>
+            </button>
+            <button class="theme-option" data-theme="sunset">
+              <span class="theme-indicator" style="background: #4a154b;"></span>
+              <span>Sunset Violet</span>
+            </button>
+          </div>
+        </div>
+
+        <a href="#/human" class="human-nav-link" id="nav-human-link" title="Open /human Community Hub">
+          <span class="human-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </span>
+          <span>/human</span>
+        </a>
+
+        <a href="https://github.com" target="_blank" class="icon-link-btn" title="GitHub Star" id="btn-github-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="layout-body">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar" id="app-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-heading">COMPONENTS</div>
+          <nav class="sidebar-nav" id="sidebar-nav">
+            <button class="nav-item active" data-category="all">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </span>
+              <span>All Components</span>
+              <span class="nav-count" id="count-all">7</span>
+            </button>
+            <button class="nav-item" data-category="buttons">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span>Buttons</span>
+              <span class="nav-count">6</span>
+            </button>
+            <button class="nav-item" data-category="cards">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <line x1="19" y1="8" x2="19" y2="14"></line>
+                  <line x1="22" y1="11" x2="16" y2="11"></line>
+                </svg>
+              </span>
+              <span>Cards</span>
+              <span class="nav-count">3</span>
+            </button>
+            <button class="nav-item" data-category="badges">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <polyline points="17 11 19 13 23 9"></polyline>
+                </svg>
+              </span>
+              <span>Badges</span>
+              <span class="nav-count">6</span>
+            </button>
+            <button class="nav-item" data-category="tooltips">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="9" r="1.5"></circle>
+                </svg>
+              </span>
+              <span>Tooltips</span>
+              <span class="nav-count">4</span>
+            </button>
+            <button class="nav-item" data-category="modals">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="4"></circle>
+                  <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path>
+                </svg>
+              </span>
+              <span>Modals & Dialogs</span>
+              <span class="nav-count">1</span>
+            </button>
+            <button class="nav-item" data-category="tabs">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M9 21v-2a4 4 0 0 1 3-3.87"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span>Tabs</span>
+              <span class="nav-count">3</span>
+            </button>
+            <button class="nav-item" data-category="dropdowns">
+              <span class="nav-icon human-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+              </span>
+              <span>Dropdowns</span>
+              <span class="nav-count">2</span>
+            </button>
+            <div style="height: 1px; background: var(--border-color); margin: 0.5rem 0;"></div>
+            <a href="#projects-section" class="nav-item" style="text-decoration: none;">
+              <span class="nav-icon human-icon" style="color: var(--accent-primary);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </span>
+              <span>30 Projects Hub</span>
+              <span class="nav-count" style="background: var(--accent-light); color: var(--accent-primary); font-weight:700;">30</span>
+            </a>
+            <a href="#resources-section" class="nav-item" style="text-decoration: none;">
+              <span class="nav-icon human-icon" style="color: var(--success);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </span>
+              <span>450+ Resource Hub</span>
+              <span class="nav-count" style="background: rgba(16, 185, 129, 0.15); color: var(--success); font-weight:700;">459</span>
+            </a>
+            <div style="height: 1px; background: var(--border-color); margin: 0.5rem 0;"></div>
+            <div class="sidebar-heading" style="padding-left: 0.5rem; margin-top: 0.4rem; font-size: 0.7rem; letter-spacing: 0.05em; color: var(--text-muted);">ECOSYSTEM STUDIOS</div>
+            <button class="nav-item" onclick="window.launchProjectModule('proj-26'); window.scrollToSection('interactive-live-sandbox');" style="background: transparent; border: none; width: 100%; text-align: left;">
+              <span class="nav-icon human-icon" style="color: #38bdf8;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </span>
+              <span>Device Previewer</span>
+              <span class="nav-count">Live</span>
+            </button>
+            <button class="nav-item" onclick="window.launchProjectModule('proj-27'); window.scrollToSection('interactive-live-sandbox');" style="background: transparent; border: none; width: 100%; text-align: left;">
+              <span class="nav-icon human-icon" style="color: #a855f7;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 0 20v-20z"></path></svg>
+              </span>
+              <span>Theme & Tokens Lab</span>
+              <span class="nav-count">CSS/Tailwind</span>
+            </button>
+            <button class="nav-item" onclick="window.launchProjectModule('proj-3'); window.scrollToSection('interactive-live-sandbox');" style="background: transparent; border: none; width: 100%; text-align: left;">
+              <span class="nav-icon human-icon" style="color: #f43f5e;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </span>
+              <span>Motion & Easing Lab</span>
+              <span class="nav-count">GSAP/CSS</span>
+            </button>
+            <button class="nav-item" onclick="window.launchProjectModule('proj-5'); window.scrollToSection('interactive-live-sandbox');" style="background: transparent; border: none; width: 100%; text-align: left;">
+              <span class="nav-icon human-icon" style="color: #10b981;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              </span>
+              <span>Charts & Data Viz</span>
+              <span class="nav-count">Recharts/D3</span>
+            </button>
+            <button class="nav-item" onclick="window.launch3DStudioModal();" style="background: transparent; border: none; width: 100%; text-align: left;">
+              <span class="nav-icon human-icon" style="color: #ec4899;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </span>
+              <span>Three.js 3D Studio</span>
+              <span class="nav-count" style="background: rgba(236, 72, 153, 0.2); color: #ec4899; font-weight:700;">3D</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">STYLES & INSPIRATION</div>
+          <div class="sidebar-tags">
+            <span class="tag-pill">Cult UI</span>
+            <span class="tag-pill">21st.dev</span>
+            <span class="tag-pill">Forge UI</span>
+            <span class="tag-pill">Shadcn UI</span>
+            <span class="tag-pill">Glassmorphism</span>
+            <span class="tag-pill">Micro-interactions</span>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="quick-stats-card">
+            <div class="stats-header">
+              <span class="pulse-dot"></span>
+              <span>Live Playground Ready</span>
+            </div>
+            <p class="stats-desc">Ready-to-use HTML & CSS snippets. Fully responsive, zero dependencies.</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Canvas Area -->
+      <main class="main-content" id="main-content">
+        <!-- Hero Banner -->
+        <section class="hero-banner">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span>Crafted for Modern Web Designers</span>
+          </div>
+          <h1 class="hero-title">
+            Exceptional UI Components for <span class="gradient-text">Next-Gen Interfaces</span>
+          </h1>
+          <p class="hero-desc">
+            Explore interactive buttons, cards, badges, tooltips, modals, tabs, and dropdowns. Live resizable canvas, multiple color schemes, copyable code, and production-ready CSS.
+          </p>
+
+          <!-- Quick Filters Toolbar -->
+          <div class="toolbar-wrapper">
+            <div class="category-pills" id="category-pills">
+              <button class="filter-pill active" data-cat="all">All</button>
+              <button class="filter-pill" data-cat="buttons">Buttons</button>
+              <button class="filter-pill" data-cat="cards">Cards</button>
+              <button class="filter-pill" data-cat="badges">Badges</button>
+              <button class="filter-pill" data-cat="tooltips">Tooltips</button>
+              <button class="filter-pill" data-cat="modals">Modals</button>
+              <button class="filter-pill" data-cat="tabs">Tabs</button>
+              <button class="filter-pill" data-cat="dropdowns">Dropdowns</button>
+            </div>
+            
+            <div class="toolbar-actions">
+              <span class="result-count-text" id="items-count-text">Showing 7 component collections (28+ variants)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Components Showcase Grid -->
+        <section class="showcase-container" id="showcase-container">
+          <!-- Dynamically populated or rendered blocks -->
+        </section>
+
+        <!-- 30 Frontend Developer Projects Directory Section -->
+        <section class="projects-directory-section" id="projects-section">
+          <div class="directory-header">
+            <div class="directory-tag">
+              <span class="human-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </span>
+              <span>200+ UI/UX Resources Inspired Roadmap</span>
+            </div>
+            <h2 class="directory-title">
+              30 Frontend Developer Projects <span class="gradient-text">Ready to Build & Explore</span>
+            </h2>
+            <p class="directory-desc">
+              Inspired by Evil Charts, Forge UI, Cult UI, 21st.dev, Magic UI, and Motion Primitives. All 30 applications categorized with live interactive tool modules, difficulty ratings, features, and source presets.
+            </p>
+          </div>
+
+          <!-- Interactive Module Sandbox Live Container -->
+          <div id="interactive-live-sandbox"></div>
+
+          <!-- Section Filter Tabs -->
+          <div class="projects-filter-bar" id="projects-filter-bar">
+            <button class="proj-tab-btn active" data-proj-filter="all">All 30 Projects</button>
+            <button class="proj-tab-btn" data-proj-filter="ui-animation">1. UI & Animations (1-5)</button>
+            <button class="proj-tab-btn" data-proj-filter="design-tools">2. Creative Tools (6-10)</button>
+            <button class="proj-tab-btn" data-proj-filter="inspiration-hub">3. Inspiration Hubs (11-15)</button>
+            <button class="proj-tab-btn" data-proj-filter="dev-tools">4. Developer Productivity (16-20)</button>
+            <button class="proj-tab-btn" data-proj-filter="portfolio-apps">5. Portfolio Apps (21-25)</button>
+            <button class="proj-tab-btn" data-proj-filter="creative-plus">6. Next-Gen Creative (26-30)</button>
+          </div>
+
+          <!-- 30 Projects Cards Container -->
+          <div class="projects-grid" id="projects-grid-container">
+            <!-- Dynamically populated via app.js -->
+          </div>
+        </section>
+
+        <!-- 450+ UI/UX Developer Resource Directory Catalog -->
+        <section class="resource-directory-section" id="resources-section">
+          <div class="directory-header">
+            <div class="directory-tag">
+              <span class="human-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </span>
+              <span>450+ Verified Frontend & Design Resources</span>
+            </div>
+            <h2 class="directory-title">
+              Complete Resource Directory & <span class="gradient-text">Design Inspiration Catalog</span>
+            </h2>
+            <p class="directory-desc">
+              Search and filter all 450+ websites, UI kits, animation libraries, AI intelligence suites, color tools, and developer utilities with instant search, category filters, and direct links.
+            </p>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="resource-search-filter-box">
+            <div class="resource-search-input-wrap">
+              <span class="human-icon" style="color:var(--text-muted);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </span>
+              <input type="text" id="resource-search-input" placeholder="Search 450+ resources by name or URL (e.g. Cult UI, Mobbin, Aceternity, 60fps)...">
+            </div>
+
+            <select id="resource-category-filter" class="resource-category-select">
+              <option value="all">All Categories (450+)</option>
+              <option value="Component Libraries & UI Kits">Component Libraries & UI Kits</option>
+              <option value="Animation & Visual Effects">Animation & Visual Effects</option>
+              <option value="UI/UX Inspiration & Galleries">UI/UX Inspiration & Galleries</option>
+              <option value="Design Utilities & Generators">Design Utilities & Generators</option>
+              <option value="Developer Productivity & Tools">Developer Productivity & Tools</option>
+              <option value="AI & Creative Intelligence">AI & Creative Intelligence</option>
+              <option value="Icons & Vector Assets">Icons & Vector Assets</option>
+              <option value="Charts & Data Visualization">Charts & Data Visualization</option>
+            </select>
+
+            <span id="resource-count-badge" style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted);">Showing 459 resources</span>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="resource-cards-grid" id="resource-cards-grid">
+            <!-- Dynamically populated via app.js -->
+          </div>
+        </section>
+
+        <!-- CTA & /human Community Hub Section -->
+        <section class="cta-human-section" id="cta-section">
+          <div class="cta-inner">
+            <div class="cta-content">
+              <div class="cta-badge">
+                <span class="human-icon">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+                <span>Created by Humans, Built for Humans</span>
+              </div>
+              <h2 class="cta-title">
+                Join <span class="gradient-text">12,400+ Designers</span> & Engineers on /human
+              </h2>
+              <p class="cta-description">
+                Elevate your applications with zero-dependency, handcrafted UI components. Access the collective design library, submit your custom presets, and pair program with frontend craftsmen.
+              </p>
+              <div class="cta-community-meta">
+                <div class="human-avatar-stack">
+                  <div class="human-avatar-item" title="Sarah Jenkins - Lead Designer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  </div>
+                  <div class="human-avatar-item" title="Alex Rivera - UI Engineer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                  </div>
+                  <div class="human-avatar-item" title="Maya Patel - Design Systems">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                  </div>
+                  <div class="human-avatar-item" title="David Chen - Frontend Craft">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path></svg>
+                  </div>
+                </div>
+                <span class="cta-meta-text">Trusted by <strong>1,200+ human teams</strong> worldwide</span>
+              </div>
+            </div>
+
+            <div class="cta-buttons-group">
+              <button class="btn-cta-primary" id="btn-explore-human" onclick="window.openHumanModal()">
+                <span class="human-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+                <span>Enter /human Hub</span>
+              </button>
+
+              <button class="btn-cta-secondary" onclick="window.triggerSampleAction('Joined human design waitlist')">
+                <span class="human-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                <span>Join Community</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Interactive Modal Containers -->
+  <div class="modal-backdrop" id="standard-modal-backdrop">
+    <div class="modal-dialog glass-panel" id="standard-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <span class="human-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path>
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h3 class="modal-title">Confirm Deployment</h3>
+            <p class="modal-subtitle">Production cluster: us-east-1</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-modal-x">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>You are about to release version <strong>v2.4.0-rc1</strong> to the live edge nodes. All connected human team members will seamlessly receive the verified package.</p>
+        <div class="modal-callout">
+          <span class="human-icon" style="color: var(--success); margin-right: 0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <polyline points="17 11 19 13 23 9"></polyline>
+            </svg>
+          </span>
+          <span>Verified and signed by 4 peer reviewers on the human design team.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="cancel-modal-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-modal-btn">
+          <span class="human-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+          <span>Deploy to Production</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated /human Website & Community Hub Modal -->
+  <div class="modal-backdrop" id="human-hub-modal-backdrop">
+    <div class="modal-dialog glass-panel human-page-modal" id="human-hub-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">
+            <span class="human-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h3 class="modal-title">/human — The Collective Hub</h3>
+            <p class="modal-subtitle">Curated, built, and verified by human designers and developers</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-human-hub-x">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Welcome to <strong>/human</strong>. In an era of generic auto-generated components, this playground celebrates genuine human ingenuity, high visual aesthetics, micro-interactions, and accessibility crafted by people for people.</p>
+        
+        <div class="human-profile-grid">
+          <div class="human-profile-card">
+            <div class="human-card-avatar">
+              <span class="human-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </span>
+            </div>
+            <div class="human-card-name">Elena Rostova</div>
+            <div class="human-card-role">Design Architect • Cult UI Contributor</div>
+            <span class="human-card-status">
+              <span class="human-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </span>
+              Active Designer
+            </span>
+          </div>
+
+          <div class="human-profile-card">
+            <div class="human-card-avatar">
+              <span class="human-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </span>
+            </div>
+            <div class="human-card-name">Kenji Sato</div>
+            <div class="human-card-role">CSS Motion Lead • 21st.dev Core</div>
+            <span class="human-card-status">
+              <span class="human-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </span>
+              Active Contributor
+            </span>
+          </div>
+
+          <div class="human-profile-card">
+            <div class="human-card-avatar">
+              <span class="human-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path></svg>
+              </span>
+            </div>
+            <div class="human-card-name">Marcus Vance</div>
+            <div class="human-card-role">Design Engineer • Forge UI Maintainer</div>
+            <span class="human-card-status">
+              <span class="human-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </span>
+              Reviewing PRs
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-callout">
+          <span class="human-icon" style="color: var(--accent-primary); margin-right: 0.5rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          </span>
+          <span>All 7 component libraries in this playground are 100% human-crafted with semantic HTML, vanilla CSS, and zero third-party bloat.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="close-human-hub-btn">Back to Playground</button>
+        <button class="btn btn-primary" onclick="window.triggerSampleAction('Joined /human creator network'); window.closeHumanModal();">
+          <span class="human-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+          </span>
+          <span>Join /human Network</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js 3D Interactive Studio Modal Dialog -->
+  <div class="modal-backdrop" id="three-modal-backdrop">
+    <div class="modal-dialog modal-dialog-lg" role="dialog" aria-labelledby="three-studio-title" aria-modal="true" style="max-width: 860px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <div class="modal-icon-badge" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title" id="three-studio-title">Three.js 3D Spatial Geometry Lab</h3>
+            <p class="modal-subtitle">Interactive WebGL viewport with geometry swapping, wireframe toggles, and lighting controls.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-three-modal-x" aria-label="Close 3D Studio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.25rem 1.75rem;">
+        <div class="three-viewport-wrap" style="position: relative; width: 100%; height: 380px; background: #07090f; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;">
+          <canvas id="three-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+          <div id="three-fallback-msg" style="display: none; position: absolute; text-align: center; color: var(--text-muted); padding: 1rem;">
+            <p style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.35rem;">WebGL 3D Fallback Mode</p>
+            <p style="font-size: 0.85rem;">Hardware accelerated WebGL not supported or initializing.</p>
+          </div>
+          <div style="position: absolute; bottom: 12px; left: 16px; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.72rem; font-family: var(--font-mono); color: #38bdf8; border: 1px solid rgba(255,255,255,0.1);">
+            <span class="pulse-dot" style="display: inline-block; width: 6px; height: 6px; background: #10b981; border-radius: 50%; margin-right: 5px;"></span>
+            Three.js r128 • 60 FPS Client WebGL
+          </div>
+        </div>
+
+        <!-- 3D Scene Controls -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.25rem;">
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.35rem; display: block;">Mesh Geometry</label>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button class="action-btn active" id="geom-torus-btn" onclick="window.switchThreeGeometry('torus')">Torus Knot</button>
+              <button class="action-btn" id="geom-cube-btn" onclick="window.switchThreeGeometry('cube')">Cube</button>
+              <button class="action-btn" id="geom-sphere-btn" onclick="window.switchThreeGeometry('sphere')">Sphere</button>
+              <button class="action-btn" id="geom-cone-btn" onclick="window.switchThreeGeometry('cone')">Cone</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.35rem; display: block;">Material & Render</label>
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+              <button class="action-btn" id="three-wireframe-btn" onclick="window.toggleThreeWireframe()">Wireframe: Off</button>
+              <button class="action-btn" onclick="window.randomizeThreeColor()">Random Color</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.35rem; display: block;">Rotation Speed</label>
+            <input type="range" id="three-speed-slider" min="0" max="0.08" step="0.005" value="0.015" oninput="window.setThreeRotationSpeed(this.value)" style="width: 100%; accent-color: var(--accent-primary);">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">Exports: React Three Fiber (R3F) & Vanilla Three.js</span>
+        <div style="display: flex; gap: 0.6rem;">
+          <button class="btn btn-ghost" id="close-three-modal-btn">Close Lab</button>
+          <button class="btn btn-primary" onclick="window.copyThreeSnippet()">
+            <span class="human-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </span>
+            <span>Copy R3F React Code</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="resources-data.js"></script>
+  <script src="all-projects-data.js"></script>
+  <script src="interactive-modules.js"></script>
+  <script src="components-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
