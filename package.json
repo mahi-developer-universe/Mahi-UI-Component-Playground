@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "node scripts/lint.js",
     "legacy:serve": "serve -l 3000",
-    "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/unit/contrast-calculator.test.js && node tests/accessibility/a11y-check.test.js && node tests/e2e-simulation.js && tsc --noEmit",
+    "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/unit/contrast-calculator.test.js && node tests/unit/registry-validation.test.js && node tests/unit/security-regression.test.js && node tests/accessibility/a11y-check.test.js && node tests/e2e-simulation.js && tsc --noEmit",
     "test:catalog": "node scripts/validate-catalog.js",
     "test:unit": "node tests/unit/contrast-calculator.test.js",
     "test:a11y": "node tests/accessibility/a11y-check.test.js",
