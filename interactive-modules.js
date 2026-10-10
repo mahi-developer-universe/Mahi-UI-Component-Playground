@@ -288,20 +288,18 @@ const INTERACTIVE_MODULES = {
         <div class="module-header-row">
           <div>
             <h4 class="module-title">Mini Logo Maker</h4>
-            <p class="module-desc">Generate clean vector brand marks with human vector icons.</p>
+            <p class="module-desc">Generate clean vector brand marks with modern geometric SVG icons.</p>
           </div>
         </div>
 
         <div style="display:flex; justify-content:center; align-items:center; padding: 2rem; background: var(--bg-secondary); border-radius: var(--radius-lg); margin: 1rem 0; border: 1px solid var(--border-color);">
           <div id="live-logo-render" style="display:flex; align-items:center; gap: 0.85rem;">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-gradient); display:flex; align-items:center; justify-content:center; color: #fff; box-shadow: 0 4px 18px var(--accent-glow);">
-              <span class="human-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              </span>
+            <div style="width: 44px; height: 44px; border-radius: 10px; background: var(--accent-primary); display:flex; align-items:center; justify-content:center; color: #fff;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
             </div>
             <div>
-              <span style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; display:block;">Mahi<span style="color:var(--accent-primary);">Studio</span></span>
-              <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Human Architecture</span>
+              <span style="font-size: 1.35rem; font-family: var(--font-heading); font-weight: 700; letter-spacing: -0.02em; display:block;">Mahi<span style="color:var(--accent-primary);">Studio</span></span>
+              <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">Design Engineering</span>
             </div>
           </div>
         </div>
@@ -1021,7 +1019,7 @@ export const ShimmerButton: React.FC<{ label: string; onClick?: () => void }> = 
 
         <div class="module-controls-bar">
           <button class="btn btn-primary" onclick="window.copyCurrentActiveSnippet()">
-            <span class="human-icon">
+            <span style="display:inline-flex; align-items:center;">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             </span>
             <span>Copy Snippet</span>

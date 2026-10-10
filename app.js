@@ -587,6 +587,8 @@ window.launchProjectModule = function(projId) {
 // 10. 450+ Resource Directory Catalog Search & Filter Engine
 // --------------------------------------------------------------------------
 let userFavoriteResources = new Set(JSON.parse(localStorage.getItem('mahi-fav-resources') || '[]'));
+let resourceDisplayLimit = 48;
+let currentFilteredResources = [];
 
 function initResourceDirectory() {
   if (typeof RESOURCE_DIRECTORY === 'undefined') return;
@@ -594,12 +596,13 @@ function initResourceDirectory() {
   const searchInput = document.getElementById('resource-search-input');
   const catSelect = document.getElementById('resource-category-filter');
   const countBadge = document.getElementById('resource-count-badge');
+  const globalSearchInput = document.getElementById('global-search');
 
   function filterAndRenderResources() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const selectedCat = catSelect ? catSelect.value : 'all';
 
-    const filtered = RESOURCE_DIRECTORY.filter(res => {
+    currentFilteredResources = RESOURCE_DIRECTORY.filter(res => {
       const matchesCat = (selectedCat === 'all' || res.category === selectedCat);
       const matchesQuery = !query || (
         res.name.toLowerCase().includes(query) ||
@@ -610,40 +613,59 @@ function initResourceDirectory() {
       return matchesCat && matchesQuery;
     });
 
-    renderResourceCards(filtered);
+    renderResourceCards();
 
     if (countBadge) {
-      countBadge.textContent = `Showing ${filtered.length} of ${RESOURCE_DIRECTORY.length} resources`;
+      countBadge.textContent = `Showing ${Math.min(resourceDisplayLimit, currentFilteredResources.length)} of ${currentFilteredResources.length} resources`;
     }
   }
 
   if (searchInput) {
-    searchInput.addEventListener('input', filterAndRenderResources);
+    searchInput.addEventListener('input', () => {
+      resourceDisplayLimit = 48;
+      filterAndRenderResources();
+    });
   }
 
   if (catSelect) {
-    catSelect.addEventListener('change', filterAndRenderResources);
+    catSelect.addEventListener('change', () => {
+      resourceDisplayLimit = 48;
+      filterAndRenderResources();
+    });
+  }
+
+  // Also connect global search bar if on resources view
+  if (globalSearchInput) {
+    globalSearchInput.addEventListener('input', (e) => {
+      if (searchInput) {
+        searchInput.value = e.target.value;
+        resourceDisplayLimit = 48;
+        filterAndRenderResources();
+      }
+    });
   }
 
   filterAndRenderResources();
 }
 
-function renderResourceCards(resources) {
+function renderResourceCards() {
   const container = document.getElementById('resource-cards-grid');
   if (!container) return;
 
-  if (resources.length === 0) {
+  if (currentFilteredResources.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
-        <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">🔍 No resources matching your search query</p>
-        <p style="font-size: 0.85rem;">Try a broader keyword like "ui", "gallery", "animation", "motion", or "icon".</p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-muted);">
+        <p style="font-size: 1.15rem; color: var(--text-primary); margin-bottom: 0.5rem;">No resources found</p>
+        <p style="font-size: 0.85rem;">Try a broader keyword or switch categories to browse all 459 resources.</p>
+        <button class="filter-pill active" style="margin-top: 1rem;" onclick="resetResourceFilters()">Reset Filters</button>
       </div>
     `;
+    const loadMoreContainer = document.getElementById('resource-load-more-wrap');
+    if (loadMoreContainer) loadMoreContainer.style.display = 'none';
     return;
   }
 
-  // Render first 60 for instant high performance, or all if filtered
-  const listToRender = resources.slice(0, 72);
+  const listToRender = currentFilteredResources.slice(0, resourceDisplayLimit);
 
   container.innerHTML = listToRender.map(res => {
     const isFav = userFavoriteResources.has(res.id);
@@ -652,20 +674,21 @@ function renderResourceCards(resources) {
     return `
       <div class="resource-card" id="card-${res.id}">
         <div class="resource-header-row">
-          <span class="resource-cat-badge">${res.tag}</span>
-          <button class="resource-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavoriteResource('${res.id}', this)" title="Add to favorites">
+          <span class="resource-cat-badge">${res.tag || 'Resource'}</span>
+          <button class="resource-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavoriteResource('${res.id}', this)" title="${isFav ? 'Remove bookmark' : 'Add to bookmarks'}" aria-label="Bookmark">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
           </button>
         </div>
 
-        <h4 class="resource-name">${escapeHtml(res.name)}</h4>
+        <h4 class="resource-name" title="${escapeHtml(res.name)}">${escapeHtml(res.name)}</h4>
+        <div class="resource-category-label">${escapeHtml(res.category)}</div>
         <div class="resource-url-display" title="${res.url}">${domain}</div>
 
         <div class="resource-footer-row">
           <a href="${res.url}" target="_blank" rel="noopener noreferrer" class="resource-visit-btn">
-            <span>Visit Site</span>
+            <span>Visit Resource</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           </a>
           <button class="resource-copy-url-btn" onclick="copySnippetText('${res.url}', 'URL')">Copy Link</button>
@@ -673,7 +696,59 @@ function renderResourceCards(resources) {
       </div>
     `;
   }).join('');
+
+  // Manage Load More button container
+  let loadMoreContainer = document.getElementById('resource-load-more-wrap');
+  if (!loadMoreContainer) {
+    loadMoreContainer = document.createElement('div');
+    loadMoreContainer.id = 'resource-load-more-wrap';
+    loadMoreContainer.style.textAlign = 'center';
+    loadMoreContainer.style.marginTop = '2.5rem';
+    loadMoreContainer.style.marginBottom = '3rem';
+    container.parentNode.appendChild(loadMoreContainer);
+  }
+
+  if (resourceDisplayLimit < currentFilteredResources.length) {
+    loadMoreContainer.style.display = 'block';
+    loadMoreContainer.innerHTML = `
+      <button class="proj-tab-btn active" style="padding: 0.75rem 2rem; font-size: 0.9rem; cursor: pointer;" onclick="loadMoreResources()">
+        Load More Resources (${listToRender.length} of ${currentFilteredResources.length})
+      </button>
+      <button class="proj-tab-btn" style="padding: 0.75rem 1.5rem; font-size: 0.9rem; cursor: pointer; margin-left: 0.5rem;" onclick="loadAllResources()">
+        Show All (${currentFilteredResources.length})
+      </button>
+    `;
+  } else {
+    loadMoreContainer.style.display = 'none';
+  }
 }
+
+window.loadMoreResources = function() {
+  resourceDisplayLimit += 48;
+  renderResourceCards();
+  const countBadge = document.getElementById('resource-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `Showing ${Math.min(resourceDisplayLimit, currentFilteredResources.length)} of ${currentFilteredResources.length} resources`;
+  }
+};
+
+window.loadAllResources = function() {
+  resourceDisplayLimit = currentFilteredResources.length;
+  renderResourceCards();
+  const countBadge = document.getElementById('resource-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `Showing all ${currentFilteredResources.length} resources`;
+  }
+};
+
+window.resetResourceFilters = function() {
+  const searchInput = document.getElementById('resource-search-input');
+  const catSelect = document.getElementById('resource-category-filter');
+  if (searchInput) searchInput.value = '';
+  if (catSelect) catSelect.value = 'all';
+  resourceDisplayLimit = 48;
+  initResourceDirectory();
+};
 
 window.toggleFavoriteResource = function(resId, btn) {
   if (userFavoriteResources.has(resId)) {

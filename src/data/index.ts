@@ -8,9 +8,9 @@ export const projectsData = rawProjects as FrontendProject[];
 export const resourcesData = rawResources as ResourceItem[];
 
 export const themePresets = [
-  { id: 'dark', label: 'Midnight Dark', color: '#0f172a' },
-  { id: 'light', label: 'Clean Light', color: '#f8fafc' },
-  { id: 'cyberpunk', label: 'Cyberpunk Neon', color: '#ff007f' },
-  { id: 'emerald', label: 'Emerald Forest', color: '#064e3b' },
-  { id: 'sunset', label: 'Sunset Violet', color: '#4a154b' }
+  { id: 'dark', label: 'Slate Dark', color: '#0b0f19' },
+  { id: 'light', label: 'Clean Paper', color: '#ffffff' },
+  { id: 'cyberpunk', label: 'Cyberpunk Neon', color: '#f43f5e' },
+  { id: 'emerald', label: 'Emerald Forest', color: '#061914' },
+  { id: 'sunset', label: 'Warm Sunset', color: '#140d18' }
 ];

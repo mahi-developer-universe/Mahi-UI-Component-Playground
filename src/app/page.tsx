@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { resourcesData, themePresets } from '@/data';
+import Link from 'next/link';
+import { resourcesData, projectsData, themePresets } from '@/data';
 import { ResourceCard } from '@/components/ui/ResourceCard';
+import { ProjectCard } from '@/components/ui/ProjectCard';
+import { InteractiveComponentPlayground } from '@/features/code-playground';
 import { useAppStore } from '@/stores/appStore';
 import { ThemeName } from '@/types';
 
 export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
+  const [activeTab, setActiveTab] = useState<'resources' | 'playground' | 'projects'>('resources');
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -99,36 +103,109 @@ export default function HomePage() {
       {/* Top Navbar */}
       <header className="navbar" id="app-navbar">
         <div className="nav-left">
-          <a href="#" className="brand-logo" id="brand-logo">
+          <Link href="/" className="brand-logo" id="brand-logo">
             <div className="logo-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
               </svg>
             </div>
             <div className="brand-text">
               <span className="brand-title">Mahi <span className="brand-badge">UI</span></span>
-              <span className="brand-subtitle">Resource Hub</span>
+              <span className="brand-subtitle">Platform</span>
             </div>
-          </a>
+          </Link>
+
           <div className="nav-divider"></div>
-          <span className="version-tag">{resourcesData.length} Verified Resources</span>
+
+          {/* Primary View Switcher Navigation */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <button
+              onClick={() => setActiveTab('resources')}
+              style={{
+                background: activeTab === 'resources' ? 'var(--accent-light)' : 'transparent',
+                color: activeTab === 'resources' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              Resources ({resourcesData.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('playground')}
+              style={{
+                background: activeTab === 'playground' ? 'var(--accent-light)' : 'transparent',
+                color: activeTab === 'playground' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              Playground ✨
+            </button>
+            <button
+              onClick={() => setActiveTab('projects')}
+              style={{
+                background: activeTab === 'projects' ? 'var(--accent-light)' : 'transparent',
+                color: activeTab === 'projects' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              Projects ({projectsData.length})
+            </button>
+            <Link
+              href="/studios"
+              style={{
+                background: 'transparent',
+                color: 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              Studios 🎨
+            </Link>
+          </nav>
         </div>
 
         <div className="nav-center">
-          <div className="search-bar-wrapper">
-            <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input
-              type="text"
-              id="global-search"
-              placeholder="Search by name, category, or URL... (Ctrl + K)"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <kbd className="shortcut-badge">⌘K</kbd>
-          </div>
+          {activeTab === 'resources' && (
+            <div className="search-bar-wrapper">
+              <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                id="global-search"
+                placeholder="Search by name, category, or URL... (Ctrl + K)"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <kbd className="shortcut-badge">⌘K</kbd>
+            </div>
+          )}
         </div>
 
         <div className="nav-right">
@@ -179,218 +256,265 @@ export default function HomePage() {
       </header>
 
       {/* Main Workspace Layout */}
-      <div className="layout-body">
-        {/* Sidebar Filter for Resource Categories */}
-        <aside className="sidebar" id="app-sidebar">
-          <div className="sidebar-section">
-            <div className="sidebar-heading">CATEGORIES</div>
-            <nav className="sidebar-nav" id="sidebar-nav">
-              <button
-                className={`nav-item ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setOnlyFavorites(false);
-                }}
-              >
-                <span>All Resources</span>
-                <span className="nav-count">{resourcesData.length}</span>
-              </button>
+      {activeTab === 'playground' && (
+        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
+          <InteractiveComponentPlayground />
+        </div>
+      )}
 
-              <button
-                className={`nav-item ${onlyFavorites ? 'active' : ''}`}
-                onClick={() => setOnlyFavorites(!onlyFavorites)}
-              >
-                <span>Bookmarked / Saved</span>
-                <span className="nav-count" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', fontWeight: 700 }}>
-                  {favorites.length}
-                </span>
-              </button>
-
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }}></div>
-
-              {categories.map((cat) => {
-                const count = resourcesData.filter((r) => r.category === cat).length;
-                return (
-                  <button
-                    key={cat}
-                    className={`nav-item ${selectedCategory === cat && !onlyFavorites ? 'active' : ''}`}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setOnlyFavorites(false);
-                    }}
-                  >
-                    <span style={{ fontSize: '0.825rem' }}>{cat}</span>
-                    <span className="nav-count">{count}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </aside>
-
-        {/* Main Resource Hub Area */}
-        <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', padding: '1.75rem 2rem' }}>
-          {/* 450+ Resource Directory Grid */}
-          <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
-            
-            {/* Top Toolbar: Filter Bar & Live Counters */}
-            <div
+      {activeTab === 'projects' && (
+        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
+          <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 4px 0' }}>30 Developer Projects</h2>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                Complete frontend implementations with full source code and interactive modules.
+              </p>
+            </div>
+            <span
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '1rem',
-                marginBottom: '1.25rem',
-                paddingBottom: '0.75rem',
-                borderBottom: '1px solid var(--border-color)'
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8rem',
+                background: 'var(--accent-light)',
+                color: 'var(--accent-primary)',
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-sm)',
+                fontWeight: 700
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  {selectedCategory === 'all' ? 'All Resources' : selectedCategory}
-                </span>
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontFamily: 'var(--font-mono)',
-                    padding: '2px 8px',
-                    borderRadius: 'var(--radius-sm)',
-                    background: 'var(--accent-light)',
-                    color: 'var(--accent-primary)',
-                    fontWeight: 700
-                  }}
-                >
-                  {filteredResources.length} items
-                </span>
-              </div>
+              30 / 30 Available
+            </span>
+          </div>
 
-              {/* Category Quick Pills */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+            {projectsData.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'resources' && (
+        <div className="layout-body">
+          {/* Sidebar Filter for Resource Categories */}
+          <aside className="sidebar" id="app-sidebar">
+            <div className="sidebar-section">
+              <div className="sidebar-heading">CATEGORIES</div>
+              <nav className="sidebar-nav" id="sidebar-nav">
                 <button
-                  className={`filter-pill ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
+                  className={`nav-item ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
                   onClick={() => {
                     setSelectedCategory('all');
                     setOnlyFavorites(false);
                   }}
-                  style={{ fontSize: '0.78rem', padding: '4px 10px' }}
                 >
-                  All ({resourcesData.length})
+                  <span>All Resources</span>
+                  <span className="nav-count">{resourcesData.length}</span>
                 </button>
+
+                <button
+                  className={`nav-item ${onlyFavorites ? 'active' : ''}`}
+                  onClick={() => setOnlyFavorites(!onlyFavorites)}
+                >
+                  <span>Bookmarked / Saved</span>
+                  <span className="nav-count" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', fontWeight: 700 }}>
+                    {favorites.length}
+                  </span>
+                </button>
+
+                <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }}></div>
+
+                {categories.map((cat) => {
+                  const count = resourcesData.filter((r) => r.category === cat).length;
+                  return (
+                    <button
+                      key={cat}
+                      className={`nav-item ${selectedCategory === cat && !onlyFavorites ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setOnlyFavorites(false);
+                      }}
+                    >
+                      <span style={{ fontSize: '0.825rem' }}>{cat}</span>
+                      <span className="nav-count">{count}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+          </aside>
+
+          {/* Main Resource Hub Area */}
+          <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', padding: '1.75rem 2rem' }}>
+            {/* 450+ Resource Directory Grid */}
+            <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
+              
+              {/* Top Toolbar: Filter Bar & Live Counters */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '1rem',
+                  marginBottom: '1.25rem',
+                  paddingBottom: '0.75rem',
+                  borderBottom: '1px solid var(--border-color)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    {selectedCategory === 'all' ? 'All Resources' : selectedCategory}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontFamily: 'var(--font-mono)',
+                      padding: '2px 8px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: 'var(--accent-light)',
+                      color: 'var(--accent-primary)',
+                      fontWeight: 700
+                    }}
+                  >
+                    {filteredResources.length} items
+                  </span>
+                </div>
+
+                {/* Category Quick Pills */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    className={`filter-pill ${selectedCategory === 'all' && !onlyFavorites ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedCategory('all');
+                      setOnlyFavorites(false);
+                    }}
+                    style={{ fontSize: '0.78rem', padding: '4px 10px' }}
+                  >
+                    All ({resourcesData.length})
+                  </button>
+                  <button
+                    className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
+                    onClick={() => setOnlyFavorites(!onlyFavorites)}
+                    style={{ fontSize: '0.78rem', padding: '4px 10px', color: onlyFavorites ? '#fff' : '#f59e0b' }}
+                  >
+                    ★ Saved ({favorites.length})
+                  </button>
+                </div>
+              </div>
+
+              {/* Search & Category Filter Box */}
+              <div className="resource-search-filter-box" style={{ marginTop: 0 }}>
+                <div className="resource-search-input-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)' }}>
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Filter resources by name, category, or URL..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '2px 6px', fontSize: '0.8rem' }}
+                      title="Clear filter"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                <select
+                  className="resource-category-select"
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setOnlyFavorites(false);
+                  }}
+                >
+                  <option value="all">All Categories ({resourcesData.length})</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat} ({resourcesData.filter((r) => r.category === cat).length})
+                    </option>
+                  ))}
+                </select>
+
                 <button
                   className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
                   onClick={() => setOnlyFavorites(!onlyFavorites)}
-                  style={{ fontSize: '0.78rem', padding: '4px 10px', color: onlyFavorites ? '#fff' : '#f59e0b' }}
+                  style={{ height: '38px', borderRadius: 'var(--radius-md)' }}
                 >
-                  ★ Saved ({favorites.length})
+                  ★ Bookmarks ({favorites.length})
                 </button>
               </div>
-            </div>
 
-            {/* Search & Category Filter Box */}
-            <div className="resource-search-filter-box" style={{ marginTop: 0 }}>
-              <div className="resource-search-input-wrap">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)' }}>
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Filter resources by name, category, or URL..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '2px 6px', fontSize: '0.8rem' }}
-                    title="Clear filter"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-
-              <select
-                className="resource-category-select"
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  setOnlyFavorites(false);
-                }}
-              >
-                <option value="all">All Categories ({resourcesData.length})</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat} ({resourcesData.filter((r) => r.category === cat).length})
-                  </option>
-                ))}
-              </select>
-
-              <button
-                className={`filter-pill ${onlyFavorites ? 'active' : ''}`}
-                onClick={() => setOnlyFavorites(!onlyFavorites)}
-                style={{ height: '38px', borderRadius: 'var(--radius-md)' }}
-              >
-                ★ Bookmarks ({favorites.length})
-              </button>
-            </div>
-
-            {/* Cards Grid or Empty State */}
-            {filteredResources.length === 0 ? (
-              <div
-                style={{
-                  textAlign: 'center',
-                  padding: '4rem 2rem',
-                  background: 'var(--bg-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border-color)',
-                  color: 'var(--text-muted)'
-                }}
-              >
-                <p style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>No resources found</p>
-                <p style={{ fontSize: '0.9rem' }}>Try clearing the search query or switching categories.</p>
-                <button
-                  className="filter-pill active"
-                  style={{ marginTop: '1rem' }}
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedCategory('all');
-                    setOnlyFavorites(false);
+              {/* Cards Grid or Empty State */}
+              {filteredResources.length === 0 ? (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    padding: '4rem 2rem',
+                    background: 'var(--bg-card)',
+                    borderRadius: 'var(--radius-lg)',
+                    border: '1px solid var(--border-color)',
+                    color: 'var(--text-muted)'
                   }}
                 >
-                  Reset Filters
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="resource-cards-grid">
-                  {visibleResources.map((res) => (
-                    <ResourceCard
-                      key={res.id}
-                      resource={res}
-                      isFavorite={favorites.includes(res.id)}
-                      onToggleFavorite={handleToggleFavoriteWithToast}
-                    />
-                  ))}
+                  <p style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>No resources found</p>
+                  <p style={{ fontSize: '0.9rem' }}>Try clearing the search query or switching categories.</p>
+                  <button
+                    className="filter-pill active"
+                    style={{ marginTop: '1rem' }}
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedCategory('all');
+                      setOnlyFavorites(false);
+                    }}
+                  >
+                    Reset Filters
+                  </button>
                 </div>
-
-                {visibleResources.length < filteredResources.length && (
-                  <div style={{ textAlign: 'center', marginTop: '2.5rem', marginBottom: '3rem' }}>
-                    <button
-                      className="proj-tab-btn active"
-                      style={{ padding: '0.75rem 2rem', fontSize: '0.9rem', cursor: 'pointer' }}
-                      onClick={() => setDisplayLimit((prev) => prev + 48)}
-                    >
-                      Load More Resources ({visibleResources.length} of {filteredResources.length})
-                    </button>
+              ) : (
+                <>
+                  <div className="resource-cards-grid">
+                    {visibleResources.map((res) => (
+                      <ResourceCard
+                        key={res.id}
+                        resource={res}
+                        isFavorite={favorites.includes(res.id)}
+                        onToggleFavorite={handleToggleFavoriteWithToast}
+                      />
+                    ))}
                   </div>
-                )}
-              </>
-            )}
-          </section>
-        </main>
-      </div>
+
+                  {visibleResources.length < filteredResources.length && (
+                    <div style={{ textAlign: 'center', marginTop: '2.5rem', marginBottom: '3rem', display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <button
+                        className="proj-tab-btn active"
+                        style={{ padding: '0.75rem 2rem', fontSize: '0.9rem', cursor: 'pointer' }}
+                        onClick={() => setDisplayLimit((prev) => prev + 48)}
+                      >
+                        Load More Resources ({visibleResources.length} of {filteredResources.length})
+                      </button>
+                      <button
+                        className="proj-tab-btn"
+                        style={{ padding: '0.75rem 1.5rem', fontSize: '0.9rem', cursor: 'pointer' }}
+                        onClick={() => setDisplayLimit(filteredResources.length)}
+                      >
+                        Show All ({filteredResources.length})
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </section>
+          </main>
+        </div>
+      )}
     </>
   );
 }
