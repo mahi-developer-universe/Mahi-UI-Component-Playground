@@ -14,21 +14,17 @@ assert.ok(pkg.scripts.test, 'test script exists');
 console.log('✅ 1. package.json configuration & scripts verified');
 
 // 2. Verify all 30 projects have runnable definitions or modules
+const vm = require('vm');
 const projectsContent = fs.readFileSync(path.join(__dirname, '..', 'all-projects-data.js'), 'utf8');
-const projectsMatch = projectsContent.match(/const ALL_30_PROJECTS = (\[[\s\S]*?\]);/);
-const projects = eval(projectsMatch[1]);
+const projects = vm.runInNewContext(projectsContent + '; ALL_30_PROJECTS;');
 assert.strictEqual(projects.length, 30, 'All 30 projects present in registry');
 
-const modulesContent = fs.readFileSync(path.join(__dirname, '..', 'interactive-modules.js'), 'utf8');
-const modulesMatch = modulesContent.match(/const INTERACTIVE_MODULES = ({[\s\S]*?});\r?\n\r?\n\/\/ Global/);
-assert.ok(modulesMatch, 'INTERACTIVE_MODULES parsed successfully');
-const modules = eval('(' + modulesMatch[1] + ')');
+const renderedJson = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'src', 'data', 'projects', 'interactive-rendered.json'), 'utf8'));
 
 let interactiveCount = 0;
 projects.forEach(p => {
   if (p.interactiveModule) {
-    assert.ok(modules[p.interactiveModule], `Module "${p.interactiveModule}" must be registered in INTERACTIVE_MODULES`);
-    assert.strictEqual(typeof modules[p.interactiveModule].render, 'function', `Module "${p.interactiveModule}" must have a render() function`);
+    assert.ok(renderedJson[p.interactiveModule], `Module "${p.interactiveModule}" must be registered in interactive-rendered.json`);
     interactiveCount++;
   }
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { generateTonalScale, calculateContrastRatio, getWcagRating } from '@/lib/color';
+import { generateTonalScale, calculateContrastRatio, getWcagRating, suggestAccessibleColor } from '@/lib/color';
 import { CopyButton } from '@/components/ui/CopyButton';
 
 export const ColorPaletteStudio: React.FC = () => {
@@ -207,6 +207,166 @@ export const ColorPaletteStudio: React.FC = () => {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Accessible Contrast Inspector & Color Alternatives Generator */}
+      <div
+        style={{
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '1.75rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.25rem'
+        }}
+      >
+        <div>
+          <h4 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', fontWeight: 700 }}>
+            WCAG Accessibility Contrast Inspector & Smart Alternatives
+          </h4>
+          <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+            Tests base color against light and dark surfaces. When a pairing fails WCAG AA (&lt; 4.5:1), an accessible luminance alternative is suggested automatically.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+          {/* Surface: Clean White */}
+          {(() => {
+            const contrast = calculateContrastRatio(baseColor, '#ffffff');
+            const rating = getWcagRating(contrast);
+            const suggested = contrast < 4.5 ? suggestAccessibleColor(baseColor, '#ffffff', 4.5) : baseColor;
+
+            return (
+              <div
+                style={{
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '1.25rem',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#64748b' }}>
+                    Surface: Clean White (#ffffff)
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      background: rating.aa ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                      color: rating.aa ? '#059669' : '#dc2626'
+                    }}
+                  >
+                    {contrast}:1 · {rating.label}
+                  </span>
+                </div>
+
+                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: baseColor, marginBottom: '6px' }}>
+                  Headline in Selected Color ({baseColor})
+                </div>
+
+                {contrast < 4.5 && (
+                  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px dashed #cbd5e1', fontSize: '0.8rem' }}>
+                    <div style={{ color: '#dc2626', fontWeight: 600, marginBottom: '4px' }}>
+                      ⚠️ Insufficient contrast for normal text (&lt; 4.5:1)
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span>Suggested Alternative:</span>
+                      <button
+                        onClick={() => setBaseColor(suggested)}
+                        style={{
+                          background: suggested,
+                          color: '#ffffff',
+                          border: 'none',
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Apply {suggested} (4.5:1 AA)
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Surface: Slate Dark */}
+          {(() => {
+            const contrast = calculateContrastRatio(baseColor, '#0b0f19');
+            const rating = getWcagRating(contrast);
+            const suggested = contrast < 4.5 ? suggestAccessibleColor(baseColor, '#0b0f19', 4.5) : baseColor;
+
+            return (
+              <div
+                style={{
+                  background: '#0b0f19',
+                  color: '#f8fafc',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '1.25rem',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: '#94a3b8' }}>
+                    Surface: Slate Dark (#0b0f19)
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      background: rating.aa ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                      color: rating.aa ? '#34d399' : '#f87171'
+                    }}
+                  >
+                    {contrast}:1 · {rating.label}
+                  </span>
+                </div>
+
+                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: baseColor, marginBottom: '6px' }}>
+                  Headline in Selected Color ({baseColor})
+                </div>
+
+                {contrast < 4.5 && (
+                  <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px dashed rgba(255, 255, 255, 0.15)', fontSize: '0.8rem' }}>
+                    <div style={{ color: '#f87171', fontWeight: 600, marginBottom: '4px' }}>
+                      ⚠️ Insufficient contrast for normal text (&lt; 4.5:1)
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span>Suggested Alternative:</span>
+                      <button
+                        onClick={() => setBaseColor(suggested)}
+                        style={{
+                          background: suggested,
+                          color: '#0b0f19',
+                          border: 'none',
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Apply {suggested} (4.5:1 AA)
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
       </div>
 

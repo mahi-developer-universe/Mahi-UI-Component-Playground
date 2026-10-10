@@ -87,7 +87,7 @@ export function hslToHex(h: number, s: number, l: number): string {
   const hue2rgb = (p: number, q: number, t: number) => {
     let tNorm = t;
     if (tNorm < 0) tNorm += 1;
-    if (tNorm > 1) tNorm -= 1;
+    if (tNorm > 1) tNorm += 1;
     if (tNorm < 1 / 6) return p + (q - p) * 6 * tNorm;
     if (tNorm < 1 / 2) return q;
     if (tNorm < 2 / 3) return p + (q - p) * (2 / 3 - tNorm) * 6;
@@ -136,6 +136,37 @@ export function getWcagRating(ratio: number): { aa: boolean; aaa: boolean; label
   else if (ratio >= 3) label = 'AA Large';
 
   return { aa, aaa, label };
+}
+
+/**
+ * Suggests an accessible alternative color that meets target contrast ratio (>= 4.5:1 or >= 7:1)
+ * on a specified background by adjusting luminance while preserving hue.
+ */
+export function suggestAccessibleColor(
+  foregroundHex: string,
+  backgroundHex: string,
+  targetRatio: number = 4.5
+): string {
+  const currentRatio = calculateContrastRatio(foregroundHex, backgroundHex);
+  if (currentRatio >= targetRatio) return foregroundHex;
+
+  const hsl = hexToHsl(foregroundHex);
+  const bgLuminance = getLuminance(backgroundHex);
+
+  // If background is dark, increase lightness; if background is light, decrease lightness
+  const step = bgLuminance < 0.5 ? 2 : -2;
+  let currentL = hsl.l;
+
+  while (currentL > 2 && currentL < 98) {
+    currentL += step;
+    const candidate = hslToHex(hsl.h, hsl.s, currentL);
+    if (calculateContrastRatio(candidate, backgroundHex) >= targetRatio) {
+      return candidate;
+    }
+  }
+
+  // Fallback to pure high-contrast if limit reached
+  return bgLuminance < 0.5 ? '#ffffff' : '#000000';
 }
 
 /**

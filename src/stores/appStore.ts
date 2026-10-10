@@ -7,6 +7,7 @@ interface AppStore {
   setTheme: (theme: ThemeName) => void;
   favorites: string[];
   toggleFavorite: (id: string) => void;
+  setFavorites: (favorites: string[]) => void;
   recentProjects: string[];
   addRecentProject: (id: string) => void;
   isThreeLabOpen: boolean;
@@ -25,6 +26,7 @@ export const useAppStore = create<AppStore>()(
             ? state.favorites.filter((f) => f !== id)
             : [...state.favorites, id]
         })),
+      setFavorites: (favorites) => set({ favorites }),
       recentProjects: [],
       addRecentProject: (id) =>
         set((state) => ({

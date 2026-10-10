@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint || echo 'Lint passed'",
+    "lint": "node scripts/lint.js",
     "legacy:serve": "serve -l 3000",
     "test": "node scripts/validate-catalog.js && node scripts/test-ecosystem.js && node tests/unit/contrast-calculator.test.js && node tests/accessibility/a11y-check.test.js && node tests/e2e-simulation.js && tsc --noEmit",
     "test:catalog": "node scripts/validate-catalog.js",

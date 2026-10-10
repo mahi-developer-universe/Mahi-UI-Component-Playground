@@ -322,6 +322,83 @@ export default function HomePage() {
                   </span>
                 </button>
 
+                {/* Bookmark JSON Import / Export Actions */}
+                <div style={{ display: 'flex', gap: '6px', margin: '4px 0 8px 0', padding: '0 8px' }}>
+                  <button
+                    onClick={() => {
+                      if (favorites.length === 0) {
+                        showToast('No bookmarks to export');
+                        return;
+                      }
+                      const jsonStr = JSON.stringify({ version: '1.0', favorites, exportedAt: new Date().toISOString() }, null, 2);
+                      const blob = new Blob([jsonStr], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `mahi-bookmarks-${Date.now()}.json`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                      showToast('Bookmarks JSON exported 💾');
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '4px 6px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-secondary)',
+                      fontSize: '0.75rem',
+                      cursor: 'pointer'
+                    }}
+                    title="Export saved bookmarks as JSON"
+                  >
+                    Export JSON
+                  </button>
+
+                  <label
+                    style={{
+                      flex: 1,
+                      padding: '4px 6px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-secondary)',
+                      fontSize: '0.75rem',
+                      cursor: 'pointer',
+                      textAlign: 'center'
+                    }}
+                    title="Import bookmarks from JSON"
+                  >
+                    Import
+                    <input
+                      type="file"
+                      accept=".json"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          try {
+                            const parsed = JSON.parse(event.target?.result as string);
+                            if (parsed && Array.isArray(parsed.favorites)) {
+                              const validIds = parsed.favorites.filter((id: any) => typeof id === 'string');
+                              const merged = Array.from(new Set([...favorites, ...validIds]));
+                              useAppStore.getState().setFavorites(merged);
+                              showToast(`Imported ${validIds.length} bookmarks ⭐`);
+                            } else {
+                              showToast('Invalid bookmarks JSON schema');
+                            }
+                          } catch {
+                            showToast('Failed to parse JSON file');
+                          }
+                        };
+                        reader.readAsText(file);
+                      }}
+                    />
+                  </label>
+                </div>
+
                 <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }}></div>
 
                 {categories.map((cat) => {
