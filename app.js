@@ -548,6 +548,14 @@ function setupProjectsFilterTabs() {
   });
 }
 
+window.closeInteractiveSandbox = function() {
+  const sandbox = document.getElementById('interactive-live-sandbox');
+  if (sandbox) {
+    sandbox.innerHTML = '';
+    sandbox.style.display = 'none';
+  }
+};
+
 window.launchProjectModule = function(projId) {
   const proj = ALL_30_PROJECTS.find(p => p.id === projId);
   if (!proj) return;
@@ -555,15 +563,30 @@ window.launchProjectModule = function(projId) {
   const sandbox = document.getElementById('interactive-live-sandbox');
   if (!sandbox) return;
 
+  sandbox.style.display = 'block';
+
+  const renderSandboxHeader = (title, num, category) => `
+    <div class="sandbox-active-banner" style="display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.25rem; background: var(--bg-card); border: 1px solid var(--border-color); border-bottom: none; border-radius: var(--radius-lg, 12px) var(--radius-lg, 12px) 0 0; margin-bottom: 0;">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <span style="font-family: var(--font-mono, monospace); font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); background: rgba(16, 185, 129, 0.15); padding: 3px 8px; border-radius: 4px;">#${num}</span>
+        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);">${title}</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-secondary); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">${category}</span>
+      </div>
+      <button onclick="window.closeInteractiveSandbox()" class="action-btn" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer;" title="Close interactive tool">
+        ✕ Close Sandbox
+      </button>
+    </div>
+  `;
+
   if (proj.interactiveModule && INTERACTIVE_MODULES[proj.interactiveModule]) {
-    sandbox.innerHTML = INTERACTIVE_MODULES[proj.interactiveModule].render();
+    sandbox.innerHTML = renderSandboxHeader(proj.title, proj.num, proj.sectionLabel) + INTERACTIVE_MODULES[proj.interactiveModule].render();
     sandbox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     showToast(`Launched Project #${proj.num}: ${proj.title}`);
 
     // If dither canvas was launched, auto-render initial pattern
     if (proj.interactiveModule === 'dither-studio') {
       setTimeout(() => {
-        window.renderSampleDither('bayer');
+        if (window.renderSampleDither) window.renderSampleDither('bayer');
       }, 50);
     }
 
@@ -574,12 +597,39 @@ window.launchProjectModule = function(projId) {
       }, 50);
     }
   } else {
-    // Fallback: Component suite scroll or notification
-    const componentCard = document.getElementById('card-buttons');
-    if (componentCard) {
-      componentCard.scrollIntoView({ behavior: 'smooth' });
+    // Project #1 or components suite preview: ensure showcase container is visible & render teaser in sandbox
+    const showcaseContainer = document.getElementById('showcase-container');
+    if (showcaseContainer) {
+      showcaseContainer.style.display = 'grid';
     }
-    showToast(`Project #${proj.num}: ${proj.title} preview loaded!`);
+
+    sandbox.innerHTML = renderSandboxHeader(proj.title, proj.num, proj.sectionLabel) + `
+      <div class="interactive-module-box">
+        <div class="module-header-row">
+          <div>
+            <h4 class="module-title">${proj.title}</h4>
+            <p class="module-desc">${proj.description}</p>
+          </div>
+          <div class="module-badge">Core Foundation Suite</div>
+        </div>
+        <div style="padding: 1.5rem; text-align: center; background: var(--bg-secondary); border-radius: 8px; border: 1px dashed var(--border-color); margin-top: 1rem;">
+          <p style="margin: 0 0 1rem 0; color: var(--text-secondary); font-size: 0.95rem;">
+            All 7 core component suites (Buttons, Cards, Badges, Tooltips, Modals, Tabs, Dropdowns) are loaded in the interactive component showcase below!
+          </p>
+          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="document.getElementById('showcase-container').scrollIntoView({ behavior: 'smooth' })">
+              Explore Showcase Components ↓
+            </button>
+            <button class="action-btn" onclick="copySnippetText('npm install mahi-ui', 'CLI Install')">
+              Copy Package Install
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    sandbox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    showToast(`Launched Project #${proj.num}: ${proj.title}`);
   }
 };
 

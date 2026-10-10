@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { resourcesData, projectsData, themePresets } from '@/data';
 import { ResourceCard } from '@/components/ui/ResourceCard';
 import { ProjectCard } from '@/components/ui/ProjectCard';
+import { ProjectModal } from '@/features/project-gallery/ProjectModal';
 import { InteractiveComponentPlayground } from '@/features/code-playground';
 import { useAppStore } from '@/stores/appStore';
-import { ThemeName } from '@/types';
+import { ThemeName, FrontendProject } from '@/types';
 
 export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
@@ -18,6 +19,7 @@ export default function HomePage() {
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [displayLimit, setDisplayLimit] = useState(48);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<FrontendProject | null>(null);
 
   // Global Ctrl+K / Cmd+K search focus shortcut
   useEffect(() => {
@@ -288,7 +290,17 @@ export default function HomePage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
             {projectsData.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onLaunch={(id) => {
+                  const target = projectsData.find((p) => p.id === id);
+                  if (target) {
+                    setSelectedProject(target);
+                    showToast(`Launching ${target.title}...`);
+                  }
+                }}
+              />
             ))}
           </div>
         </div>
@@ -591,6 +603,14 @@ export default function HomePage() {
             </section>
           </main>
         </div>
+      )}
+
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          onToast={showToast}
+        />
       )}
     </>
   );
