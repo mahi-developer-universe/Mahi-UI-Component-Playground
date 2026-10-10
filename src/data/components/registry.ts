@@ -530,5 +530,217 @@ export const SettingsToggle = () => {
       keyboardNavigation: 'Space key toggles state when focused.',
       wcagNotes: 'Communicates checked status through aria-checked attribute.'
     }
+  },
+  {
+    id: 'alerts',
+    title: 'Contextual Alerts & Banners',
+    category: 'feedback',
+    description: 'High-visibility contextual notifications with semantic color coding, iconography, and dismiss actions.',
+    tags: ['Alert', 'Banner', 'Feedback', 'Accessible'],
+    props: [
+      {
+        name: 'variant',
+        label: 'Variant',
+        type: 'select',
+        defaultValue: 'info',
+        options: ['info', 'success', 'warning', 'danger'],
+        description: 'Semantic intent and color treatment'
+      },
+      {
+        name: 'title',
+        label: 'Alert Title',
+        type: 'string',
+        defaultValue: 'Deployment Status',
+        description: 'Headline text of the alert'
+      },
+      {
+        name: 'message',
+        label: 'Alert Message',
+        type: 'string',
+        defaultValue: 'All 37 static paths and security perimeter validations passed with zero violations.',
+        description: 'Detail text rendered inside the alert'
+      }
+    ],
+    previewComponent: 'AlertPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Alert } from '@/components/ui/Alert';
+
+export const StatusAlert = () => {
+  return (
+    <Alert
+      variant="{{variant}}"
+      title="{{title}}"
+      onClose={() => console.log('dismissed')}
+    >
+      {{message}}
+    </Alert>
+  );
+};`,
+      html: `<div class="alert alert-{{variant}}" role="alert">
+  <strong>{{title}}:</strong> {{message}}
+</div>`,
+      tailwind: `<div role="alert" className="flex items-start gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400">
+  <div className="font-bold text-sm">{{title}}</div>
+  <div className="text-sm text-slate-300">{{message}}</div>
+</div>`
+    },
+    accessibility: {
+      role: 'alert',
+      wcagNotes: 'Uses role="alert" with WCAG-compliant 4.5:1 text-to-background contrast.'
+    }
+  },
+  {
+    id: 'skeletons',
+    title: 'Loading Skeletons',
+    category: 'feedback',
+    description: 'Smooth shimmer placeholders preserving layout flow during asynchronous data loading.',
+    tags: ['Skeleton', 'Loading', 'Placeholder', 'Shimmer'],
+    props: [
+      {
+        name: 'variant',
+        label: 'Shape Variant',
+        type: 'select',
+        defaultValue: 'rectangular',
+        options: ['rectangular', 'circular', 'text'],
+        description: 'Geometry of the skeleton placeholder'
+      },
+      {
+        name: 'width',
+        label: 'Width',
+        type: 'string',
+        defaultValue: '100%',
+        description: 'CSS width unit'
+      },
+      {
+        name: 'height',
+        label: 'Height',
+        type: 'string',
+        defaultValue: '64px',
+        description: 'CSS height unit'
+      }
+    ],
+    previewComponent: 'SkeletonPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Skeleton } from '@/components/ui/Skeleton';
+
+export const CardPlaceholder = () => {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <Skeleton variant="{{variant}}" width="{{width}}" height="{{height}}" />
+      <Skeleton width="60%" height="16px" />
+    </div>
+  );
+};`,
+      html: `<div class="skeleton skeleton-{{variant}}" style="width: {{width}}; height: {{height}};"></div>`,
+      tailwind: `<div className="w-full h-16 rounded-xl bg-slate-800 animate-pulse" />`
+    },
+    accessibility: {
+      role: 'presentation',
+      wcagNotes: 'Marked with aria-hidden="true" to prevent screen reader clutter during loads.'
+    }
+  },
+  {
+    id: 'breadcrumbs',
+    title: 'Breadcrumb Navigation',
+    category: 'navigation',
+    description: 'Semantic hierarchical trails helping developers orient within nested route depths.',
+    tags: ['Breadcrumb', 'Navigation', 'Hierarchy', 'Accessible'],
+    props: [
+      {
+        name: 'separator',
+        label: 'Separator Symbol',
+        type: 'string',
+        defaultValue: '/',
+        description: 'Delimiter displayed between breadcrumb trail steps'
+      }
+    ],
+    previewComponent: 'BreadcrumbsPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+
+export const PageTrail = () => {
+  return (
+    <Breadcrumbs
+      separator="{{separator}}"
+      items={[
+        { label: 'Platform', href: '/' },
+        { label: 'Studios', href: '/studios' },
+        { label: 'Workbench', isCurrent: true }
+      ]}
+    />
+  );
+};`,
+      html: `<nav aria-label="Breadcrumb">
+  <ol class="breadcrumb-trail">
+    <li><a href="/">Platform</a></li>
+    <li><span>{{separator}}</span></li>
+    <li aria-current="page">Workbench</li>
+  </ol>
+</nav>`,
+      tailwind: `<nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-slate-400">
+  <a href="/" className="hover:text-white">Platform</a>
+  <span>{{separator}}</span>
+  <span className="text-white font-semibold">Workbench</span>
+</nav>`
+    },
+    accessibility: {
+      role: 'navigation',
+      keyboardNavigation: 'Focusable breadcrumb links with aria-current="page" on current target.',
+      wcagNotes: 'Wraps ordered list inside nav element with aria-label="Breadcrumb".'
+    }
+  },
+  {
+    id: 'empty_states',
+    title: 'Empty States & Fallbacks',
+    category: 'feedback',
+    description: 'Polished dashed placeholders providing actionable cues when zero items or records match.',
+    tags: ['Empty State', 'Fallback', 'Layout', 'No Results'],
+    props: [
+      {
+        name: 'title',
+        label: 'Headline',
+        type: 'string',
+        defaultValue: 'No Bookmarks Found',
+        description: 'Title of the zero-results container'
+      },
+      {
+        name: 'description',
+        label: 'Explanation Text',
+        type: 'string',
+        defaultValue: 'Try selecting a different filter category or import your saved JSON bookmarks collection.',
+        description: 'Helpful guidance text'
+      }
+    ],
+    previewComponent: 'EmptyStatePreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Button } from '@/components/ui/Button';
+
+export const SearchFallback = () => {
+  return (
+    <EmptyState
+      title="{{title}}"
+      description="{{description}}"
+      action={<Button variant="primary">Browse All Resources</Button>}
+    />
+  );
+};`,
+      html: `<div class="empty-state">
+  <h4>{{title}}</h4>
+  <p>{{description}}</p>
+</div>`,
+      tailwind: `<div className="p-12 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/50">
+  <h4 className="text-lg font-bold text-white mb-2">{{title}}</h4>
+  <p className="text-sm text-slate-400 mb-4">{{description}}</p>
+</div>`
+    },
+    accessibility: {
+      role: 'region',
+      wcagNotes: 'Clear contrast and readable guidance with interactive keyboard action slot.'
+    }
   }
 ];

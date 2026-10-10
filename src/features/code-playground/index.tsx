@@ -5,11 +5,13 @@ import { COMPONENT_REGISTRY } from '@/data/components/registry';
 import { PropertyEditor } from './PropertyEditor';
 import { ComponentPreviewCanvas } from './PreviewCanvas';
 import { CodeExporter } from './CodeExporter';
+import { ComponentApiExplorer } from './ComponentApiExplorer';
 import { generateCodeSnippet } from '@/lib/registry';
 
 export const InteractiveComponentPlayground: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string>(COMPONENT_REGISTRY[0].id);
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [activeViewMode, setActiveViewMode] = useState<'workbench' | 'api-docs'>('workbench');
 
   const selectedItem = useMemo(() => {
     return COMPONENT_REGISTRY.find((c) => c.id === selectedComponentId) || COMPONENT_REGISTRY[0];
@@ -82,77 +84,120 @@ export const InteractiveComponentPlayground: React.FC = () => {
           ))}
         </div>
 
-        {/* Viewport size controls */}
-        <div className="responsive-controls" style={{ display: 'flex', gap: '0.25rem' }}>
-          <button
-            className={`size-btn ${viewport === 'mobile' ? 'active' : ''}`}
-            onClick={() => setViewport('mobile')}
-            title="Mobile (380px)"
-          >
-            <span>Mobile</span>
-          </button>
-          <button
-            className={`size-btn ${viewport === 'tablet' ? 'active' : ''}`}
-            onClick={() => setViewport('tablet')}
-            title="Tablet (720px)"
-          >
-            <span>Tablet</span>
-          </button>
-          <button
-            className={`size-btn ${viewport === 'desktop' ? 'active' : ''}`}
-            onClick={() => setViewport('desktop')}
-            title="Desktop (100%)"
-          >
-            <span>Desktop</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Main Split Layout: Live Canvas + Property Controls */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <ComponentPreviewCanvas
-            componentId={selectedItem.id}
-            propValues={activeProps}
-            viewport={viewport}
-          />
-
-          {/* Accessibility Info Bar */}
-          {selectedItem.accessibility && (
-            <div
+        {/* Viewport & View Mode Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', background: 'var(--bg-secondary)', padding: '2px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <button
+              onClick={() => setActiveViewMode('workbench')}
               style={{
-                fontSize: '0.75rem',
-                color: 'var(--text-muted)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-md)',
-                padding: '0.65rem 0.85rem',
-                display: 'flex',
-                gap: '0.5rem',
-                alignItems: 'center'
+                background: activeViewMode === 'workbench' ? 'var(--accent-primary)' : 'transparent',
+                color: activeViewMode === 'workbench' ? '#fff' : 'var(--text-muted)',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer'
               }}
             >
-              <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>A11y:</span>
-              <span>{selectedItem.accessibility.keyboardNavigation || selectedItem.accessibility.wcagNotes}</span>
+              Workbench
+            </button>
+            <button
+              onClick={() => setActiveViewMode('api-docs')}
+              style={{
+                background: activeViewMode === 'api-docs' ? 'var(--accent-primary)' : 'transparent',
+                color: activeViewMode === 'api-docs' ? '#fff' : 'var(--text-muted)',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              API Spec
+            </button>
+          </div>
+
+          {activeViewMode === 'workbench' && (
+            <div className="responsive-controls" style={{ display: 'flex', gap: '0.25rem' }}>
+              <button
+                className={`size-btn ${viewport === 'mobile' ? 'active' : ''}`}
+                onClick={() => setViewport('mobile')}
+                title="Mobile (380px)"
+              >
+                <span>Mobile</span>
+              </button>
+              <button
+                className={`size-btn ${viewport === 'tablet' ? 'active' : ''}`}
+                onClick={() => setViewport('tablet')}
+                title="Tablet (720px)"
+              >
+                <span>Tablet</span>
+              </button>
+              <button
+                className={`size-btn ${viewport === 'desktop' ? 'active' : ''}`}
+                onClick={() => setViewport('desktop')}
+                title="Desktop (100%)"
+              >
+                <span>Desktop</span>
+              </button>
             </div>
           )}
         </div>
-
-        {/* Property Controls */}
-        <PropertyEditor
-          propsConfig={selectedItem.props}
-          values={activeProps}
-          onChange={handlePropChange}
-          onReset={handleResetProps}
-        />
       </div>
 
-      {/* Synchronized Generated Code Viewer */}
-      <CodeExporter
-        codeReact={generatedReact}
-        codeHtml={generatedHtml}
-        codeTailwind={generatedTailwind}
-      />
+      {activeViewMode === 'api-docs' ? (
+        <ComponentApiExplorer component={selectedItem} />
+      ) : (
+        <>
+          {/* Main Split Layout: Live Canvas + Property Controls */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <ComponentPreviewCanvas
+                componentId={selectedItem.id}
+                propValues={activeProps}
+                viewport={viewport}
+              />
+
+              {/* Accessibility Info Bar */}
+              {selectedItem.accessibility && (
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-muted)',
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '0.65rem 0.85rem',
+                    display: 'flex',
+                    gap: '0.5rem',
+                    alignItems: 'center'
+                  }}
+                >
+                  <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>A11y:</span>
+                  <span>{selectedItem.accessibility.keyboardNavigation || selectedItem.accessibility.wcagNotes}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Property Controls */}
+            <PropertyEditor
+              propsConfig={selectedItem.props}
+              values={activeProps}
+              onChange={handlePropChange}
+              onReset={handleResetProps}
+            />
+          </div>
+
+          {/* Synchronized Generated Code Viewer */}
+          <CodeExporter
+            codeReact={generatedReact}
+            codeHtml={generatedHtml}
+            codeTailwind={generatedTailwind}
+          />
+        </>
+      )}
     </div>
   );
 };

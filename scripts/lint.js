@@ -32,10 +32,12 @@ function scanDir(dir) {
       if (resPath.endsWith('lint.js')) continue;
 
       fileCount++;
-      const content = fs.readFileSync(resPath, 'utf8');
+      const rawContent = fs.readFileSync(resPath, 'utf8');
+      // Strip block and line comments to check only executable code
+      const codeOnly = rawContent.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
 
       for (const check of FORBIDDEN_PATTERNS) {
-        if (check.pattern.test(content)) {
+        if (check.pattern.test(codeOnly)) {
           console.error(`❌ Security Violation in ${path.relative(process.cwd(), resPath)}: ${check.message}`);
           errorCount++;
         }

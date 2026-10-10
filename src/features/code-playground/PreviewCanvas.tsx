@@ -10,6 +10,10 @@ import { Tabs } from '@/components/ui/Tabs';
 import { Dropdown } from '@/components/ui/Dropdown';
 import { Input } from '@/components/ui/Input';
 import { Switch } from '@/components/ui/Switch';
+import { Alert } from '@/components/ui/Alert';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 interface ComponentPreviewCanvasProps {
   componentId: string;
@@ -157,6 +161,58 @@ export const ComponentPreviewCanvas: React.FC<ComponentPreviewCanvasProps> = ({
               checked={Boolean(propValues.checked)}
               onChange={() => {}}
               disabled={Boolean(propValues.disabled)}
+            />
+          </div>
+        );
+
+      case 'alerts':
+        return (
+          <div style={{ width: '100%', maxWidth: '440px', margin: '0 auto' }}>
+            <Alert
+              variant={propValues.variant || 'info'}
+              title={propValues.title || 'System Notification'}
+              onClose={() => alert('Dismissed')}
+            >
+              {propValues.message || 'Important operational message or update notice.'}
+            </Alert>
+          </div>
+        );
+
+      case 'skeletons':
+        return (
+          <div style={{ width: '100%', maxWidth: '380px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Skeleton
+              variant={propValues.variant || 'rectangular'}
+              width={propValues.width || '100%'}
+              height={propValues.height || '64px'}
+              borderRadius="12px"
+            />
+            <Skeleton width="70%" height="20px" />
+            <Skeleton width="45%" height="16px" />
+          </div>
+        );
+
+      case 'breadcrumbs':
+        return (
+          <div style={{ padding: '1rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: 'var(--radius-md)' }}>
+            <Breadcrumbs
+              separator={propValues.separator || '/'}
+              items={[
+                { label: 'Ecosystem', href: '/' },
+                { label: 'Studios', href: '/studios' },
+                { label: 'Component Workbench', isCurrent: true }
+              ]}
+            />
+          </div>
+        );
+
+      case 'empty_states':
+        return (
+          <div style={{ width: '100%', maxWidth: '440px', margin: '0 auto' }}>
+            <EmptyState
+              title={propValues.title || 'No Bookmarks Found'}
+              description={propValues.description || 'Try selecting a different filter category or import your saved JSON bookmarks collection.'}
+              action={<Button variant="primary" size="sm">Browse Directory</Button>}
             />
           </div>
         );
