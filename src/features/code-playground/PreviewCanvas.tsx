@@ -14,22 +14,39 @@ import { Alert } from '@/components/ui/Alert';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Toast } from '@/components/ui/Toast';
+import { Progress } from '@/components/ui/Progress';
+import { Pagination } from '@/components/ui/Pagination';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { Avatar } from '@/components/ui/Avatar';
+import { StatCard } from '@/components/ui/StatCard';
 
 interface ComponentPreviewCanvasProps {
   componentId: string;
   propValues: Record<string, any>;
-  viewport: 'desktop' | 'tablet' | 'mobile';
+  viewport: 'desktop' | 'tablet' | 'mobile' | 'ultrawide';
+  simulatedState?: 'default' | 'hover' | 'focus' | 'disabled' | 'loading' | 'error';
 }
 
 export const ComponentPreviewCanvas: React.FC<ComponentPreviewCanvasProps> = ({
   componentId,
   propValues,
-  viewport
+  viewport,
+  simulatedState = 'default'
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
+  // Compute effective prop values factoring in simulated state overrides
+  const effectiveProps: Record<string, any> = {
+    ...propValues,
+    disabled: simulatedState === 'disabled' ? true : Boolean(propValues.disabled),
+    isLoading: simulatedState === 'loading' ? true : Boolean(propValues.isLoading),
+    error: simulatedState === 'error' ? 'Simulated error message' : propValues.error
+  };
+
   const widthStyle: Record<string, string> = {
-    desktop: '100%',
+    ultrawide: '100%',
+    desktop: '1024px',
     tablet: '720px',
     mobile: '380px'
   };
@@ -40,13 +57,14 @@ export const ComponentPreviewCanvas: React.FC<ComponentPreviewCanvasProps> = ({
         return (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button
-              variant={propValues.variant || 'primary'}
-              size={propValues.size || 'md'}
-              isLoading={Boolean(propValues.isLoading)}
-              disabled={Boolean(propValues.disabled)}
-              onClick={() => alert(`Clicked: ${propValues.label}`)}
+              variant={effectiveProps.variant || 'primary'}
+              size={effectiveProps.size || 'md'}
+              isLoading={Boolean(effectiveProps.isLoading)}
+              disabled={Boolean(effectiveProps.disabled)}
+              className={simulatedState === 'hover' ? 'hover-simulated' : simulatedState === 'focus' ? 'focus-simulated' : undefined}
+              onClick={() => alert(`Clicked: ${effectiveProps.label}`)}
             >
-              {propValues.label || 'Action Button'}
+              {effectiveProps.label || 'Action Button'}
             </Button>
           </div>
         );
@@ -213,6 +231,75 @@ export const ComponentPreviewCanvas: React.FC<ComponentPreviewCanvasProps> = ({
               title={propValues.title || 'No Bookmarks Found'}
               description={propValues.description || 'Try selecting a different filter category or import your saved JSON bookmarks collection.'}
               action={<Button variant="primary" size="sm">Browse Directory</Button>}
+            />
+          </div>
+        );
+
+      case 'toasts':
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Toast
+              message={propValues.message || 'Notification broadcast'}
+              variant={propValues.variant || 'success'}
+            />
+          </div>
+        );
+
+      case 'progress':
+        return (
+          <div style={{ width: '100%', maxWidth: '380px', margin: '0 auto' }}>
+            <Progress
+              value={Number(propValues.value ?? 65)}
+              variant={propValues.variant || 'gradient'}
+              label={propValues.label || 'Build Metric'}
+            />
+          </div>
+        );
+
+      case 'pagination':
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Pagination
+              currentPage={1}
+              totalPages={Number(propValues.totalPages ?? 8)}
+              onPageChange={() => {}}
+            />
+          </div>
+        );
+
+      case 'checkboxes':
+        return (
+          <div style={{ maxWidth: '420px', margin: '0 auto', padding: '1rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: 'var(--radius-md)' }}>
+            <Checkbox
+              label={propValues.label || 'Accept System Guidelines'}
+              description={propValues.description || 'Allow automated security and quality verification.'}
+              checked={Boolean(propValues.checked)}
+              disabled={Boolean(propValues.disabled)}
+              onChange={() => {}}
+            />
+          </div>
+        );
+
+      case 'avatars':
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem' }}>
+            <Avatar
+              fallback={propValues.fallback || 'JD'}
+              size={propValues.size || 'lg'}
+              status={propValues.status || 'online'}
+            />
+          </div>
+        );
+
+      case 'stat_cards':
+        return (
+          <div style={{ maxWidth: '320px', margin: '0 auto' }}>
+            <StatCard
+              label={propValues.label || 'Active Subscribers'}
+              value={propValues.value || '12,450'}
+              change={propValues.change || '+18.4%'}
+              trend={propValues.trend || 'up'}
+              description="Real-time global verified developers"
             />
           </div>
         );

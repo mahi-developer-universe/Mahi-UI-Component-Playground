@@ -22,14 +22,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci || npm install
 
+      - name: Run Static Security & Quality Linter
+        run: npm run lint
+
       - name: Run Catalog & Resource Audits
         run: node scripts/validate-catalog.js
 
       - name: Run Ecosystem Integration Tests
         run: node scripts/test-ecosystem.js
 
-      - name: Run Unit Tests
-        run: node tests/unit/contrast-calculator.test.js
+      - name: Run Unit Tests & Security Regressions
+        run: node tests/unit/contrast-calculator.test.js && node tests/unit/registry-validation.test.js && node tests/unit/security-regression.test.js
 
       - name: Run Accessibility Tests
         run: node tests/accessibility/a11y-check.test.js

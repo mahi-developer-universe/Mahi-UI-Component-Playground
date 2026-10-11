@@ -150,6 +150,46 @@ export const ComponentApiExplorer: React.FC<ComponentApiExplorerProps> = ({ comp
           )}
         </div>
       )}
+
+      {/* Component Dependency & Bundle Size Impact Inspector */}
+      <div
+        style={{
+          background: 'rgba(99, 102, 241, 0.04)',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          borderRadius: 'var(--radius-md, 8px)',
+          padding: '12px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.85rem' }}>
+            <span>📦 Dependency & Runtime Bundle Impact</span>
+            <span style={{ fontSize: '0.75rem', padding: '1px 6px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '4px' }}>
+              Tree-Shakeable
+            </span>
+          </div>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'monospace' }}>
+            Estimated Gzip: <strong>&lt; 1.2 KB</strong>
+          </span>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px', fontSize: '0.8rem' }}>
+          <div style={{ padding: '6px 10px', background: 'var(--bg-secondary)', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>PEER DEPENDENCIES</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>react @ ^19.0.0</span>
+          </div>
+          <div style={{ padding: '6px 10px', background: 'var(--bg-secondary)', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>RUNTIME VENDORS</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>0 external runtime packages</span>
+          </div>
+          <div style={{ padding: '6px 10px', background: 'var(--bg-secondary)', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>TOKEN COUPLING</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>Pure CSS Variables</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

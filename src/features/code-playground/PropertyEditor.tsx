@@ -12,13 +12,21 @@ interface PropertyEditorProps {
   values: Record<string, any>;
   onChange: (name: string, value: any) => void;
   onReset: () => void;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
 export const PropertyEditor: React.FC<PropertyEditorProps> = ({
   propsConfig,
   values,
   onChange,
-  onReset
+  onReset,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false
 }) => {
   return (
     <div
@@ -33,17 +41,41 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h4 style={{ fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)' }}>
+        <h4 style={{ fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', margin: 0 }}>
           Component Properties
         </h4>
-        <button
-          onClick={onReset}
-          className="action-btn"
-          style={{ fontSize: '0.75rem', padding: '3px 8px' }}
-          title="Reset to default props"
-        >
-          Reset Defaults
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          {onUndo && (
+            <button
+              onClick={onUndo}
+              disabled={!canUndo}
+              className="action-btn"
+              style={{ fontSize: '0.75rem', padding: '3px 8px', opacity: canUndo ? 1 : 0.4, cursor: canUndo ? 'pointer' : 'not-allowed' }}
+              title="Undo last change"
+            >
+              ↶ Undo
+            </button>
+          )}
+          {onRedo && (
+            <button
+              onClick={onRedo}
+              disabled={!canRedo}
+              className="action-btn"
+              style={{ fontSize: '0.75rem', padding: '3px 8px', opacity: canRedo ? 1 : 0.4, cursor: canRedo ? 'pointer' : 'not-allowed' }}
+              title="Redo change"
+            >
+              ↷ Redo
+            </button>
+          )}
+          <button
+            onClick={onReset}
+            className="action-btn"
+            style={{ fontSize: '0.75rem', padding: '3px 8px' }}
+            title="Reset to default props"
+          >
+            Reset Defaults
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

@@ -8,8 +8,10 @@ import { TypographyStudio } from '@/features/typography-studio';
 import { IconExplorer } from '@/features/icon-explorer';
 import { BackgroundStudio } from '@/features/background-studio';
 import { MotionLab } from '@/features/animation-lab';
+import { ComponentRecipeBuilder, AccessibleChartStudio } from '@/features/design-system';
+import { VisualPageBuilder } from '@/features/page-builder';
 
-type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion';
+type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder';
 
 export default function StudiosPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('typography');
@@ -20,7 +22,10 @@ export default function StudiosPage() {
     { id: 'colors', label: 'Color & Contrast', icon: '🎨' },
     { id: 'themes', label: 'Theme Studio', icon: '⚙️' },
     { id: 'backgrounds', label: 'Background Studio', icon: '▦' },
-    { id: 'motion', label: 'Motion Physics', icon: '▶' }
+    { id: 'motion', label: 'Motion Physics', icon: '▶' },
+    { id: 'recipes', label: 'Recipe Builder', icon: '🧩' },
+    { id: 'charts', label: 'Accessible Charts', icon: '📊' },
+    { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' }
   ];
 
   return (
@@ -188,6 +193,48 @@ export default function StudiosPage() {
               </p>
             </div>
             <MotionLab />
+          </section>
+        )}
+
+        {activeTab === 'recipes' && (
+          <section>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 6px 0' }}>
+                🧩 Component Recipe & Workflow Studio
+              </h2>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                Compose and preview composite patterns (Auth Cards, Telemetry Headers, Filter Bars) with full source export.
+              </p>
+            </div>
+            <ComponentRecipeBuilder />
+          </section>
+        )}
+
+        {activeTab === 'charts' && (
+          <section>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 6px 0' }}>
+                📊 Accessible Chart & Data Studio
+              </h2>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                Configure real-time histograms, distribution donuts, and continuous trend curves with automated WCAG AA tabular screen-reader alternatives.
+              </p>
+            </div>
+            <AccessibleChartStudio />
+          </section>
+        )}
+
+        {activeTab === 'pagebuilder' && (
+          <section>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 6px 0' }}>
+                📐 Visual Page Canvas Builder
+              </h2>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                Drag, arrange, and customize full responsive landing page sections with instant Next.js 16 page export.
+              </p>
+            </div>
+            <VisualPageBuilder />
           </section>
         )}
       </div>

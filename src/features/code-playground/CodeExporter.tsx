@@ -64,7 +64,27 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
           )}
         </div>
 
-        <CopyButton textToCopy={currentCode} label="Copy Code" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            onClick={() => {
+              const extension = activeTab === 'react' ? 'tsx' : activeTab === 'html' ? 'html' : 'css';
+              const mime = activeTab === 'react' ? 'text/typescript' : 'text/plain';
+              const blob = new Blob([currentCode], { type: mime });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `Component.${extension}`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="action-btn"
+            style={{ fontSize: '0.75rem', padding: '4px 10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            title="Download snippet file"
+          >
+            <span>↓ Download</span>
+          </button>
+          <CopyButton textToCopy={currentCode} label="Copy Code" />
+        </div>
       </div>
 
       <pre

@@ -6,12 +6,14 @@ import { themePresets } from '@/data';
 import { ThemeName } from '@/types';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { Slider } from '@/components/ui/Slider';
+import { exportDTCGDesignTokens } from '@/lib/dtcg-tokens';
 
 export const ThemeStudio: React.FC = () => {
   const { theme, setTheme } = useAppStore();
   const [borderRadius, setBorderRadius] = useState(12);
   const [blurIntensity, setBlurIntensity] = useState(16);
   const [borderAlpha, setBorderAlpha] = useState(15);
+  const [exportFormat, setExportFormat] = useState<'css' | 'dtcg'>('css');
 
   const activeThemePreset = themePresets.find((t) => t.id === theme) || themePresets[0];
 
@@ -21,6 +23,12 @@ export const ThemeStudio: React.FC = () => {
   --border-opacity: ${borderAlpha / 100};
   --theme-anchor: ${activeThemePreset.color};
 }`;
+
+  const generatedDtcgBundle = JSON.stringify(
+    exportDTCGDesignTokens(theme, borderRadius, blurIntensity, borderAlpha),
+    null,
+    2
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -183,11 +191,68 @@ export const ThemeStudio: React.FC = () => {
 
         {/* Code Output */}
         <div style={{ marginTop: '0.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-              Generated CSS Token Output
-            </span>
-            <CopyButton text={generatedThemeBundle} label="Copy CSS Tokens" />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                Token Export:
+              </span>
+              <div style={{ display: 'flex', background: 'var(--bg-secondary)', padding: '2px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                <button
+                  onClick={() => setExportFormat('css')}
+                  style={{
+                    background: exportFormat === 'css' ? 'var(--accent-primary)' : 'transparent',
+                    color: exportFormat === 'css' ? '#fff' : 'var(--text-muted)',
+                    border: 'none',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  CSS Variables
+                </button>
+                <button
+                  onClick={() => setExportFormat('dtcg')}
+                  style={{
+                    background: exportFormat === 'dtcg' ? 'var(--accent-primary)' : 'transparent',
+                    color: exportFormat === 'dtcg' ? '#fff' : 'var(--text-muted)',
+                    border: 'none',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  W3C DTCG Tokens (JSON)
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <CopyButton
+                text={exportFormat === 'css' ? generatedThemeBundle : generatedDtcgBundle}
+                label={exportFormat === 'css' ? 'Copy CSS' : 'Copy DTCG JSON'}
+              />
+              {exportFormat === 'dtcg' && (
+                <button
+                  onClick={() => {
+                    const blob = new Blob([generatedDtcgBundle], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `tokens-${theme}.tokens.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="action-btn"
+                  style={{ fontSize: '0.75rem', padding: '3px 8px', cursor: 'pointer' }}
+                >
+                  ↓ Download .tokens.json
+                </button>
+              )}
+            </div>
           </div>
           <pre
             style={{
@@ -196,12 +261,14 @@ export const ThemeStudio: React.FC = () => {
               borderRadius: 'var(--radius-md)',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.85rem',
-              color: '#38bdf8',
+              color: exportFormat === 'css' ? '#38bdf8' : '#34d399',
               margin: 0,
-              border: '1px solid var(--border-color)'
+              border: '1px solid var(--border-color)',
+              maxHeight: '260px',
+              overflowY: 'auto'
             }}
           >
-            {generatedThemeBundle}
+            {exportFormat === 'css' ? generatedThemeBundle : generatedDtcgBundle}
           </pre>
         </div>
       </div>

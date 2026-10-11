@@ -10,8 +10,9 @@ import { generateCodeSnippet } from '@/lib/registry';
 
 export const InteractiveComponentPlayground: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string>(COMPONENT_REGISTRY[0].id);
-  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile' | 'ultrawide'>('desktop');
   const [activeViewMode, setActiveViewMode] = useState<'workbench' | 'api-docs'>('workbench');
+  const [simulatedState, setSimulatedState] = useState<'default' | 'hover' | 'focus' | 'disabled' | 'loading' | 'error'>('default');
 
   const selectedItem = useMemo(() => {
     return COMPONENT_REGISTRY.find((c) => c.id === selectedComponentId) || COMPONENT_REGISTRY[0];
@@ -29,9 +30,52 @@ export const InteractiveComponentPlayground: React.FC = () => {
     return initial;
   });
 
+  // Safely restore component and prop state from URL query parameters if present
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlComp = params.get('component');
+      const urlProps = params.get('props');
+
+      if (urlComp && COMPONENT_REGISTRY.some((c) => c.id === urlComp)) {
+        setSelectedComponentId(urlComp);
+      }
+
+      if (urlProps) {
+        const decoded = JSON.parse(decodeURIComponent(urlProps));
+        if (decoded && typeof decoded === 'object' && !Array.isArray(decoded)) {
+          const compId = urlComp || selectedComponentId;
+          setPropsState((prev) => ({
+            ...prev,
+            [compId]: {
+              ...prev[compId],
+              ...decoded
+            }
+          }));
+        }
+      }
+    } catch {
+      // Graceful fallback if URL parameter is malformed
+    }
+  }, []);
+
+  // History stacks for Undo / Redo
+  const [historyPast, setHistoryPast] = useState<Record<string, Record<string, any>[]>>({});
+  const [historyFuture, setHistoryFuture] = useState<Record<string, Record<string, any>[]>>({});
+
   const activeProps = propsState[selectedItem.id] || {};
 
   const handlePropChange = (name: string, value: any) => {
+    const current = propsState[selectedItem.id] || {};
+    setHistoryPast((prev) => ({
+      ...prev,
+      [selectedItem.id]: [...(prev[selectedItem.id] || []), { ...current }]
+    }));
+    setHistoryFuture((prev) => ({
+      ...prev,
+      [selectedItem.id]: []
+    }));
     setPropsState((prev) => ({
       ...prev,
       [selectedItem.id]: {
@@ -41,11 +85,42 @@ export const InteractiveComponentPlayground: React.FC = () => {
     }));
   };
 
+  const handleUndo = () => {
+    const past = historyPast[selectedItem.id] || [];
+    if (past.length === 0) return;
+    const previous = past[past.length - 1];
+    const newPast = past.slice(0, past.length - 1);
+    const current = propsState[selectedItem.id] || {};
+
+    setHistoryPast((prev) => ({ ...prev, [selectedItem.id]: newPast }));
+    setHistoryFuture((prev) => ({ ...prev, [selectedItem.id]: [current, ...(prev[selectedItem.id] || [])] }));
+    setPropsState((prev) => ({ ...prev, [selectedItem.id]: previous }));
+  };
+
+  const handleRedo = () => {
+    const future = historyFuture[selectedItem.id] || [];
+    if (future.length === 0) return;
+    const next = future[0];
+    const newFuture = future.slice(1);
+    const current = propsState[selectedItem.id] || {};
+
+    setHistoryFuture((prev) => ({ ...prev, [selectedItem.id]: newFuture }));
+    setHistoryPast((prev) => ({ ...prev, [selectedItem.id]: [...(prev[selectedItem.id] || []), current] }));
+    setPropsState((prev) => ({ ...prev, [selectedItem.id]: next }));
+  };
+
   const handleResetProps = () => {
+    const current = propsState[selectedItem.id] || {};
     const defaults: Record<string, any> = {};
     selectedItem.props.forEach((p) => {
       defaults[p.name] = p.defaultValue;
     });
+
+    setHistoryPast((prev) => ({
+      ...prev,
+      [selectedItem.id]: [...(prev[selectedItem.id] || []), { ...current }]
+    }));
+    setHistoryFuture((prev) => ({ ...prev, [selectedItem.id]: [] }));
     setPropsState((prev) => ({
       ...prev,
       [selectedItem.id]: defaults
@@ -120,7 +195,7 @@ export const InteractiveComponentPlayground: React.FC = () => {
           </div>
 
           {activeViewMode === 'workbench' && (
-            <div className="responsive-controls" style={{ display: 'flex', gap: '0.25rem' }}>
+            <div className="responsive-controls" style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
               <button
                 className={`size-btn ${viewport === 'mobile' ? 'active' : ''}`}
                 onClick={() => setViewport('mobile')}
@@ -138,9 +213,58 @@ export const InteractiveComponentPlayground: React.FC = () => {
               <button
                 className={`size-btn ${viewport === 'desktop' ? 'active' : ''}`}
                 onClick={() => setViewport('desktop')}
-                title="Desktop (100%)"
+                title="Desktop (1024px)"
               >
                 <span>Desktop</span>
+              </button>
+              <button
+                className={`size-btn ${viewport === 'ultrawide' ? 'active' : ''}`}
+                onClick={() => setViewport('ultrawide')}
+                title="Ultrawide (100%)"
+              >
+                <span>Full</span>
+              </button>
+
+              {/* Interactive State Simulator Pills */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: '6px', paddingLeft: '6px', borderLeft: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginRight: '2px' }}>State:</span>
+                {(['default', 'hover', 'focus', 'disabled', 'loading', 'error'] as const).map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setSimulatedState(st)}
+                    style={{
+                      background: simulatedState === st ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: simulatedState === st ? '#fff' : 'var(--text-muted)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '2px 6px',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textTransform: 'capitalize'
+                    }}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  try {
+                    const encoded = encodeURIComponent(JSON.stringify(activeProps));
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?component=${selectedComponentId}&props=${encoded}`;
+                    navigator.clipboard.writeText(shareUrl);
+                    alert('Copied shareable configuration link to clipboard!');
+                  } catch {
+                    alert('Could not copy link');
+                  }
+                }}
+                className="action-btn"
+                style={{ fontSize: '0.75rem', padding: '4px 8px', marginLeft: '6px' }}
+                title="Share component configuration URL"
+              >
+                🔗 Share Link
               </button>
             </div>
           )}
@@ -158,6 +282,7 @@ export const InteractiveComponentPlayground: React.FC = () => {
                 componentId={selectedItem.id}
                 propValues={activeProps}
                 viewport={viewport}
+                simulatedState={simulatedState}
               />
 
               {/* Accessibility Info Bar */}
@@ -187,6 +312,10 @@ export const InteractiveComponentPlayground: React.FC = () => {
               values={activeProps}
               onChange={handlePropChange}
               onReset={handleResetProps}
+              onUndo={handleUndo}
+              onRedo={handleRedo}
+              canUndo={(historyPast[selectedItem.id] || []).length > 0}
+              canRedo={(historyFuture[selectedItem.id] || []).length > 0}
             />
           </div>
 

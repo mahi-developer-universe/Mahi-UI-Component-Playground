@@ -389,20 +389,22 @@ export default function HomePage() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
+                        // Limit file size to 2MB
+                        if (file.size > 2 * 1024 * 1024) {
+                          showToast('File size exceeds 2MB limit');
+                          return;
+                        }
                         const reader = new FileReader();
-                        reader.onload = (event) => {
+                        reader.onload = async (event) => {
                           try {
+                            const { sanitizeBookmarkPayload } = await import('@/lib/security');
                             const parsed = JSON.parse(event.target?.result as string);
-                            if (parsed && Array.isArray(parsed.favorites)) {
-                              const validIds = parsed.favorites.filter((id: any) => typeof id === 'string');
-                              const merged = Array.from(new Set([...favorites, ...validIds]));
-                              useAppStore.getState().setFavorites(merged);
-                              showToast(`Imported ${validIds.length} bookmarks ⭐`);
-                            } else {
-                              showToast('Invalid bookmarks JSON schema');
-                            }
-                          } catch {
-                            showToast('Failed to parse JSON file');
+                            const result = sanitizeBookmarkPayload(parsed);
+                            const merged = Array.from(new Set([...favorites, ...result.validIds]));
+                            useAppStore.getState().setFavorites(merged);
+                            showToast(`Imported ${result.validIds.length} bookmarks ⭐`);
+                          } catch (err: any) {
+                            showToast(err?.message || 'Failed to parse bookmarks JSON');
                           }
                         };
                         reader.readAsText(file);

@@ -742,5 +742,372 @@ export const SearchFallback = () => {
       role: 'region',
       wcagNotes: 'Clear contrast and readable guidance with interactive keyboard action slot.'
     }
+  },
+  {
+    id: 'toasts',
+    title: 'Toast Notifications',
+    category: 'feedback',
+    description: 'Transient status feedback banners with accessible roles and animated entry transitions.',
+    tags: ['Toast', 'Notification', 'Feedback', 'Status'],
+    props: [
+      {
+        name: 'message',
+        label: 'Message',
+        type: 'string',
+        defaultValue: 'Changes saved successfully to your cloud profile.',
+        description: 'Text rendered in the notification'
+      },
+      {
+        name: 'variant',
+        label: 'Status Variant',
+        type: 'select',
+        defaultValue: 'success',
+        options: ['success', 'info', 'warning', 'danger'],
+        description: 'Semantic state styling'
+      }
+    ],
+    previewComponent: 'ToastPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Toast } from '@/components/ui/Toast';
+
+export const StatusNotification = () => {
+  return (
+    <Toast
+      variant="{{variant}}"
+      message="{{message}}"
+      onClose={() => console.log('Dismissed')}
+    />
+  );
+};`,
+      html: `<div role="status" aria-live="polite" class="toast toast-{{variant}}">
+  <span>{{message}}</span>
+</div>`,
+      tailwind: `<div role="status" aria-live="polite" className="inline-flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-white shadow-xl text-sm font-medium">
+  <span>{{message}}</span>
+</div>`
+    },
+    accessibility: {
+      role: 'status',
+      wcagNotes: 'Uses aria-live="polite" to notify assistive tech without interrupting current speech flow.'
+    }
+  },
+  {
+    id: 'progress',
+    title: 'Progress Indicators',
+    category: 'feedback',
+    description: 'Fluid percentage-based meter bars with accessible min/max attributes and gradient accents.',
+    tags: ['Progress', 'Loading', 'Meter', 'Status'],
+    props: [
+      {
+        name: 'value',
+        label: 'Percentage Value',
+        type: 'number',
+        defaultValue: 65,
+        min: 0,
+        max: 100,
+        step: 1,
+        description: 'Current progress completion percentage'
+      },
+      {
+        name: 'variant',
+        label: 'Visual Fill',
+        type: 'select',
+        defaultValue: 'gradient',
+        options: ['gradient', 'primary', 'success', 'warning'],
+        description: 'Color theme of the filled bar'
+      },
+      {
+        name: 'label',
+        label: 'Label',
+        type: 'string',
+        defaultValue: 'System Build Pipeline',
+        description: 'Text caption above the meter'
+      }
+    ],
+    previewComponent: 'ProgressPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Progress } from '@/components/ui/Progress';
+
+export const BuildMeter = () => {
+  return (
+    <Progress
+      value={ {{value}} }
+      variant="{{variant}}"
+      label="{{label}}"
+    />
+  );
+};`,
+      html: `<div role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100" class="progress-bar">
+  <div style="width: {{value}}%;"></div>
+</div>`,
+      tailwind: `<div className="w-full space-y-1.5">
+  <div className="flex justify-between text-xs font-semibold text-slate-300">
+    <span>{{label}}</span>
+    <span>{{value}}%</span>
+  </div>
+  <div role="progressbar" aria-valuenow={ {{value}} } aria-valuemin={0} aria-valuemax={100} className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+    <div style={{ width: '{{value}}%' }} className="h-full bg-blue-600 transition-all rounded-full" />
+  </div>
+</div>`
+    },
+    accessibility: {
+      role: 'progressbar',
+      wcagNotes: 'Exposes aria-valuenow, aria-valuemin, and aria-valuemax semantics for assistive screen readers.'
+    }
+  },
+  {
+    id: 'pagination',
+    title: 'Pagination Controls',
+    category: 'navigation',
+    description: 'Accessible page navigation controller with active state indicators and truncation.',
+    tags: ['Pagination', 'Navigation', 'Pages', 'Controls'],
+    props: [
+      {
+        name: 'totalPages',
+        label: 'Total Pages',
+        type: 'number',
+        defaultValue: 10,
+        min: 2,
+        max: 50,
+        step: 1,
+        description: 'Total number of pages available'
+      }
+    ],
+    previewComponent: 'PaginationPreview',
+    codeTemplates: {
+      react: `import React, { useState } from 'react';
+import { Pagination } from '@/components/ui/Pagination';
+
+export const ResourcePagination = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  return (
+    <Pagination
+      currentPage={currentPage}
+      totalPages={ {{totalPages}} }
+      onPageChange={setCurrentPage}
+    />
+  );
+};`,
+      html: `<nav aria-label="Pagination">
+  <button aria-label="Previous page">‹</button>
+  <button aria-current="page">1</button>
+  <button>2</button>
+  <button aria-label="Next page">›</button>
+</nav>`,
+      tailwind: `<nav aria-label="Pagination" className="flex items-center gap-1.5">
+  <button className="px-3 py-1 text-sm rounded bg-slate-800 text-slate-300 hover:bg-slate-700">‹</button>
+  <button aria-current="page" className="px-3 py-1 text-sm rounded bg-blue-600 text-white font-semibold">1</button>
+  <button className="px-3 py-1 text-sm rounded bg-slate-800 text-slate-300 hover:bg-slate-700">›</button>
+</nav>`
+    },
+    accessibility: {
+      role: 'navigation',
+      keyboardNavigation: 'Focusable previous/next buttons and numbered page buttons with aria-current="page".',
+      wcagNotes: 'Nav landmark with explicit aria-label="Pagination" and labelled controls.'
+    }
+  },
+  {
+    id: 'checkboxes',
+    title: 'Selection Checkboxes',
+    category: 'forms',
+    description: 'Binary selection controls supporting customizable descriptions, error hints, and accessible focus outlines.',
+    tags: ['Checkbox', 'Form', 'Selection', 'Input'],
+    props: [
+      {
+        name: 'label',
+        label: 'Label Text',
+        type: 'string',
+        defaultValue: 'Enable Multi-Factor Authentication',
+        description: 'Text displayed next to the checkbox'
+      },
+      {
+        name: 'description',
+        label: 'Helper Description',
+        type: 'string',
+        defaultValue: 'Require an authentication code when signing in from an unknown device.',
+        description: 'Sub-label providing contextual detail'
+      },
+      {
+        name: 'checked',
+        label: 'Checked State',
+        type: 'boolean',
+        defaultValue: true,
+        description: 'Whether the checkbox is selected'
+      },
+      {
+        name: 'disabled',
+        label: 'Disabled',
+        type: 'boolean',
+        defaultValue: false,
+        description: 'Whether the checkbox interaction is disabled'
+      }
+    ],
+    previewComponent: 'CheckboxPreview',
+    codeTemplates: {
+      react: `import React, { useState } from 'react';
+import { Checkbox } from '@/components/ui/Checkbox';
+
+export const SecurityPreference = () => {
+  const [enabled, setEnabled] = useState( {{checked}} );
+
+  return (
+    <Checkbox
+      label="{{label}}"
+      description="{{description}}"
+      checked={enabled}
+      disabled={ {{disabled}} }
+      onChange={(e) => setEnabled(e.target.checked)}
+    />
+  );
+};`,
+      html: `<label class="checkbox-container">
+  <input type="checkbox" {{#if checked}}checked{{/if}} {{#if disabled}}disabled{{/if}} />
+  <span>{{label}}</span>
+</label>`,
+      tailwind: `<label className="inline-flex items-start gap-3 cursor-pointer">
+  <input type="checkbox" className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" {{#if checked}}defaultChecked{{/if}} />
+  <div className="flex flex-col">
+    <span className="text-sm font-medium text-white">{{label}}</span>
+    <span className="text-xs text-slate-400">{{description}}</span>
+  </div>
+</label>`
+    },
+    accessibility: {
+      role: 'checkbox',
+      keyboardNavigation: 'Focusable via Tab; toggle selection via Spacebar.',
+      wcagNotes: 'Semantic label wrapping input with explicit description association.'
+    }
+  },
+  {
+    id: 'avatars',
+    title: 'User Avatars',
+    category: 'layout',
+    description: 'Circular user representation displaying profile images, initial fallbacks, and real-time activity status dots.',
+    tags: ['Avatar', 'User', 'Profile', 'Image'],
+    props: [
+      {
+        name: 'fallback',
+        label: 'Initials Fallback',
+        type: 'string',
+        defaultValue: 'JD',
+        description: 'Two-character initials shown when image is unavailable'
+      },
+      {
+        name: 'size',
+        label: 'Size Scale',
+        type: 'select',
+        defaultValue: 'lg',
+        options: ['sm', 'md', 'lg', 'xl'],
+        description: 'Diameter dimension of the avatar circle'
+      },
+      {
+        name: 'status',
+        label: 'Activity Status',
+        type: 'select',
+        defaultValue: 'online',
+        options: ['online', 'offline', 'busy', 'away'],
+        description: 'Color-coded status ring marker'
+      }
+    ],
+    previewComponent: 'AvatarPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { Avatar } from '@/components/ui/Avatar';
+
+export const UserProfileBadge = () => {
+  return (
+    <Avatar
+      fallback="{{fallback}}"
+      size="{{size}}"
+      status="{{status}}"
+    />
+  );
+};`,
+      html: `<div class="avatar avatar-{{size}} status-{{status}}">
+  <span>{{fallback}}</span>
+</div>`,
+      tailwind: `<div className="relative inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 text-white font-bold">
+  <span>{{fallback}}</span>
+  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
+</div>`
+    },
+    accessibility: {
+      role: 'img',
+      wcagNotes: 'Includes alt text attribute and explicit status label for screen readers.'
+    }
+  },
+  {
+    id: 'stat_cards',
+    title: 'KPI & Statistic Cards',
+    category: 'layout',
+    description: 'Dashboard metric cards displaying key performance metrics, comparison trend indicators, and subtitle descriptions.',
+    tags: ['Stat', 'Card', 'Metrics', 'Dashboard', 'KPI'],
+    props: [
+      {
+        name: 'label',
+        label: 'Metric Label',
+        type: 'string',
+        defaultValue: 'Monthly Recurring Revenue',
+        description: 'Caption above the statistic'
+      },
+      {
+        name: 'value',
+        label: 'Metric Value',
+        type: 'string',
+        defaultValue: '$48,250',
+        description: 'Primary highlighted figure'
+      },
+      {
+        name: 'change',
+        label: 'Trend Delta',
+        type: 'string',
+        defaultValue: '+14.2%',
+        description: 'Percentage change relative to past period'
+      },
+      {
+        name: 'trend',
+        label: 'Trend Direction',
+        type: 'select',
+        defaultValue: 'up',
+        options: ['up', 'down', 'neutral'],
+        description: 'Color and arrow direction for change'
+      }
+    ],
+    previewComponent: 'StatCardPreview',
+    codeTemplates: {
+      react: `import React from 'react';
+import { StatCard } from '@/components/ui/StatCard';
+
+export const RevenueMetric = () => {
+  return (
+    <StatCard
+      label="{{label}}"
+      value="{{value}}"
+      change="{{change}}"
+      trend="{{trend}}"
+      description="Compared to $42,100 last month"
+    />
+  );
+};`,
+      html: `<div class="stat-card">
+  <div class="stat-label">{{label}}</div>
+  <div class="stat-value">{{value}}</div>
+  <div class="stat-trend trend-{{trend}}">{{change}}</div>
+</div>`,
+      tailwind: `<div className="p-5 rounded-xl border border-slate-800 bg-slate-900">
+  <span className="text-xs font-semibold text-slate-400 uppercase">{{label}}</span>
+  <div className="flex items-baseline gap-2 mt-1">
+    <span className="text-2xl font-bold font-mono text-white">{{value}}</span>
+    <span className="text-xs font-bold text-emerald-400">{{change}}</span>
+  </div>
+</div>`
+    },
+    accessibility: {
+      role: 'region',
+      wcagNotes: 'Semantic layout with clear heading association and readable tabular numeric numerals.'
+    }
   }
 ];
