@@ -11,10 +11,32 @@ function initApp() {
   initProjectsDirectory();
   initResourceDirectory();
   setupThemeSwitcher();
+  setupUserMenu();
   setupSearchAndFilters();
   setupModalHandlers();
   setupDropdownGlobalDismiss();
   setupGlobalKeyboardShortcuts();
+}
+
+function setupUserMenu() {
+  const userToggle = document.getElementById('user-profile-toggle');
+  const userMenu = document.getElementById('user-dropdown-menu');
+  if (!userToggle || !userMenu) return;
+
+  userToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isShowing = userMenu.classList.contains('show');
+    // Close other dropdowns
+    const themeMenu = document.getElementById('theme-menu');
+    if (themeMenu) themeMenu.classList.remove('show');
+    userMenu.classList.toggle('show', !isShowing);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#user-menu-container')) {
+      userMenu.classList.remove('show');
+    }
+  });
 }
 
 // --------------------------------------------------------------------------
@@ -351,18 +373,21 @@ function setupSearchAndFilters() {
       sidebarNavItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
 
-      activeCategory = item.getAttribute('data-category');
+      const catAttr = item.getAttribute('data-category');
+      if (catAttr) {
+        activeCategory = catAttr;
 
-      // Sync pills
-      filterPills.forEach(p => {
-        if (p.getAttribute('data-cat') === activeCategory) {
-          p.classList.add('active');
-        } else {
-          p.classList.remove('active');
-        }
-      });
+        // Sync pills
+        filterPills.forEach(p => {
+          if (p.getAttribute('data-cat') === activeCategory) {
+            p.classList.add('active');
+          } else {
+            p.classList.remove('active');
+          }
+        });
 
-      applyFilters();
+        applyFilters();
+      }
     });
   });
 }

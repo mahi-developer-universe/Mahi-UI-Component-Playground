@@ -14,6 +14,7 @@ export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
   const [activeTab, setActiveTab] = useState<'resources' | 'playground' | 'projects'>('resources');
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [onlyFavorites, setOnlyFavorites] = useState(false);
@@ -254,6 +255,96 @@ export default function HomePage() {
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
             </svg>
           </a>
+
+          {/* User Profile & Team Presence Dropdown */}
+          <div className="user-menu-container" id="user-menu-container">
+            <button
+              className="user-profile-btn"
+              id="user-profile-toggle"
+              onClick={() => {
+                setThemeMenuOpen(false);
+                setUserMenuOpen(!userMenuOpen);
+              }}
+              aria-label="User Account & Team Profile"
+            >
+              <div className="user-avatar-wrap">
+                <span className="user-avatar-initials">MU</span>
+                <span className="user-status-indicator online"></span>
+              </div>
+              <div className="user-info-text">
+                <span className="user-name">Mahi Dev</span>
+                <span className="user-role">Lead Architect</span>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            {userMenuOpen && (
+              <div className="user-dropdown-menu show" id="user-dropdown-menu">
+                <div className="user-dropdown-header">
+                  <div className="user-avatar-wrap lg">
+                    <span className="user-avatar-initials">MU</span>
+                    <span className="user-status-indicator online"></span>
+                  </div>
+                  <div>
+                    <div className="user-dropdown-name">Mahi Developer</div>
+                    <div className="user-dropdown-email">mahi@developeruniverse.dev</div>
+                    <span className="user-tier-badge">Pro Creator • 12,480 Stars</span>
+                  </div>
+                </div>
+
+                <div className="user-menu-section-title">ACTIVE TEAM MEMBERS (ONLINE)</div>
+                <div className="user-team-list">
+                  <div className="user-team-item">
+                    <span className="team-avatar-mini" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>JD</span>
+                    <div className="team-meta">
+                      <span className="team-name">Jane Doe</span>
+                      <span className="team-status">Designing Bento Grid</span>
+                    </div>
+                    <span className="user-status-dot online"></span>
+                  </div>
+                  <div className="user-team-item">
+                    <span className="team-avatar-mini" style={{ background: 'linear-gradient(135deg, #ec4899, #f43f5e)' }}>AK</span>
+                    <div className="team-meta">
+                      <span className="team-name">Alex Kumar</span>
+                      <span className="team-status">Editing Three.js Mesh</span>
+                    </div>
+                    <span className="user-status-dot online"></span>
+                  </div>
+                  <div className="user-team-item">
+                    <span className="team-avatar-mini" style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>SL</span>
+                    <div className="team-meta">
+                      <span className="team-name">Sarah Lin</span>
+                      <span className="team-status">Reviewing WCAG AAA</span>
+                    </div>
+                    <span className="user-status-dot busy"></span>
+                  </div>
+                </div>
+
+                <div className="user-dropdown-divider"></div>
+
+                <div className="user-menu-actions">
+                  <button className="user-menu-action-btn" onClick={() => { setUserMenuOpen(false); showToast('Opened Workspace Profile Settings'); }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile Settings</span>
+                  </button>
+                  <button className="user-menu-action-btn" onClick={() => { setUserMenuOpen(false); showToast('Switched to Developer Universe Team'); }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Team & Collaborators</span>
+                  </button>
+                  <button className="user-menu-action-btn" onClick={() => { setUserMenuOpen(false); showToast('Exported User Preferences'); }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Export User Preferences</span>
+                  </button>
+                  <button className="user-menu-action-btn logout-danger" onClick={() => { setUserMenuOpen(false); showToast('Status set to Offline'); }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Set Status to Offline</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
