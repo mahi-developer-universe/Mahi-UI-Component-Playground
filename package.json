@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Comprehensive, interactive platform for UI components, UI/UX design systems, theme customization, background generation, animation exploration, 3D experiences, code generation, and frontend resource discovery.",
   "main": "app.js",
+  "bin": {
+    "mahi-ui": "./bin/mahi-ui.js"
+  },
   "scripts": {
+    "cli": "node bin/mahi-ui.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
