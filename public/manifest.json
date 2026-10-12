@@ -1,0 +1,16 @@
+{
+  "name": "Mahi UI Component Playground",
+  "short_name": "Mahi UI",
+  "description": "Comprehensive interactive platform for UI components, 30 projects, and 450+ curated frontend resources.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07090e",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
