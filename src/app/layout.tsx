@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mahi-developer-universe.github.io/Mahi-UI-Component-Playground'),
   title: {
     default: 'Mahi UI — Modern Component Playground & 3D Lab',
     template: '%s | Mahi UI'
