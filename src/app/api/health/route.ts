@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { globalRateLimiter, sensitiveActionLimiter } from '@/lib/rateLimit';
 
+export const dynamic = 'force-static';
+
 export async function GET(request: NextRequest) {
   // Client IP identification (x-forwarded-for or default client identifier)
   const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'client-anon';
