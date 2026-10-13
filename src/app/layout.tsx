@@ -41,6 +41,15 @@ export const metadata: Metadata = {
   }
 };
 
+import type { Viewport } from 'next';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#10b981'
+};
+
 import { AppShell } from '@/components/layout/AppShell';
 
 export default function RootLayout({

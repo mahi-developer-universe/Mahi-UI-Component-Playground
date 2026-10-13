@@ -2593,3 +2593,52 @@ body {
   outline-offset: 2px;
 }
 
+/* ==========================================================================
+   Comprehensive Mobile View Optimization (< 768px and < 480px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .app-sidebar {
+    display: none !important;
+  }
+
+  .main-content,
+  main#main-content {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-bottom: 5rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  .navbar {
+    padding: 0 0.75rem !important;
+    height: 56px !important;
+  }
+
+  .brand-text .brand-tag {
+    display: none !important;
+  }
+
+  .nav-center {
+    display: none !important;
+  }
+
+  .nav-right {
+    gap: 0.35rem !important;
+  }
+
+  .nav-right .theme-btn span:not(.brand-name):not(:first-child) {
+    font-size: 0.75rem;
+  }
+
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
