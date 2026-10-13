@@ -5,12 +5,14 @@ interface ResourceCardProps {
   resource: ResourceItem;
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
+  onLaunchSandbox?: (resource: ResourceItem) => void;
 }
 
 export const ResourceCard: React.FC<ResourceCardProps> = ({
   resource,
   isFavorite,
-  onToggleFavorite
+  onToggleFavorite,
+  onLaunchSandbox
 }) => {
   // Extract clean domain for display
   const domain = resource.url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
@@ -35,12 +37,13 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       <div className="resource-category-label">{resource.category}</div>
       <div className="resource-url-display" title={resource.url}>{domain}</div>
 
-      <div className="resource-footer-row">
+      <div className="resource-footer-row" style={{ display: 'flex', gap: '8px' }}>
         <a
           href={resource.url}
           target="_blank"
           rel="noopener noreferrer"
           className="resource-visit-btn"
+          style={{ flex: 1 }}
         >
           <span>Visit Resource</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
@@ -49,6 +52,29 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
+
+        {onLaunchSandbox && (
+          <button
+            onClick={() => onLaunchSandbox(resource)}
+            className="action-btn"
+            style={{
+              padding: '6px 10px',
+              fontSize: '0.78rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              borderRadius: 'var(--radius-md, 8px)',
+              background: 'var(--accent-light)',
+              color: 'var(--accent-primary)',
+              border: '1px solid var(--border-color)',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+            title="Launch Sandbox Studio for this category"
+          >
+            <span>⚡ Sandbox</span>
+          </button>
+        )}
       </div>
     </div>
   );

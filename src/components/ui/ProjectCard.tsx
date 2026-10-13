@@ -4,9 +4,10 @@ import { FrontendProject } from '@/types';
 interface ProjectCardProps {
   project: FrontendProject;
   onLaunch?: (id: string) => void;
+  onLaunchModal?: (project: FrontendProject) => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLaunch }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLaunch, onLaunchModal }) => {
   return (
     <div className="project-item-card">
       <div className="proj-header">
@@ -40,7 +41,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLaunch }) =
                 <circle cx="9" cy="7" r="4"></circle>
               </svg>
             </span>
-            <span>Launch Interactive Tool</span>
+            <span>Launch Sandbox</span>
           </button>
         ) : (
           <a
@@ -54,9 +55,29 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onLaunch }) =
                 <circle cx="9" cy="7" r="4"></circle>
               </svg>
             </span>
-            <span>Launch Interactive Tool</span>
+            <span>Launch Sandbox</span>
           </a>
         )}
+
+        {onLaunchModal && (
+          <button
+            className="action-btn"
+            onClick={() => onLaunchModal(project)}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '6px',
+              fontSize: '0.8rem',
+              background: 'var(--accent-light)',
+              color: 'var(--accent-primary)',
+              border: '1px solid var(--accent-primary)',
+              cursor: 'pointer'
+            }}
+            title="Launch in Full-Screen Modal View"
+          >
+            ⤢
+          </button>
+        )}
+
         <a
           href={project.route || `/projects/${project.id}`}
           className="action-btn"

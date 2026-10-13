@@ -7,12 +7,14 @@ import { ResourceCard } from '@/components/ui/ResourceCard';
 import { ProjectCard } from '@/components/ui/ProjectCard';
 import { ProjectModal } from '@/features/project-gallery/ProjectModal';
 import { InteractiveComponentPlayground } from '@/features/code-playground';
+import interactiveRendered from '@/data/projects/interactive-rendered.json';
 import { useAppStore } from '@/stores/appStore';
 import { ThemeName, FrontendProject } from '@/types';
+import { SandboxHub, SandboxModal, SANDBOX_REGISTRY, SandboxItem } from '@/features/sandboxes';
 
 export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
-  const [activeTab, setActiveTab] = useState<'resources' | 'playground' | 'projects'>('resources');
+  const [activeTab, setActiveTab] = useState<'resources' | 'sandboxes' | 'playground' | 'projects'>('resources');
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,6 +23,8 @@ export default function HomePage() {
   const [displayLimit, setDisplayLimit] = useState(48);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<FrontendProject | null>(null);
+  const [activeSandboxProject, setActiveSandboxProject] = useState<FrontendProject | null>(null);
+  const [activeSandboxModal, setActiveSandboxModal] = useState<SandboxItem | null>(null);
 
   // Global Ctrl+K / Cmd+K search focus shortcut
   useEffect(() => {
@@ -140,6 +144,36 @@ export default function HomePage() {
               }}
             >
               Resources ({resourcesData.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('sandboxes')}
+              style={{
+                background: activeTab === 'sandboxes' ? 'var(--accent-light)' : 'transparent',
+                color: activeTab === 'sandboxes' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <span>Sandboxes</span>
+              <span
+                style={{
+                  fontSize: '0.7rem',
+                  padding: '1px 6px',
+                  borderRadius: '10px',
+                  background: activeTab === 'sandboxes' ? 'var(--accent-primary)' : 'rgba(255,255,255,0.08)',
+                  color: activeTab === 'sandboxes' ? '#ffffff' : 'var(--text-muted)'
+                }}
+              >
+                {SANDBOX_REGISTRY.length}
+              </span>
             </button>
             <button
               onClick={() => setActiveTab('playground')}
@@ -349,6 +383,12 @@ export default function HomePage() {
       </header>
 
       {/* Main Workspace Layout */}
+      {activeTab === 'sandboxes' && (
+        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+          <SandboxHub onShowToast={showToast} />
+        </div>
+      )}
+
       {activeTab === 'playground' && (
         <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
           <InteractiveComponentPlayground />
@@ -379,6 +419,127 @@ export default function HomePage() {
             </span>
           </div>
 
+          {/* Live Interactive Sandbox Banner & Workspace */}
+          {activeSandboxProject && (
+            <div
+              style={{
+                marginBottom: '2rem',
+                borderRadius: 'var(--radius-lg, 12px)',
+                border: '1px solid var(--border-color)',
+                background: 'var(--bg-card)',
+                overflow: 'hidden',
+                boxShadow: 'var(--glass-shadow)'
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1rem 1.5rem',
+                  borderBottom: '1px solid var(--border-color)',
+                  background: 'rgba(255, 255, 255, 0.02)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      color: 'var(--accent-primary)',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      padding: '3px 8px',
+                      borderRadius: '4px'
+                    }}
+                  >
+                    #{activeSandboxProject.num}
+                  </span>
+                  <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>
+                    {activeSandboxProject.title} — Active Sandbox
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--text-muted)',
+                      background: 'var(--bg-secondary)',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      border: '1px solid var(--border-color)'
+                    }}
+                  >
+                    {activeSandboxProject.sectionLabel}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => {
+                      const matched = SANDBOX_REGISTRY.find(
+                        (s) => s.projectId === activeSandboxProject.id || s.interactiveModule === activeSandboxProject.interactiveModule
+                      );
+                      if (matched) {
+                        setActiveSandboxModal(matched);
+                        showToast(`Opened ${matched.title} in Full Screen Modal`);
+                      } else {
+                        setSelectedProject(activeSandboxProject);
+                      }
+                    }}
+                    style={{
+                      padding: '4px 10px',
+                      fontSize: '0.75rem',
+                      borderRadius: '6px',
+                      border: '1px solid var(--accent-primary)',
+                      background: 'var(--accent-light)',
+                      color: 'var(--accent-primary)',
+                      cursor: 'pointer',
+                      fontWeight: 600
+                    }}
+                  >
+                    ⤢ Full-Screen Modal
+                  </button>
+                  <button
+                    onClick={() => setActiveSandboxProject(null)}
+                    style={{
+                      padding: '4px 10px',
+                      fontSize: '0.75rem',
+                      borderRadius: '6px',
+                      border: '1px solid var(--border-color)',
+                      background: 'transparent',
+                      color: 'var(--text-secondary)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    ✕ Close Sandbox
+                  </button>
+                </div>
+              </div>
+
+              <div
+                style={{ padding: '1.5rem' }}
+                dangerouslySetInnerHTML={{
+                  __html:
+                    activeSandboxProject.interactiveModule &&
+                    (interactiveRendered as Record<string, string>)[activeSandboxProject.interactiveModule]
+                      ? (interactiveRendered as Record<string, string>)[activeSandboxProject.interactiveModule]
+                      : `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Interactive module ready. Click card to open full dialog preview.</div>`
+                }}
+                onClick={async (e) => {
+                  const target = e.target as HTMLElement;
+                  const button = target.closest('button') as HTMLButtonElement | null;
+                  if (!button) return;
+                  const text = button.innerText.trim();
+                  if (text.toLowerCase().includes('copy')) {
+                    const { copyToClipboard } = await import('@/lib/utils');
+                    await copyToClipboard(button.getAttribute('data-code') || text);
+                    showToast(`Copied snippet to clipboard 📋`);
+                  } else {
+                    showToast(`Action Triggered: ${text || 'Interactive Control'}`);
+                  }
+                }}
+              />
+            </div>
+          )}
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
             {projectsData.map((project) => (
               <ProjectCard
@@ -387,8 +548,20 @@ export default function HomePage() {
                 onLaunch={(id) => {
                   const target = projectsData.find((p) => p.id === id);
                   if (target) {
+                    setActiveSandboxProject(target);
                     setSelectedProject(target);
-                    showToast(`Launching ${target.title}...`);
+                    showToast(`Launched Sandbox: ${target.title} 🚀`);
+                  }
+                }}
+                onLaunchModal={(proj) => {
+                  const matched = SANDBOX_REGISTRY.find(
+                    (s) => s.projectId === proj.id || s.interactiveModule === proj.interactiveModule
+                  );
+                  if (matched) {
+                    setActiveSandboxModal(matched);
+                    showToast(`Expanded ${matched.title} to Full Screen Modal`);
+                  } else {
+                    setSelectedProject(proj);
                   }
                 }}
               />
@@ -669,6 +842,30 @@ export default function HomePage() {
                         resource={res}
                         isFavorite={favorites.includes(res.id)}
                         onToggleFavorite={handleToggleFavoriteWithToast}
+                        onLaunchSandbox={(resource) => {
+                          const cat = resource.category.toLowerCase();
+                          let targetSandbox: SandboxItem | undefined;
+                          if (cat.includes('animation') || cat.includes('fx')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-motion');
+                          } else if (cat.includes('color') || cat.includes('palette') || cat.includes('contrast')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-colors');
+                          } else if (cat.includes('icon')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-icons');
+                          } else if (cat.includes('background') || cat.includes('pattern') || cat.includes('gradient')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-backgrounds');
+                          } else if (cat.includes('chart') || cat.includes('data')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-charts');
+                          } else if (cat.includes('theme') || cat.includes('design system')) {
+                            targetSandbox = SANDBOX_REGISTRY.find((s) => s.id === 'studio-themes');
+                          } else {
+                            targetSandbox = SANDBOX_REGISTRY[0];
+                          }
+
+                          if (targetSandbox) {
+                            setActiveSandboxModal(targetSandbox);
+                            showToast(`Launched Sandbox: ${targetSandbox.title} 🚀`);
+                          }
+                        }}
                       />
                     ))}
                   </div>
@@ -702,6 +899,14 @@ export default function HomePage() {
         <ProjectModal
           project={selectedProject}
           onClose={() => setSelectedProject(null)}
+          onToast={showToast}
+        />
+      )}
+
+      {activeSandboxModal && (
+        <SandboxModal
+          sandbox={activeSandboxModal}
+          onClose={() => setActiveSandboxModal(null)}
           onToast={showToast}
         />
       )}
