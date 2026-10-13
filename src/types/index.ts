@@ -46,6 +46,10 @@ export interface ResourceItem {
   featured: boolean;
 }
 
-export type ThemeName = 'dark' | 'light' | 'cyberpunk' | 'emerald' | 'sunset';
+export type ThemeName = 'emerald' | 'dark' | 'light' | 'cyberpunk' | 'sunset';
 
 export type ViewportSize = 'mobile' | 'tablet' | 'desktop';
+
+export * from './project.types';
+export * from './theme.types';
+export * from './export.types';

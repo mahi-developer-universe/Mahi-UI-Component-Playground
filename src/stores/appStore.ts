@@ -9,15 +9,20 @@ interface AppStore {
   toggleFavorite: (id: string) => void;
   setFavorites: (favorites: string[]) => void;
   recentProjects: string[];
-  addRecentProject: (id: string) => void;
+  addRecentProject: (idOrSlug: string) => void;
   isThreeLabOpen: boolean;
   setThreeLabOpen: (open: boolean) => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+  commandPaletteOpen: boolean;
+  setCommandPaletteOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppStore>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      theme: 'emerald',
       setTheme: (theme) => set({ theme }),
       favorites: [],
       toggleFavorite: (id) =>
@@ -28,15 +33,24 @@ export const useAppStore = create<AppStore>()(
         })),
       setFavorites: (favorites) => set({ favorites }),
       recentProjects: [],
-      addRecentProject: (id) =>
+      addRecentProject: (idOrSlug) =>
         set((state) => ({
-          recentProjects: [id, ...state.recentProjects.filter((p) => p !== id)].slice(0, 10)
+          recentProjects: [
+            idOrSlug,
+            ...state.recentProjects.filter((p) => p !== idOrSlug)
+          ].slice(0, 10)
         })),
       isThreeLabOpen: false,
-      setThreeLabOpen: (isThreeLabOpen) => set({ isThreeLabOpen })
+      setThreeLabOpen: (isThreeLabOpen) => set({ isThreeLabOpen }),
+      sidebarOpen: true,
+      setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+      commandPaletteOpen: false,
+      setCommandPaletteOpen: (commandPaletteOpen) => set({ commandPaletteOpen })
     }),
     {
       name: 'mahi-ui-storage',
+      version: 2,
       storage: createJSONStorage(() => {
         if (typeof window !== 'undefined') {
           return localStorage;
@@ -50,7 +64,8 @@ export const useAppStore = create<AppStore>()(
       partialize: (state) => ({
         theme: state.theme,
         favorites: state.favorites,
-        recentProjects: state.recentProjects
+        recentProjects: state.recentProjects,
+        sidebarOpen: state.sidebarOpen
       })
     }
   )

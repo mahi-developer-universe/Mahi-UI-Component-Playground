@@ -1,9 +1,9 @@
-'use client';
-
 import React, { useState, useMemo } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { CopyButton } from '@/components/ui/CopyButton';
 import { Slider } from '@/components/ui/Slider';
+
+export * from './HumanIconExplorerWorkspace';
 
 interface IconMetadata {
   name: string;
