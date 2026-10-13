@@ -1,12 +1,12 @@
 import type { NextConfig } from 'next';
 
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
+const isPagesDeploy = process.env.GITHUB_ACTIONS === 'true' && process.env.DEPLOY_TARGET === 'pages';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ['three', 'lucide-react'],
-  output: isGithubActions ? 'export' : undefined,
-  basePath: isGithubActions ? '/Mahi-UI-Component-Playground' : '',
+  output: isPagesDeploy ? 'export' : undefined,
+  basePath: isPagesDeploy ? '/Mahi-UI-Component-Playground' : '',
   images: {
     unoptimized: true
   }

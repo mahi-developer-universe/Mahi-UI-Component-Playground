@@ -40,6 +40,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          DEPLOY_TARGET: pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
