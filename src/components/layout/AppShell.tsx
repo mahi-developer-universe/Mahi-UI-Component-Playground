@@ -41,9 +41,21 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     window.addEventListener('open-shortcuts-modal', handleOpenShortcuts);
     window.addEventListener('keydown', handleKeyDown);
 
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      useAppStore.getState().setSidebarOpen(false);
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        useAppStore.getState().setSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('open-shortcuts-modal', handleOpenShortcuts);
+      window.removeEventListener('resize', handleResize);
     };
   }, [theme, setCommandPaletteOpen]);
 

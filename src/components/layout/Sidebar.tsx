@@ -8,11 +8,13 @@ import { CANONICAL_PROJECTS } from '@/data/projects/canonicalRegistry';
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
-  const { sidebarOpen, favorites, recentProjects } = useAppStore();
+  const { sidebarOpen, setSidebarOpen, favorites, recentProjects } = useAppStore();
 
-  if (!sidebarOpen) {
-    return null;
-  }
+  const handleLinkClick = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  };
 
   const navLinks = [
     { href: '/', label: 'Overview', icon: '🏠' },
@@ -34,25 +36,19 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside
-      className="app-sidebar"
-      style={{
-        width: '280px',
-        flexShrink: 0,
-        height: 'calc(100vh - 65px)',
-        position: 'sticky',
-        top: '65px',
-        background: 'var(--bg-secondary)',
-        borderRight: '1px solid var(--border-color)',
-        overflowY: 'auto',
-        padding: '1.25rem 0.75rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        zIndex: 50
-      }}
-      aria-label="Application primary sidebar navigation"
-    >
+    <>
+      {/* Mobile Drawer Overlay Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="mobile-sidebar-backdrop"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`app-sidebar ${sidebarOpen ? 'open' : 'closed'}`}
+        aria-label="Application primary sidebar navigation"
+      >
       {/* Primary Navigation */}
       <div>
         <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', padding: '0 0.75rem 0.5rem', fontWeight: 700 }}>
@@ -65,6 +61,7 @@ export const Sidebar: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={handleLinkClick}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -117,6 +114,7 @@ export const Sidebar: React.FC = () => {
                         key={proj.id}
                         href={proj.route}
                         title={proj.title}
+                        onClick={handleLinkClick}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -149,5 +147,6 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
     </aside>
+    </>
   );
 };
