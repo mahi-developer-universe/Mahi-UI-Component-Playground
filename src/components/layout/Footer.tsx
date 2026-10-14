@@ -48,6 +48,7 @@ export const Footer: React.FC = () => {
               </div>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.85rem' }}>
                 <li><Link href="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Overview</Link></li>
+                <li><Link href="/playground" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Component Studio</Link></li>
                 <li><Link href="/projects" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>All 30 Projects</Link></li>
                 <li><Link href="/studios" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Design Studios</Link></li>
                 <li><Link href="/favorites" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Bookmarks</Link></li>

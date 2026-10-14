@@ -18,10 +18,11 @@ export const Sidebar: React.FC = () => {
 
   const navLinks = [
     { href: '/', label: 'Overview', icon: '🏠' },
-    { href: '/projects', label: 'All 30 Projects', icon: '⚡' },
+    { href: '/playground', label: 'Component Studio', icon: '⚡' },
+    { href: '/projects', label: 'All 30 Projects', icon: '📦' },
+    { href: '/studios', label: 'Creative Studios', icon: '🎨' },
     { href: '/favorites', label: `Favorites (${favorites.length})`, icon: '⭐' },
     { href: '/recent', label: 'Recently Opened', icon: '🕒' },
-    { href: '/studios', label: 'Creative Studios', icon: '🎨' },
     { href: '/settings', label: 'Preferences', icon: '⚙️' },
     { href: '/about', label: 'About & Roadmap', icon: '📖' }
   ];

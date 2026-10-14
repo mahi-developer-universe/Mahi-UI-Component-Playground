@@ -11,9 +11,10 @@ export const MobileNavigation: React.FC = () => {
 
   const items = [
     { href: '/', label: 'Home', icon: '🏠' },
-    { href: '/projects', label: 'Projects', icon: '⚡' },
+    { href: '/playground', label: 'Studio', icon: '⚡' },
+    { href: '/projects', label: 'Projects', icon: '📦' },
+    { href: '/studios', label: 'Labs', icon: '🎨' },
     { href: '/favorites', label: `Saved (${favorites.length})`, icon: '⭐' },
-    { href: '/studios', label: 'Studios', icon: '🎨' },
     { href: '/settings', label: 'Settings', icon: '⚙️' }
   ];
 
