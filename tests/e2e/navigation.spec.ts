@@ -30,28 +30,33 @@ test.describe('Mahi UI Hub — Core Navigation & Theme Switching', () => {
     }
   });
 
-  test('should navigate to all major top-level application routes', async ({ page }) => {
-    // 1. Component Playground
-    await page.goto('/playground');
-    await expect(page).toHaveURL(/.*playground/);
-    await expect(page.locator('h1, h2, span').filter({ hasText: /Component/i }).first()).toBeVisible();
+  test.describe('Top-level application routes', () => {
+    test('should navigate to Component Playground', async ({ page }) => {
+      await page.goto('/playground');
+      await expect(page).toHaveURL(/.*playground/);
+      await expect(page.locator('h1, h2, span').filter({ hasText: /Component/i }).first()).toBeVisible();
+    });
 
-    // 2. All 30 Projects Directory
-    await page.goto('/projects');
-    await expect(page).toHaveURL(/.*projects/);
-    await expect(page.locator('h1, h2').filter({ hasText: /Projects/i }).first()).toBeVisible();
+    test('should navigate to All 30 Projects Directory', async ({ page }) => {
+      await page.goto('/projects');
+      await expect(page).toHaveURL(/.*projects/);
+      await expect(page.locator('h1, h2').filter({ hasText: /Projects/i }).first()).toBeVisible();
+    });
 
-    // 3. Design Studios
-    await page.goto('/studios');
-    await expect(page).toHaveURL(/.*studios/);
-    await expect(page.locator('h1, h2, span').filter({ hasText: /Studio/i }).first()).toBeVisible();
+    test('should navigate to Design Studios', async ({ page }) => {
+      await page.goto('/studios');
+      await expect(page).toHaveURL(/.*studios/);
+      await expect(page.locator('h1, h2, span').filter({ hasText: /Studio/i }).first()).toBeVisible();
+    });
 
-    // 4. Favorites & Bookmarks
-    await page.goto('/favorites');
-    await expect(page).toHaveURL(/.*favorites/);
+    test('should navigate to Favorites & Bookmarks', async ({ page }) => {
+      await page.goto('/favorites');
+      await expect(page).toHaveURL(/.*favorites/);
+    });
 
-    // 5. Settings
-    await page.goto('/settings');
-    await expect(page).toHaveURL(/.*settings/);
+    test('should navigate to Platform Settings', async ({ page }) => {
+      await page.goto('/settings');
+      await expect(page).toHaveURL(/.*settings/);
+    });
   });
 });
