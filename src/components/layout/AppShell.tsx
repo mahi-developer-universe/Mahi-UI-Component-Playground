@@ -11,6 +11,7 @@ import { BackToTopButton } from '../shared/BackToTopButton';
 import { ShortcutsModal } from '../shared/ShortcutsModal';
 import { useAppStore } from '@/stores/appStore';
 
+import { usePathname } from 'next/navigation';
 import { GlobalBreadcrumbs } from './GlobalBreadcrumbs';
 
 interface AppShellProps {
@@ -18,6 +19,8 @@ interface AppShellProps {
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const { theme, commandPaletteOpen, setCommandPaletteOpen } = useAppStore();
   const [shortcutsModalOpen, setShortcutsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -68,11 +71,11 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         Skip to main content
       </a>
 
-      {/* Sticky Top Header */}
-      <Header onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
+      {/* Sticky Top Header on all sub-routes */}
+      {!isHomePage && <Header onOpenCommandPalette={() => setCommandPaletteOpen(true)} />}
 
-      <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 68px)' }}>
-        <Sidebar />
+      <div style={{ display: 'flex', flex: 1, minHeight: !isHomePage ? 'calc(100vh - 68px)' : '100vh' }}>
+        {!isHomePage && <Sidebar />}
         <main
           id="main-content"
           tabIndex={-1}

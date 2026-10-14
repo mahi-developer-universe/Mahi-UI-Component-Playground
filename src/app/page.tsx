@@ -223,6 +223,22 @@ export default function HomePage() {
             >
               Studios 🎨
             </Link>
+            <Link
+              href="/about"
+              style={{
+                background: 'transparent',
+                color: 'var(--text-secondary)',
+                border: 'none',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-md)',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              About 📖
+            </Link>
           </nav>
         </div>
 
