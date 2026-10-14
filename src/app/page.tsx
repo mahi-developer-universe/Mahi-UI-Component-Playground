@@ -423,19 +423,19 @@ export default function HomePage() {
 
       {/* Main Workspace Layout */}
       {activeTab === 'sandboxes' && (
-        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+        <div className="tab-pane-container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem 1.5rem' }}>
           <SandboxHub onShowToast={showToast} />
         </div>
       )}
 
       {activeTab === 'playground' && (
-        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
+        <div className="tab-pane-container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
           <InteractiveComponentPlayground />
         </div>
       )}
 
       {activeTab === 'projects' && (
-        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
+        <div className="tab-pane-container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem' }}>
           <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 4px 0' }}>30 Developer Projects</h2>

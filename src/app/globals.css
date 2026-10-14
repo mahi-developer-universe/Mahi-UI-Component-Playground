@@ -2762,11 +2762,29 @@ body {
     font-size: 0.75rem;
   }
 
+  /* Tab panes responsive padding and viewport constraint */
+  .tab-pane-container {
+    padding: 1rem 0.75rem 5.5rem 0.75rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
   /* Grid Resizing for Small Devices */
   .resource-grid,
   .projects-grid,
-  .resource-directory-section div[style*="gridTemplateColumns"] {
+  .resource-directory-section div[style*="gridTemplateColumns"],
+  div[style*="repeat(auto-fill, minmax(320px, 1fr))"],
+  div[style*="repeat(auto-fit, minmax(320px, 1fr))"] {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Responsive Canvas & Sandbox controls */
+  .interactive-mount-wrapper,
+  .interactive-mount-wrapper * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Mobile Filter Box adjustments */
