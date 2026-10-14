@@ -52,6 +52,46 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
             <span className="brand-tag">Playground</span>
           </div>
         </Link>
+
+        {/* Home & About Direct Links */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '0.5rem' }}>
+          <Link
+            href="/"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '6px 12px',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '0.85rem',
+              fontWeight: pathname === '/' ? 700 : 500,
+              color: pathname === '/' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              background: pathname === '/' ? 'var(--accent-light)' : 'transparent',
+              textDecoration: 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <span>Home</span>
+          </Link>
+          <Link
+            href="/about"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '6px 12px',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '0.85rem',
+              fontWeight: pathname === '/about' ? 700 : 500,
+              color: pathname === '/about' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+              background: pathname === '/about' ? 'var(--accent-light)' : 'transparent',
+              textDecoration: 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <span>About</span>
+          </Link>
+        </nav>
       </div>
 
       <div className="nav-center" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

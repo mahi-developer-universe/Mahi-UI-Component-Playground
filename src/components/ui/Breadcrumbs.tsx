@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export interface BreadcrumbItem {
   label: string;
@@ -40,7 +41,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
               }}
             >
               {item.href && !item.isCurrent ? (
-                <a
+                <Link
                   href={item.href}
                   style={{
                     color: 'var(--text-secondary, #94a3b8)',
@@ -50,7 +51,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                   }}
                 >
                   {item.label}
-                </a>
+                </Link>
               ) : (
                 <span
                   aria-current={item.isCurrent || isLast ? 'page' : undefined}

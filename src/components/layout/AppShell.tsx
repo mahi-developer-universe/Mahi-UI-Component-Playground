@@ -11,6 +11,8 @@ import { BackToTopButton } from '../shared/BackToTopButton';
 import { ShortcutsModal } from '../shared/ShortcutsModal';
 import { useAppStore } from '@/stores/appStore';
 
+import { GlobalBreadcrumbs } from './GlobalBreadcrumbs';
+
 interface AppShellProps {
   children: React.ReactNode;
 }
@@ -83,6 +85,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             outline: 'none'
           }}
         >
+          <GlobalBreadcrumbs />
           {children}
         </main>
       </div>
