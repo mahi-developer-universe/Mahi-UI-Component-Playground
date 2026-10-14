@@ -45,18 +45,27 @@ export const LiveCodeSandbox: React.FC<LiveCodeSandboxProps> = ({
     });
   }, [component.id]);
 
-  // Sync theme to iframe
+  // Sync theme to iframe with explicit origin
   useEffect(() => {
     if (!iframeRef.current || !iframeReady) return;
+    const targetOrigin = window.location.origin;
     iframeRef.current.contentWindow?.postMessage(
       { type: 'SET_THEME', theme },
-      '*'
+      targetOrigin
     );
   }, [theme, iframeReady]);
 
-  // Handle messages from iframe
+  // Handle messages from iframe with origin and source validation
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
+      // Validate that message came from our sandbox iframe
+      if (iframeRef.current && e.source !== iframeRef.current.contentWindow) {
+        return;
+      }
+      if (e.origin !== window.location.origin && e.origin !== 'null' && e.origin !== '') {
+        return;
+      }
+
       if (e.data && e.data.type === 'SANDBOX_READY') {
         setIframeReady(true);
         setRuntimeStatus('ready');
@@ -68,10 +77,11 @@ export const LiveCodeSandbox: React.FC<LiveCodeSandboxProps> = ({
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // Post code update to iframe
+  // Post code update to iframe with strict target origin
   const executeSandbox = () => {
     if (!iframeRef.current) return;
     setRuntimeStatus('rendering');
+    const targetOrigin = window.location.origin;
     iframeRef.current.contentWindow?.postMessage(
       {
         type: 'RENDER_CODE',
@@ -79,7 +89,7 @@ export const LiveCodeSandbox: React.FC<LiveCodeSandboxProps> = ({
         css: codeState.css,
         js: codeState.js
       },
-      '*'
+      targetOrigin
     );
     setTimeout(() => {
       setRuntimeStatus('ready');

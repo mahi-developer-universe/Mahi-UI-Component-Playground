@@ -24,10 +24,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       title: 'Project Not Found | Mahi UI'
     };
   }
+  const projectName = project.name || project.title || 'Project';
   return {
-    title: `${project.name} | Mahi UI Component Playground`,
-    description: project.description,
-    keywords: [project.name, project.category, 'frontend playground', 'interactive tools']
+    title: `${projectName} | Mahi UI Component Playground`,
+    description: project.description || '',
+    keywords: [projectName, project.category || 'Tools', 'frontend playground', 'interactive tools']
   };
 }
 
