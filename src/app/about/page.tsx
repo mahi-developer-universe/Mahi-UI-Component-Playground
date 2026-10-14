@@ -41,7 +41,10 @@ export default function AboutPage() {
         <section style={{ background: 'var(--bg-card)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 700, marginTop: 0 }}>Quick Navigation</h2>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-            <Link href="/projects" style={{ padding: '8px 16px', borderRadius: '6px', background: 'var(--accent-primary)', color: '#fff', textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/playground" style={{ padding: '8px 16px', borderRadius: '6px', background: 'var(--accent-primary)', color: '#000', textDecoration: 'none', fontWeight: 700 }}>
+              Component Studio & Sandbox →
+            </Link>
+            <Link href="/projects" style={{ padding: '8px 16px', borderRadius: '6px', background: 'rgba(255,255,255,0.08)', color: 'var(--text-primary)', textDecoration: 'none', fontWeight: 600 }}>
               All 30 Projects Directory →
             </Link>
             <Link href="/studios" style={{ padding: '8px 16px', borderRadius: '6px', background: 'rgba(255,255,255,0.08)', color: 'var(--text-primary)', textDecoration: 'none', fontWeight: 600 }}>
