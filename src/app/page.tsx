@@ -13,7 +13,7 @@ import { ThemeName, FrontendProject } from '@/types';
 import { SandboxHub, SandboxModal, SANDBOX_REGISTRY, SandboxItem } from '@/features/sandboxes';
 
 export default function HomePage() {
-  const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
+  const { theme, setTheme, favorites, toggleFavorite, sidebarOpen, toggleSidebar, setSidebarOpen } = useAppStore();
   const [activeTab, setActiveTab] = useState<'resources' | 'sandboxes' | 'playground' | 'projects'>('resources');
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -110,6 +110,29 @@ export default function HomePage() {
       {/* Top Navbar */}
       <header className="navbar" id="app-navbar">
         <div className="nav-left">
+          {activeTab === 'resources' && (
+            <button
+              onClick={toggleSidebar}
+              className="theme-btn mobile-drawer-btn"
+              aria-label={sidebarOpen ? 'Close category sidebar' : 'Open category sidebar'}
+              style={{
+                padding: '6px 9px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                borderRadius: 'var(--radius-sm)',
+                flexShrink: 0
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          )}
+
           <Link href="/" className="brand-logo" id="brand-logo">
             <div className="logo-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -588,8 +611,17 @@ export default function HomePage() {
 
       {activeTab === 'resources' && (
         <div className="layout-body">
+          {/* Mobile Drawer Overlay Backdrop */}
+          {sidebarOpen && (
+            <div
+              className="mobile-sidebar-backdrop"
+              onClick={() => setSidebarOpen(false)}
+              aria-hidden="true"
+            />
+          )}
+
           {/* Sidebar Filter for Resource Categories */}
-          <aside className="sidebar" id="app-sidebar">
+          <aside className="sidebar" id="app-sidebar" data-state={sidebarOpen ? 'open' : 'closed'}>
             <div className="sidebar-section">
               <div className="sidebar-heading">CATEGORIES</div>
               <nav className="sidebar-nav" id="sidebar-nav">
@@ -598,6 +630,9 @@ export default function HomePage() {
                   onClick={() => {
                     setSelectedCategory('all');
                     setOnlyFavorites(false);
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                      setSidebarOpen(false);
+                    }
                   }}
                 >
                   <span>All Resources</span>
@@ -606,7 +641,12 @@ export default function HomePage() {
 
                 <button
                   className={`nav-item ${onlyFavorites ? 'active' : ''}`}
-                  onClick={() => setOnlyFavorites(!onlyFavorites)}
+                  onClick={() => {
+                    setOnlyFavorites(!onlyFavorites);
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                      setSidebarOpen(false);
+                    }
+                  }}
                 >
                   <span>Bookmarked / Saved</span>
                   <span className="nav-count" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b', fontWeight: 700 }}>
@@ -704,6 +744,9 @@ export default function HomePage() {
                       onClick={() => {
                         setSelectedCategory(cat);
                         setOnlyFavorites(false);
+                        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                          setSidebarOpen(false);
+                        }
                       }}
                     >
                       <span style={{ fontSize: '0.825rem' }}>{cat}</span>
