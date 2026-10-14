@@ -6,12 +6,13 @@ import { PropertyEditor } from './PropertyEditor';
 import { ComponentPreviewCanvas } from './PreviewCanvas';
 import { CodeExporter } from './CodeExporter';
 import { ComponentApiExplorer } from './ComponentApiExplorer';
+import { LiveCodeSandbox } from './LiveCodeSandbox';
 import { generateCodeSnippet } from '@/lib/registry';
 
 export const InteractiveComponentPlayground: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string>(COMPONENT_REGISTRY[0].id);
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile' | 'ultrawide'>('desktop');
-  const [activeViewMode, setActiveViewMode] = useState<'workbench' | 'api-docs'>('workbench');
+  const [activeViewMode, setActiveViewMode] = useState<'workbench' | 'live-editor' | 'api-docs'>('workbench');
   const [simulatedState, setSimulatedState] = useState<'default' | 'hover' | 'focus' | 'disabled' | 'loading' | 'error'>('default');
 
   const selectedItem = useMemo(() => {
@@ -178,6 +179,24 @@ export const InteractiveComponentPlayground: React.FC = () => {
               Workbench
             </button>
             <button
+              onClick={() => setActiveViewMode('live-editor')}
+              style={{
+                background: activeViewMode === 'live-editor' ? 'var(--accent-primary)' : 'transparent',
+                color: activeViewMode === 'live-editor' ? '#fff' : 'var(--text-muted)',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              <span>⚡ Live Sandbox</span>
+            </button>
+            <button
               onClick={() => setActiveViewMode('api-docs')}
               style={{
                 background: activeViewMode === 'api-docs' ? 'var(--accent-primary)' : 'transparent',
@@ -194,7 +213,7 @@ export const InteractiveComponentPlayground: React.FC = () => {
             </button>
           </div>
 
-          {activeViewMode === 'workbench' && (
+          {(activeViewMode === 'workbench' || activeViewMode === 'live-editor') && (
             <div className="responsive-controls" style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
               <button
                 className={`size-btn ${viewport === 'mobile' ? 'active' : ''}`}
@@ -273,6 +292,12 @@ export const InteractiveComponentPlayground: React.FC = () => {
 
       {activeViewMode === 'api-docs' ? (
         <ComponentApiExplorer component={selectedItem} />
+      ) : activeViewMode === 'live-editor' ? (
+        <LiveCodeSandbox
+          component={selectedItem}
+          initialProps={activeProps}
+          viewport={viewport}
+        />
       ) : (
         <>
           {/* Main Split Layout: Live Canvas + Property Controls */}
@@ -319,11 +344,13 @@ export const InteractiveComponentPlayground: React.FC = () => {
             />
           </div>
 
-          {/* Synchronized Generated Code Viewer */}
+          {/* Synchronized Generated Code Viewer & Standalone Exporter */}
           <CodeExporter
             codeReact={generatedReact}
             codeHtml={generatedHtml}
             codeTailwind={generatedTailwind}
+            component={selectedItem}
+            props={activeProps}
           />
         </>
       )}

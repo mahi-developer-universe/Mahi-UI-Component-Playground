@@ -1,83 +1,169 @@
 /**
- * External Link Health Audit Script
- * Optionally audits external resources in src/data/resources/resources.json
- * with rate limiting and exponential backoff to verify HTTP status codes.
+ * Comprehensive External Link Health & Availability Auditor
+ * Supports batching, concurrency limits, redirect following, status reports,
+ * and JSON artifact generation for CI/CD scheduled workflows.
  */
 const https = require('https');
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 const { URL } = require('url');
-const resources = require('../src/data/resources/resources.json');
 
-// By default in CI or quick testing, inspect a sample of 20 URLs to avoid timeouts/rate limiting
-const SAMPLE_SIZE = process.env.AUDIT_ALL ? resources.length : 20;
-const timeoutMs = 6000;
+const resourcesPath = path.join(__dirname, '..', 'src', 'data', 'resources', 'resources.json');
+const resources = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
 
-function checkUrl(targetUrl) {
+// Command line parameters
+const args = process.argv.slice(2);
+const auditAll = args.includes('--all') || process.env.AUDIT_ALL === 'true';
+const maxConcurrency = 5;
+const timeoutMs = 8000;
+const sampleLimit = auditAll ? resources.length : 25;
+
+function checkUrlWithRedirect(targetUrl, maxRedirects = 3) {
   return new Promise((resolve) => {
-    let parsedUrl;
-    try {
-      parsedUrl = new URL(targetUrl);
-    } catch (e) {
-      return resolve({ url: targetUrl, status: 'INVALID_URL' });
+    let currentUrl = targetUrl;
+    let redirectsCount = 0;
+
+    function attempt(urlToTry) {
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(urlToTry);
+      } catch (e) {
+        return resolve({ url: targetUrl, finalUrl: urlToTry, status: 'INVALID_URL', statusCode: 0 });
+      }
+
+      const client = parsedUrl.protocol === 'https:' ? https : http;
+      const req = client.request(
+        urlToTry,
+        {
+          method: 'GET', // Many CDN/WAF services block HEAD requests
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 MahiUI-Auditor/2.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+          },
+          timeout: timeoutMs
+        },
+        (res) => {
+          const code = res.statusCode || 0;
+
+          // Follow 301, 302, 307, 308 redirects
+          if (code >= 300 && code < 400 && res.headers.location && redirectsCount < maxRedirects) {
+            redirectsCount++;
+            let nextLoc = res.headers.location;
+            if (!nextLoc.startsWith('http')) {
+              nextLoc = new URL(nextLoc, urlToTry).toString();
+            }
+            res.resume();
+            return attempt(nextLoc);
+          }
+
+          // Read small chunk and abort to preserve bandwidth
+          res.resume();
+
+          const isSuccess = (code >= 200 && code < 400) || code === 403; // Note: 403 often means Cloudflare bot protection, not a dead site
+          resolve({
+            url: targetUrl,
+            finalUrl: urlToTry,
+            statusCode: code,
+            redirects: redirectsCount,
+            status: isSuccess ? 'ACTIVE' : `HTTP_${code}`
+          });
+        }
+      );
+
+      req.on('timeout', () => {
+        req.destroy();
+        resolve({ url: targetUrl, finalUrl: urlToTry, status: 'TIMEOUT', statusCode: 0 });
+      });
+
+      req.on('error', (err) => {
+        resolve({ url: targetUrl, finalUrl: urlToTry, status: 'NETWORK_ERR', message: err.message, statusCode: 0 });
+      });
+
+      req.end();
     }
 
-    const client = parsedUrl.protocol === 'https:' ? https : http;
-    const req = client.request(
-      targetUrl,
-      {
-        method: 'HEAD',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) MahiUI-Link-Audit/1.0'
-        },
-        timeout: timeoutMs
-      },
-      (res) => {
-        resolve({
-          url: targetUrl,
-          statusCode: res.statusCode,
-          status: res.statusCode >= 200 && res.statusCode < 400 ? 'OK' : 'HTTP_' + res.statusCode
-        });
-      }
-    );
-
-    req.on('timeout', () => {
-      req.destroy();
-      resolve({ url: targetUrl, status: 'TIMEOUT' });
-    });
-
-    req.on('error', (err) => {
-      resolve({ url: targetUrl, status: 'NETWORK_ERR', message: err.message });
-    });
-
-    req.end();
+    attempt(currentUrl);
   });
 }
 
-async function runAudit() {
-  console.log(`🌐 Auditing ${SAMPLE_SIZE} links from ${resources.length} total resources (Rate-limited sample)...`);
-  const sample = resources.slice(0, SAMPLE_SIZE);
+// Pool worker for concurrency
+async function pool(items, concurrency, fn) {
+  const results = [];
+  const executing = [];
 
-  let successCount = 0;
-  let redirectCount = 0;
-  let warnCount = 0;
+  for (const item of items) {
+    const p = Promise.resolve().then(() => fn(item));
+    results.push(p);
 
-  for (const item of sample) {
-    const res = await checkUrl(item.url);
-    if (res.status === 'OK') {
-      successCount++;
-    } else if (res.statusCode >= 300 && res.statusCode < 400) {
-      redirectCount++;
-    } else {
-      warnCount++;
-      console.log(`  ⚠️  ${item.name}: ${item.url} -> [${res.status}]`);
+    if (concurrency <= items.length) {
+      const e = p.then(() => executing.splice(executing.indexOf(e), 1));
+      executing.push(e);
+      if (executing.length >= concurrency) {
+        await Promise.race(executing);
+      }
     }
   }
 
-  console.log(`\n📊 Link Health Summary:`);
-  console.log(`  - Active 200 OK: ${successCount}`);
-  console.log(`  - Redirects: ${redirectCount}`);
-  console.log(`  - Network/Unavailable/Blocked: ${warnCount}`);
-  console.log(`✅ Sample link health check completed.\n`);
+  return Promise.all(results);
 }
 
-runAudit();
+async function runAudit() {
+  console.log(`\n🌐 ==========================================`);
+  console.log(`🌐 Mahi UI External Link Health & Quality Audit`);
+  console.log(`🌐 Total Resources in Catalog: ${resources.length}`);
+  console.log(`🌐 Inspecting: ${sampleLimit} links (Concurrency: ${maxConcurrency})`);
+  console.log(`🌐 ==========================================\n`);
+
+  const targets = resources.slice(0, sampleLimit);
+  const startTime = Date.now();
+
+  const auditResults = await pool(targets, maxConcurrency, async (resItem) => {
+    const check = await checkUrlWithRedirect(resItem.url);
+    const flag = check.status === 'ACTIVE' ? '✅' : '⚠️ ';
+    process.stdout.write(`${flag} [${check.status}] ${resItem.name} (${resItem.url})\n`);
+    return {
+      id: resItem.id,
+      name: resItem.name,
+      originalUrl: resItem.url,
+      finalUrl: check.finalUrl,
+      status: check.status,
+      statusCode: check.statusCode,
+      redirects: check.redirects || 0
+    };
+  });
+
+  const durationSec = ((Date.now() - startTime) / 1000).toFixed(1);
+  const activeCount = auditResults.filter((r) => r.status === 'ACTIVE').length;
+  const warned = auditResults.filter((r) => r.status !== 'ACTIVE');
+
+  console.log(`\n📊 Audit Summary (Finished in ${durationSec}s):`);
+  console.log(`  - Verified Active: ${activeCount} / ${sampleLimit}`);
+  console.log(`  - Blocked / Timeout / Check Needed: ${warned.length}`);
+
+  // Write report artifact
+  const reportPath = path.join(__dirname, '..', 'link-audit-report.json');
+  fs.writeFileSync(
+    reportPath,
+    JSON.stringify(
+      {
+        auditedAt: new Date().toISOString(),
+        totalResources: resources.length,
+        auditedCount: sampleLimit,
+        activeCount,
+        warningCount: warned.length,
+        results: auditResults
+      },
+      null,
+      2
+    )
+  );
+
+  console.log(`\n📄 Report written to: ${reportPath}`);
+  console.log(`🎉 External link health audit finished successfully.\n`);
+}
+
+runAudit().catch((err) => {
+  console.error('Fatal audit failure:', err);
+  process.exit(1);
+});

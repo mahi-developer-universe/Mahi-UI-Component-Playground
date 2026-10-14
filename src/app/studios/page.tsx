@@ -11,7 +11,9 @@ import { MotionLab } from '@/features/animation-lab';
 import { ComponentRecipeBuilder, AccessibleChartStudio } from '@/features/design-system';
 import { VisualPageBuilder } from '@/features/page-builder';
 
-type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder';
+import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
+
+type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed';
 
 export default function StudiosPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('typography');
@@ -25,7 +27,8 @@ export default function StudiosPage() {
     { id: 'motion', label: 'Motion Physics', icon: '▶' },
     { id: 'recipes', label: 'Recipe Builder', icon: '🧩' },
     { id: 'charts', label: 'Accessible Charts', icon: '📊' },
-    { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' }
+    { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' },
+    { id: 'threed', label: '3D Spatial Studio', icon: '🧊' }
   ];
 
   return (
@@ -235,6 +238,22 @@ export default function StudiosPage() {
               </p>
             </div>
             <VisualPageBuilder />
+          </section>
+        )}
+
+        {activeTab === 'threed' && (
+          <section>
+            <div style={{ marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 6px 0' }}>
+                🧊 3D Spatial Geometry & WebGL Studio
+              </h2>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                Interactive Three.js geometries (Torus, Cube, Sphere, Cone), wireframe modes, dynamic rotational physics, and React Three Fiber export.
+              </p>
+            </div>
+            <div style={{ minHeight: '520px', width: '100%', position: 'relative', background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', padding: '1rem' }}>
+              <ThreeLab />
+            </div>
           </section>
         )}
       </div>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; script-src 'unsafe-inline'; object-src 'none';">
+  <title>Mahi UI Sandboxed Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-card: #161e2e;
+      --accent-primary: #10b981;
+      --accent-hover: #059669;
+      --accent-light: rgba(16, 185, 129, 0.15);
+      --accent-glow: rgba(16, 185, 129, 0.35);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-hover: rgba(16, 185, 129, 0.4);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-color-hover: rgba(16, 185, 129, 0.5);
+    }
+
+    [data-theme="cyberpunk"] {
+      --bg-primary: #05050a;
+      --bg-secondary: #0c0817;
+      --bg-card: #150f28;
+      --accent-primary: #f43f5e;
+      --accent-hover: #e11d48;
+      --text-primary: #fff0f5;
+      --text-secondary: #f472b6;
+      --border-color: rgba(244, 63, 94, 0.25);
+    }
+
+    [data-theme="sunset"] {
+      --bg-primary: #120b08;
+      --bg-secondary: #1c100b;
+      --bg-card: #271610;
+      --accent-primary: #f97316;
+      --accent-hover: #ea580c;
+      --text-primary: #fff7ed;
+      --text-secondary: #fdba74;
+      --border-color: rgba(249, 115, 22, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    #sandbox-root {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Common Utility Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-color-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--accent-light);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      max-width: 480px;
+      width: 100%;
+    }
+
+    #error-container {
+      display: none;
+      width: 100%;
+      max-width: 560px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      color: #fca5a5;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 1rem;
+    }
+  </style>
+  <style id="custom-user-styles"></style>
+</head>
+<body>
+  <div id="sandbox-root">
+    <!-- Live User Content Rendered Here -->
+  </div>
+
+  <div id="error-container"></div>
+
+  <script>
+    const root = document.getElementById('sandbox-root');
+    const customStyles = document.getElementById('custom-user-styles');
+    const errorContainer = document.getElementById('error-container');
+
+    function showError(err) {
+      errorContainer.style.display = 'block';
+      errorContainer.textContent = 'Render Error: ' + (err && err.message ? err.message : String(err));
+    }
+
+    function clearError() {
+      errorContainer.style.display = 'none';
+      errorContainer.textContent = '';
+    }
+
+    window.addEventListener('message', (event) => {
+      // Validate origin if not running on local null origin
+      const data = event.data;
+      if (!data || typeof data !== 'object') return;
+
+      if (data.type === 'SET_THEME' && data.theme) {
+        document.documentElement.setAttribute('data-theme', data.theme);
+      }
+
+      if (data.type === 'RENDER_CODE') {
+        clearError();
+        const { html, css, js } = data;
+
+        // 1. Inject Styles
+        if (typeof css === 'string') {
+          customStyles.textContent = css;
+        }
+
+        // 2. Inject HTML
+        if (typeof html === 'string') {
+          root.innerHTML = html;
+        }
+
+        // 3. Evaluate Safe JS inside isolated context
+        if (typeof js === 'string' && js.trim().length > 0) {
+          try {
+            // Function constructor running inside the isolated iframe without access to parent window
+            const fn = new Function('root', 'document', 'window', js);
+            fn(root, document, window);
+          } catch (err) {
+            showError(err);
+          }
+        }
+      }
+    });
+
+    // Notify parent iframe is loaded and ready
+    window.parent.postMessage({ type: 'SANDBOX_READY' }, '*');
+  </script>
+</body>
+</html>

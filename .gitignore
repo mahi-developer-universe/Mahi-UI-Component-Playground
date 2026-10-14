@@ -22,3 +22,8 @@ Thumbs.db
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Test & Audit Artifacts
+playwright-report/
+test-results/
+link-audit-report.json
