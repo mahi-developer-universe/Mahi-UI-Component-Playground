@@ -6,9 +6,10 @@ export const appConfig = {
     github: 'https://github.com/mahi-developer-universe/Mahi-UI-Component-Playground'
   },
   navigation: [
-    { label: 'Components', href: '#showcase-container' },
-    { label: '30 Projects', href: '#projects-section' },
-    { label: '450+ Resources', href: '#resources-section' },
-    { label: 'Three.js 3D Lab', action: 'openThreeLab' }
+    { label: 'Component Studio', href: '/playground' },
+    { label: '30 Projects', href: '/projects' },
+    { label: 'Design Studios', href: '/studios' },
+    { label: 'Favorites', href: '/favorites' },
+    { label: 'Preferences', href: '/settings' }
   ]
 };
