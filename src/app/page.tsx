@@ -11,9 +11,6 @@ import interactiveRendered from '@/data/projects/interactive-rendered.json';
 import { useAppStore } from '@/stores/appStore';
 import { ThemeName, FrontendProject } from '@/types';
 import { SandboxHub, SandboxModal, SANDBOX_REGISTRY, SandboxItem } from '@/features/sandboxes';
-import { FAQAccordion } from '@/components/shared/FAQAccordion';
-import { LandingHeroSection } from '@/components/shared/LandingHeroSection';
-import { LandingFeaturesSection, LandingEndCtaSection } from '@/components/shared/LandingFeaturesSection';
 
 export default function HomePage() {
   const { theme, setTheme, favorites, toggleFavorite } = useAppStore();
@@ -194,37 +191,22 @@ export default function HomePage() {
             >
               Playground ✨
             </button>
-            <Link
-              href="/projects"
+            <button
+              onClick={() => setActiveTab('projects')}
               style={{
-                background: 'transparent',
-                color: 'var(--text-secondary)',
+                background: activeTab === 'projects' ? 'var(--accent-light)' : 'transparent',
+                color: activeTab === 'projects' ? 'var(--accent-primary)' : 'var(--text-secondary)',
                 border: 'none',
                 padding: '6px 12px',
                 borderRadius: 'var(--radius-md)',
                 fontSize: '0.85rem',
                 fontWeight: 600,
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
+                cursor: 'pointer',
                 transition: 'all 0.15s ease'
               }}
             >
-              <span>30 Projects</span>
-              <span
-                style={{
-                  fontSize: '0.7rem',
-                  padding: '1px 6px',
-                  borderRadius: '10px',
-                  background: 'var(--accent-light)',
-                  color: 'var(--accent-primary)',
-                  fontWeight: 700
-                }}
-              >
-                30
-              </span>
-            </Link>
+              Projects ({projectsData.length})
+            </button>
             <Link
               href="/studios"
               style={{
@@ -719,14 +701,6 @@ export default function HomePage() {
 
           {/* Main Resource Hub Area */}
           <main className="main-content" id="main-content" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%', padding: '1.75rem 2rem' }}>
-            {/* Landing Page Hero with Value Proposition & Above-the-fold CTA */}
-            {selectedCategory === 'all' && !searchQuery && !onlyFavorites && (
-              <>
-                <LandingHeroSection />
-                <LandingFeaturesSection />
-              </>
-            )}
-
             {/* 450+ Resource Directory Grid */}
             <section className="resource-directory-section" id="resources-section" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none' }}>
               
@@ -916,11 +890,6 @@ export default function HomePage() {
                   )}
                 </>
               )}
-              {/* Expandable FAQs Accordion */}
-              <FAQAccordion />
-
-              {/* 2nd Ending Call to Action Section */}
-              <LandingEndCtaSection />
             </section>
           </main>
         </div>
