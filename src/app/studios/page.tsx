@@ -13,24 +13,39 @@ import { VisualPageBuilder } from '@/features/page-builder';
 
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 
+import { 
+  Type, 
+  Sparkles, 
+  Palette, 
+  Sliders, 
+  Grid, 
+  Play, 
+  Puzzle, 
+  BarChart3, 
+  LayoutTemplate, 
+  Box, 
+  Smartphone, 
+  Cpu 
+} from 'lucide-react';
+
 type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed' | 'reactnative' | 'reverse';
 
 export default function StudiosPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('typography');
 
   const tabs = [
-    { id: 'typography', label: 'Typography Studio', icon: 'Aa' },
-    { id: 'icons', label: 'Icon Explorer', icon: '✦' },
-    { id: 'colors', label: 'Color & Contrast', icon: '🎨' },
-    { id: 'themes', label: 'Theme Studio', icon: '⚙️' },
-    { id: 'backgrounds', label: 'Background Studio', icon: '▦' },
-    { id: 'motion', label: 'Motion Physics', icon: '▶' },
-    { id: 'recipes', label: 'Recipe Builder', icon: '🧩' },
-    { id: 'charts', label: 'Accessible Charts', icon: '📊' },
-    { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' },
-    { id: 'threed', label: '3D Spatial Studio', icon: '🧊' },
-    { id: 'reactnative', label: 'React Native Studio', icon: '📱' },
-    { id: 'reverse', label: 'Reverse Engine', icon: '⚙️' }
+    { id: 'typography', label: 'Typography Studio', icon: Type },
+    { id: 'icons', label: 'Icon Explorer', icon: Sparkles },
+    { id: 'colors', label: 'Color & Contrast', icon: Palette },
+    { id: 'themes', label: 'Theme Studio', icon: Sliders },
+    { id: 'backgrounds', label: 'Background Studio', icon: Grid },
+    { id: 'motion', label: 'Motion Physics', icon: Play },
+    { id: 'recipes', label: 'Recipe Builder', icon: Puzzle },
+    { id: 'charts', label: 'Accessible Charts', icon: BarChart3 },
+    { id: 'pagebuilder', label: 'Page Canvas Builder', icon: LayoutTemplate },
+    { id: 'threed', label: '3D Spatial Studio', icon: Box },
+    { id: 'reactnative', label: 'React Native Studio', icon: Smartphone },
+    { id: 'reverse', label: 'Reverse Engine', icon: Cpu }
   ];
 
   return (
@@ -89,6 +104,7 @@ export default function StudiosPage() {
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const IconComp = tab.icon;
             return (
               <button
                 key={tab.id}
@@ -109,7 +125,7 @@ export default function StudiosPage() {
                   transition: 'all 0.15s ease'
                 }}
               >
-                <span>{tab.icon}</span>
+                <IconComp size={16} />
                 <span>{tab.label}</span>
               </button>
             );
