@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCommandPalette }) => {
       <div className="nav-left" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <button
           onClick={toggleSidebar}
-          className="theme-btn"
+          className="theme-btn mobile-drawer-btn"
           aria-label={sidebarOpen ? 'Collapse navigation sidebar' : 'Expand navigation sidebar'}
           style={{ padding: '6px 10px', display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}
         >

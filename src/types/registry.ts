@@ -35,7 +35,8 @@ export const ComponentRegistryItemSchema = z.object({
   codeTemplates: z.object({
     react: z.string(),
     html: z.string(),
-    tailwind: z.string().optional()
+    tailwind: z.string().optional(),
+    reactNative: z.string().optional()
   }),
   accessibility: z.object({
     role: z.string().optional(),

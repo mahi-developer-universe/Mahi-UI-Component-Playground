@@ -8,6 +8,7 @@ import { CodeExporter } from './CodeExporter';
 import { ComponentApiExplorer } from './ComponentApiExplorer';
 import { LiveCodeSandbox } from './LiveCodeSandbox';
 import { generateCodeSnippet } from '@/lib/registry';
+import { generateReactNativeSnippet } from '@/lib/reactNativeGenerator';
 
 export const InteractiveComponentPlayground: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string>(COMPONENT_REGISTRY[0].id);
@@ -141,6 +142,10 @@ export const InteractiveComponentPlayground: React.FC = () => {
     return selectedItem.codeTemplates.tailwind
       ? generateCodeSnippet(selectedItem.codeTemplates.tailwind, activeProps)
       : undefined;
+  }, [selectedItem, activeProps]);
+
+  const generatedReactNative = useMemo(() => {
+    return generateReactNativeSnippet(selectedItem.id, activeProps);
   }, [selectedItem, activeProps]);
 
   return (
@@ -349,6 +354,7 @@ export const InteractiveComponentPlayground: React.FC = () => {
             codeReact={generatedReact}
             codeHtml={generatedHtml}
             codeTailwind={generatedTailwind}
+            codeReactNative={generatedReactNative}
             component={selectedItem}
             props={activeProps}
           />

@@ -622,6 +622,26 @@ export default function HomePage() {
 
           {/* Sidebar Filter for Resource Categories */}
           <aside className="sidebar" id="app-sidebar" data-state={sidebarOpen ? 'open' : 'closed'}>
+            {/* Mobile Sidebar Header */}
+            <div className="mobile-sidebar-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)' }}>Categories</span>
+                <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: 'var(--accent-light)', color: 'var(--accent-primary)', fontWeight: 700 }}>
+                  {resourcesData.length}
+                </span>
+              </div>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Close categories menu"
+                className="mobile-sidebar-close-btn"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
             <div className="sidebar-section">
               <div className="sidebar-heading">CATEGORIES</div>
               <nav className="sidebar-nav" id="sidebar-nav">

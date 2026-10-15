@@ -8,6 +8,7 @@ interface CodeExporterProps {
   codeReact: string;
   codeHtml: string;
   codeTailwind?: string;
+  codeReactNative?: string;
   component?: ComponentRegistryItem;
   props?: Record<string, any>;
 }
@@ -16,16 +17,18 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
   codeReact,
   codeHtml,
   codeTailwind,
+  codeReactNative,
   component,
   props = {}
 }) => {
-  const [activeTab, setActiveTab] = useState<'react' | 'html' | 'tailwind'>('react');
+  const [activeTab, setActiveTab] = useState<'react' | 'html' | 'tailwind' | 'react-native'>('react');
   const [isExportingZip, setIsExportingZip] = useState<boolean>(false);
 
   const currentCode = {
     react: codeReact,
     html: codeHtml,
-    tailwind: codeTailwind || codeHtml
+    tailwind: codeTailwind || codeHtml,
+    'react-native': codeReactNative || codeReact
   }[activeTab];
 
   return (
@@ -68,6 +71,13 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
               Tailwind CSS
             </button>
           )}
+          <button
+            className={`code-lang-btn ${activeTab === 'react-native' ? 'active' : ''}`}
+            onClick={() => setActiveTab('react-native')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+          >
+            <span>📱 React Native</span>
+          </button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -81,7 +91,8 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
                     props,
                     reactCode: codeReact,
                     htmlCode: codeHtml,
-                    tailwindCode: codeTailwind
+                    tailwindCode: codeTailwind,
+                    reactNativeCode: codeReactNative
                   });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
@@ -117,13 +128,13 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
 
           <button
             onClick={() => {
-              const extension = activeTab === 'react' ? 'tsx' : activeTab === 'html' ? 'html' : 'css';
-              const mime = activeTab === 'react' ? 'text/typescript' : 'text/plain';
+              const extension = activeTab === 'react' ? 'tsx' : activeTab === 'html' ? 'html' : activeTab === 'react-native' ? 'native.tsx' : 'css';
+              const mime = activeTab === 'html' ? 'text/html' : 'text/typescript';
               const blob = new Blob([currentCode], { type: mime });
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
-              a.download = `Component.${extension}`;
+              a.download = `${component?.id || 'Component'}.${extension}`;
               a.click();
               URL.revokeObjectURL(url);
             }}

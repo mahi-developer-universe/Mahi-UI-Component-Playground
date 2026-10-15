@@ -8,12 +8,12 @@ import { TypographyStudio } from '@/features/typography-studio';
 import { IconExplorer } from '@/features/icon-explorer';
 import { BackgroundStudio } from '@/features/background-studio';
 import { MotionLab } from '@/features/animation-lab';
-import { ComponentRecipeBuilder, AccessibleChartStudio } from '@/features/design-system';
+import { ComponentRecipeBuilder, AccessibleChartStudio, ReactNativeStudio } from '@/features/design-system';
 import { VisualPageBuilder } from '@/features/page-builder';
 
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 
-type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed';
+type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed' | 'reactnative';
 
 export default function StudiosPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('typography');
@@ -28,7 +28,8 @@ export default function StudiosPage() {
     { id: 'recipes', label: 'Recipe Builder', icon: '🧩' },
     { id: 'charts', label: 'Accessible Charts', icon: '📊' },
     { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' },
-    { id: 'threed', label: '3D Spatial Studio', icon: '🧊' }
+    { id: 'threed', label: '3D Spatial Studio', icon: '🧊' },
+    { id: 'reactnative', label: 'React Native Studio', icon: '📱' }
   ];
 
   return (
@@ -254,6 +255,12 @@ export default function StudiosPage() {
             <div style={{ minHeight: '520px', width: '100%', position: 'relative', background: 'var(--bg-card)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', padding: '1rem' }}>
               <ThreeLab />
             </div>
+          </section>
+        )}
+
+        {activeTab === 'reactnative' && (
+          <section>
+            <ReactNativeStudio />
           </section>
         )}
       </div>

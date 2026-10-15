@@ -1060,9 +1060,6 @@ pre.code-block {
 
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
-  .sidebar {
-    display: none;
-  }
 
   .main-content {
     padding: 1.5rem;
@@ -2622,9 +2619,62 @@ body {
 }
 
 /* ==========================================================================
-   Comprehensive Mobile View Optimization (< 768px and < 480px)
+   Comprehensive Mobile & Touch Optimization (Standardized for < 768px & < 480px)
    ========================================================================== */
+
+/* Mobile Sidebar Header & Close Button */
+.mobile-sidebar-header {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  /* Prevent horizontal document overflow */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Safe interactive touch tap targets (WCAG AAA minimum target zone) */
+  button, 
+  a.theme-btn, 
+  a.resource-visit-btn, 
+  .filter-pill, 
+  .theme-option,
+  .user-menu-action-btn {
+    min-height: 40px;
+  }
+
+  /* Mobile Sidebar Header display */
+  .mobile-sidebar-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.75rem 1rem 0.5rem 1rem !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mobile-sidebar-close-btn {
+    background: transparent !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: var(--radius-sm, 6px) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease !important;
+  }
+
+  .mobile-sidebar-close-btn:active {
+    background: var(--bg-card-hover) !important;
+  }
+
   /* Mobile Sidebar Drawer Overlay */
   .app-sidebar,
   .sidebar,
@@ -2634,14 +2684,19 @@ body {
     left: 0 !important;
     bottom: 60px !important;
     height: calc(100vh - 116px) !important;
+    height: calc(100dvh - 116px) !important;
     width: 290px !important;
-    max-width: 85vw !important;
+    max-width: 86vw !important;
     z-index: 999 !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75) !important;
     background: var(--bg-secondary) !important;
     transform: translateX(-100%);
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
     display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-right: 1px solid var(--border-color) !important;
   }
 
   .app-sidebar.open,
@@ -2655,41 +2710,45 @@ body {
   .sidebar.closed,
   .sidebar[data-state="closed"],
   aside#app-sidebar[data-state="closed"] {
-    display: none !important;
     transform: translateX(-100%) !important;
   }
 
+  /* Mobile Backdrop */
   .mobile-sidebar-backdrop {
     display: block !important;
     position: fixed;
-    top: 56px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 998;
+    animation: fadeIn 0.2s ease-out;
   }
 
+  /* Layout Body & Content */
   .layout-body {
     flex-direction: column !important;
     width: 100% !important;
+    max-width: 100vw !important;
     min-width: 0 !important;
   }
 
   .main-content,
   main#main-content {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
     padding-top: 1rem !important;
-    padding-bottom: 5.5rem !important;
+    padding-bottom: 6rem !important;
     width: 100% !important;
     max-width: 100vw !important;
     min-width: 0 !important;
     overflow-x: hidden !important;
   }
 
-  /* Navbar Mobile Layout */
+  /* Top Navbar on Mobile */
   .navbar {
     padding: 0 0.75rem !important;
     height: 56px !important;
@@ -2700,6 +2759,9 @@ body {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
   }
 
   .navbar::-webkit-scrollbar {
@@ -2729,8 +2791,8 @@ body {
 
   .nav-left nav button,
   .nav-left nav a {
-    padding: 4px 8px !important;
-    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+    font-size: 0.78rem !important;
     white-space: nowrap !important;
     flex-shrink: 0 !important;
   }
@@ -2744,12 +2806,17 @@ body {
     display: none !important;
   }
 
+  .brand-text .brand-title,
+  .brand-text .brand-name {
+    font-size: 1rem !important;
+  }
+
   .nav-center {
     display: none !important;
   }
 
   .nav-right {
-    gap: 0.25rem !important;
+    gap: 0.35rem !important;
     flex-shrink: 0 !important;
   }
 
@@ -2762,46 +2829,144 @@ body {
     font-size: 0.75rem;
   }
 
-  /* Tab panes responsive padding and viewport constraint */
+  /* Responsive Grids */
+  .resource-grid,
+  .projects-grid,
+  .resource-directory-section div[style*="gridTemplateColumns"],
+  div[style*="repeat(auto-fill, minmax(320px, 1fr))"],
+  div[style*="repeat(auto-fit, minmax(320px, 1fr))"],
+  div[style*="repeat(auto-fill, minmax(300px, 1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Card and Modal width bounds */
+  .resource-card,
+  .project-item-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Interactive Workbench Split Stacking */
+  .responsive-controls {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+
+  /* Full Screen Modals Mobile Sizing */
+  .modal-backdrop {
+    padding: 0.5rem !important;
+    align-items: flex-end !important;
+  }
+
+  .interactive-modal-window {
+    max-height: 92vh !important;
+    max-height: 92dvh !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Command Palette on mobile */
+  .modal-backdrop > div[style*="maxWidth: '620px'"],
+  .modal-backdrop > div[style*="max-width: 620px"] {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 0 auto !important;
+  }
+
+  /* Tab Panes */
   .tab-pane-container {
-    padding: 1rem 0.75rem 5.5rem 0.75rem !important;
+    padding: 1rem 0.85rem 6rem 0.85rem !important;
     width: 100% !important;
     max-width: 100vw !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
   }
 
-  /* Grid Resizing for Small Devices */
-  .resource-grid,
-  .projects-grid,
-  .resource-directory-section div[style*="gridTemplateColumns"],
-  div[style*="repeat(auto-fill, minmax(320px, 1fr))"],
-  div[style*="repeat(auto-fit, minmax(320px, 1fr))"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Responsive Canvas & Sandbox controls */
-  .interactive-mount-wrapper,
-  .interactive-mount-wrapper * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Mobile Filter Box adjustments */
-  .resource-search-filter-box {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0.5rem !important;
-  }
-
-  .resource-search-filter-box .resource-search-input-wrap,
-  .resource-search-filter-box .resource-category-select,
-  .resource-search-filter-box .filter-pill {
-    width: 100% !important;
-  }
-
+  /* Mobile Bottom Navigation Bar */
   .mobile-bottom-nav {
     display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 60px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    z-index: 990 !important;
+  }
+
+  /* Floating utilities offset */
+  .back-to-top-btn,
+  button[aria-label="Scroll back to top of page"] {
+    bottom: 74px !important;
+    right: 1rem !important;
+  }
+
+  .cookie-banner-container {
+    bottom: 68px !important;
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    max-width: calc(100vw - 1.5rem) !important;
+  }
+
+  /* Dropdown Menus on Mobile */
+  .theme-dropdown-menu,
+  .user-dropdown-menu {
+    position: fixed !important;
+    top: 60px !important;
+    right: 0.75rem !important;
+    left: 0.75rem !important;
+    width: auto !important;
+    max-width: calc(100vw - 1.5rem) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra Small Devices (< 480px) */
+  .navbar {
+    padding: 0 0.5rem !important;
+  }
+
+  .brand-logo {
+    gap: 0.4rem !important;
+  }
+
+  .logo-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .main-content,
+  main#main-content {
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+  }
+
+  .resource-card,
+  .project-item-card {
+    padding: 1rem 0.85rem !important;
+  }
+
+  /* Stack Card footer actions cleanly */
+  .resource-footer-row {
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .resource-visit-btn,
+  .action-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Filter toolbar items stack on tiny screens */
+  .resource-directory-section div[style*="justifyContent: 'space-between'"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
   }
 }
 
@@ -2815,5 +2980,7 @@ body {
   .mobile-drawer-btn {
     display: none !important;
   }
+  .mobile-sidebar-header {
+    display: none !important;
+  }
 }
-

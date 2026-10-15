@@ -126,6 +126,17 @@ export const SANDBOX_REGISTRY: SandboxItem[] = [
     keywords: ['threejs', '3d', 'webgl', 'torus', 'cube', 'mesh', 'lighting'],
     type: 'component'
   },
+  {
+    id: 'studio-reactnative',
+    title: 'Universal React Native & Mobile Studio',
+    description: 'Interactive cross-platform mobile component builder with native StyleSheet generation, touch haptics, spring animations, and iOS/Android simulators.',
+    category: 'studios',
+    categoryLabel: 'Mobile & Native',
+    badge: 'iOS & Android',
+    icon: '📱',
+    keywords: ['react native', 'mobile', 'ios', 'android', 'stylesheet', 'touchable', 'spring', 'expo'],
+    type: 'component'
+  },
 
   // 2. Interactive Tool Sandboxes (from 30 Projects)
   {

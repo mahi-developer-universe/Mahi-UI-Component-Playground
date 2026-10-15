@@ -1060,9 +1060,6 @@ pre.code-block {
 
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
-  .sidebar {
-    display: none;
-  }
 
   .main-content {
     padding: 1.5rem;
