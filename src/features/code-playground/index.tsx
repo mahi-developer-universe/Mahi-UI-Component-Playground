@@ -9,6 +9,8 @@ import { ComponentApiExplorer } from './ComponentApiExplorer';
 import { LiveCodeSandbox } from './LiveCodeSandbox';
 import { generateCodeSnippet } from '@/lib/registry';
 import { generateReactNativeSnippet } from '@/lib/reactNativeGenerator';
+import { generateVueSnippet } from '@/lib/vueGenerator';
+import { generateSvelteSnippet } from '@/lib/svelteGenerator';
 
 export const InteractiveComponentPlayground: React.FC = () => {
   const [selectedComponentId, setSelectedComponentId] = useState<string>(COMPONENT_REGISTRY[0].id);
@@ -146,6 +148,14 @@ export const InteractiveComponentPlayground: React.FC = () => {
 
   const generatedReactNative = useMemo(() => {
     return generateReactNativeSnippet(selectedItem.id, activeProps);
+  }, [selectedItem, activeProps]);
+
+  const generatedVue = useMemo(() => {
+    return generateVueSnippet(selectedItem.id, activeProps);
+  }, [selectedItem, activeProps]);
+
+  const generatedSvelte = useMemo(() => {
+    return generateSvelteSnippet(selectedItem.id, activeProps);
   }, [selectedItem, activeProps]);
 
   return (
@@ -355,6 +365,8 @@ export const InteractiveComponentPlayground: React.FC = () => {
             codeHtml={generatedHtml}
             codeTailwind={generatedTailwind}
             codeReactNative={generatedReactNative}
+            codeVue={generatedVue}
+            codeSvelte={generatedSvelte}
             component={selectedItem}
             props={activeProps}
           />

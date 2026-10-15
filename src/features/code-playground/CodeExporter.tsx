@@ -9,6 +9,8 @@ interface CodeExporterProps {
   codeHtml: string;
   codeTailwind?: string;
   codeReactNative?: string;
+  codeVue?: string;
+  codeSvelte?: string;
   component?: ComponentRegistryItem;
   props?: Record<string, any>;
 }
@@ -18,17 +20,21 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
   codeHtml,
   codeTailwind,
   codeReactNative,
+  codeVue,
+  codeSvelte,
   component,
   props = {}
 }) => {
-  const [activeTab, setActiveTab] = useState<'react' | 'html' | 'tailwind' | 'react-native'>('react');
+  const [activeTab, setActiveTab] = useState<'react' | 'html' | 'tailwind' | 'react-native' | 'vue' | 'svelte'>('react');
   const [isExportingZip, setIsExportingZip] = useState<boolean>(false);
 
   const currentCode = {
     react: codeReact,
     html: codeHtml,
     tailwind: codeTailwind || codeHtml,
-    'react-native': codeReactNative || codeReact
+    'react-native': codeReactNative || codeReact,
+    vue: codeVue || codeHtml,
+    svelte: codeSvelte || codeHtml
   }[activeTab];
 
   return (
@@ -78,6 +84,20 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
           >
             <span>📱 React Native</span>
           </button>
+          <button
+            className={`code-lang-btn ${activeTab === 'vue' ? 'active' : ''}`}
+            onClick={() => setActiveTab('vue')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+          >
+            <span>💚 Vue 3</span>
+          </button>
+          <button
+            className={`code-lang-btn ${activeTab === 'svelte' ? 'active' : ''}`}
+            onClick={() => setActiveTab('svelte')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+          >
+            <span>🔥 Svelte</span>
+          </button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -92,7 +112,9 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
                     reactCode: codeReact,
                     htmlCode: codeHtml,
                     tailwindCode: codeTailwind,
-                    reactNativeCode: codeReactNative
+                    reactNativeCode: codeReactNative,
+                    vueCode: codeVue,
+                    svelteCode: codeSvelte
                   });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
@@ -128,8 +150,16 @@ export const CodeExporter: React.FC<CodeExporterProps> = ({
 
           <button
             onClick={() => {
-              const extension = activeTab === 'react' ? 'tsx' : activeTab === 'html' ? 'html' : activeTab === 'react-native' ? 'native.tsx' : 'css';
-              const mime = activeTab === 'html' ? 'text/html' : 'text/typescript';
+              const extension = 
+                activeTab === 'react' ? 'tsx' : 
+                activeTab === 'html' ? 'html' : 
+                activeTab === 'react-native' ? 'native.tsx' : 
+                activeTab === 'vue' ? 'vue' : 
+                activeTab === 'svelte' ? 'svelte' : 'css';
+              const mime = 
+                activeTab === 'html' ? 'text/html' : 
+                activeTab === 'vue' ? 'text/plain' : 
+                activeTab === 'svelte' ? 'text/plain' : 'text/typescript';
               const blob = new Blob([currentCode], { type: mime });
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
