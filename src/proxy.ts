@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { globalRateLimiter } from '@/lib/rateLimit';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Rate limiting defense for all API routes
