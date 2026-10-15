@@ -8,12 +8,12 @@ import { TypographyStudio } from '@/features/typography-studio';
 import { IconExplorer } from '@/features/icon-explorer';
 import { BackgroundStudio } from '@/features/background-studio';
 import { MotionLab } from '@/features/animation-lab';
-import { ComponentRecipeBuilder, AccessibleChartStudio, ReactNativeStudio } from '@/features/design-system';
+import { ComponentRecipeBuilder, AccessibleChartStudio, ReactNativeStudio, DomReverseEngineeringStudio } from '@/features/design-system';
 import { VisualPageBuilder } from '@/features/page-builder';
 
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 
-type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed' | 'reactnative';
+type StudioTab = 'typography' | 'icons' | 'colors' | 'themes' | 'backgrounds' | 'motion' | 'recipes' | 'charts' | 'pagebuilder' | 'threed' | 'reactnative' | 'reverse';
 
 export default function StudiosPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('typography');
@@ -29,7 +29,8 @@ export default function StudiosPage() {
     { id: 'charts', label: 'Accessible Charts', icon: '📊' },
     { id: 'pagebuilder', label: 'Page Canvas Builder', icon: '📐' },
     { id: 'threed', label: '3D Spatial Studio', icon: '🧊' },
-    { id: 'reactnative', label: 'React Native Studio', icon: '📱' }
+    { id: 'reactnative', label: 'React Native Studio', icon: '📱' },
+    { id: 'reverse', label: 'Reverse Engine', icon: '⚙️' }
   ];
 
   return (
@@ -261,6 +262,12 @@ export default function StudiosPage() {
         {activeTab === 'reactnative' && (
           <section>
             <ReactNativeStudio />
+          </section>
+        )}
+
+        {activeTab === 'reverse' && (
+          <section>
+            <DomReverseEngineeringStudio />
           </section>
         )}
       </div>

@@ -12,7 +12,7 @@ import { IconExplorer } from '@/features/icon-explorer';
 import { BackgroundStudio } from '@/features/background-studio';
 import { MotionLab } from '@/features/animation-lab';
 import { VisualPageBuilder } from '@/features/page-builder';
-import { ComponentRecipeBuilder, AccessibleChartStudio, ReactNativeStudio } from '@/features/design-system';
+import { ComponentRecipeBuilder, AccessibleChartStudio, ReactNativeStudio, DomReverseEngineeringStudio } from '@/features/design-system';
 import { ThreeLab } from '@/features/three-d-studio/ThreeLab';
 
 interface SandboxModalProps {
@@ -55,6 +55,8 @@ export const SandboxModal: React.FC<SandboxModalProps> = ({
         );
       case 'studio-reactnative':
         return <ReactNativeStudio />;
+      case 'studio-reverse':
+        return <DomReverseEngineeringStudio />;
       default:
         if (sandbox.interactiveModule) {
           const html = (interactiveRendered as Record<string, string>)[sandbox.interactiveModule];

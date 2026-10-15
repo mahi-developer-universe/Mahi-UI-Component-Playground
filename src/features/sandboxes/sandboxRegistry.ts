@@ -137,6 +137,17 @@ export const SANDBOX_REGISTRY: SandboxItem[] = [
     keywords: ['react native', 'mobile', 'ios', 'android', 'stylesheet', 'touchable', 'spring', 'expo'],
     type: 'component'
   },
+  {
+    id: 'studio-reverse',
+    title: 'DOM & CSS Reverse Engineering Studio',
+    description: 'Deconstruct raw HTML/CSS snippets into extracted color palettes, typography scales, DTCG design tokens, and clean React / Tailwind components.',
+    category: 'dev-tools',
+    categoryLabel: 'Dev Productivity',
+    badge: 'Reverse Engine',
+    icon: '⚙️',
+    keywords: ['reverse engineering', 'dom', 'decompile', 'css', 'extract', 'tokens', 'html parser', 'inspect'],
+    type: 'component'
+  },
 
   // 2. Interactive Tool Sandboxes (from 30 Projects)
   {
