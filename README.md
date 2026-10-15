@@ -31,8 +31,9 @@ A comprehensive, production-oriented frontend developer platform, UI component s
 - **Modern Frontend Ecosystem Studios**:
   - 🌐 **Three.js 3D Spatial Geometry Lab**: Client WebGL viewport with geometry switching (Torus Knot, Cube, Sphere, Icosahedron, Octahedron), wireframe modes, dynamic lighting, and React Three Fiber (R3F) code generator.
   - 🎨 **Design System Token & Ramp Studio**: 10-step mathematical color ramp generator with instant CSS Custom Properties and `tailwind.config.js` export.
+  - 📱 **React Native & Mobile Preview Studio**: Native mobile viewport emulator with live theme switching, component testing, and React Native StyleSheet code generation.
   - 📱 **Responsive Hardware Device Previewer**: Multi-device viewport bezel simulator (Mobile 375px, Tablet 680px, Desktop 100%) with orientation and touch testing.
-  - 📦 **Multi-Stack Code Exporter**: Instant toggles between React + TypeScript, Vanilla CSS, and Tailwind CSS component code.
+  - 📦 **Multi-Stack Code Exporter**: Instant toggles between React + TypeScript, Vanilla HTML/CSS, Tailwind CSS, React Native (`StyleSheet`), Vue 3 (SFC `<script setup>`), and Svelte 5 (`$props()`), plus complete standalone `.zip` project packaging.
 - **5 Canonical Design System Themes**:
   - 🌲 `emerald`: Emerald Forest (Primary brand preset)
   - 🌙 `dark`: Midnight Dark
