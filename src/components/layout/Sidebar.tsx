@@ -6,6 +6,17 @@ import { usePathname } from 'next/navigation';
 import { useAppStore } from '@/stores/appStore';
 import { CANONICAL_PROJECTS } from '@/data/projects/canonicalRegistry';
 
+import { 
+  Home, 
+  Terminal, 
+  FolderKanban, 
+  Palette, 
+  Star, 
+  Clock, 
+  Settings, 
+  BookOpen 
+} from 'lucide-react';
+
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { sidebarOpen, setSidebarOpen, favorites, recentProjects } = useAppStore();
@@ -17,14 +28,14 @@ export const Sidebar: React.FC = () => {
   };
 
   const navLinks = [
-    { href: '/', label: 'Overview', icon: '🏠' },
-    { href: '/playground', label: 'Component Studio', icon: '⚡' },
-    { href: '/projects', label: 'All 30 Projects', icon: '📦' },
-    { href: '/studios', label: 'Creative Studios', icon: '🎨' },
-    { href: '/favorites', label: `Favorites (${favorites.length})`, icon: '⭐' },
-    { href: '/recent', label: 'Recently Opened', icon: '🕒' },
-    { href: '/settings', label: 'Preferences', icon: '⚙️' },
-    { href: '/about', label: 'About & Roadmap', icon: '📖' }
+    { href: '/', label: 'Overview', icon: Home },
+    { href: '/playground', label: 'Component Studio', icon: Terminal },
+    { href: '/projects', label: 'All 30 Projects', icon: FolderKanban },
+    { href: '/studios', label: 'Creative Studios', icon: Palette },
+    { href: '/favorites', label: `Favorites (${favorites.length})`, icon: Star },
+    { href: '/recent', label: 'Recently Opened', icon: Clock },
+    { href: '/settings', label: 'Preferences', icon: Settings },
+    { href: '/about', label: 'About & Roadmap', icon: BookOpen }
   ];
 
   const categories = [
@@ -76,6 +87,7 @@ export const Sidebar: React.FC = () => {
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           {navLinks.map((item) => {
             const isActive = pathname === item.href;
+            const IconComp = item.icon;
             return (
               <Link
                 key={item.href}
@@ -95,7 +107,7 @@ export const Sidebar: React.FC = () => {
                   borderLeft: isActive ? '3px solid var(--accent-primary)' : '3px solid transparent'
                 }}
               >
-                <span>{item.icon}</span>
+                <IconComp size={16} />
                 <span>{item.label}</span>
               </Link>
             );

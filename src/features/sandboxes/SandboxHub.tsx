@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { SANDBOX_REGISTRY, SandboxItem } from './sandboxRegistry';
 import { SandboxModal } from './SandboxModal';
+import { SandboxVectorIcon } from './SandboxVectorIcon';
 import interactiveRendered from '@/data/projects/interactive-rendered.json';
 
 // Embedded Studio Components
@@ -237,7 +238,6 @@ export const SandboxHub: React.FC<SandboxHubProps> = ({ onShowToast }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               <span
                 style={{
-                  fontSize: '1.25rem',
                   width: '38px',
                   height: '38px',
                   borderRadius: '8px',
@@ -245,10 +245,11 @@ export const SandboxHub: React.FC<SandboxHubProps> = ({ onShowToast }) => {
                   border: '1px solid var(--border-color)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  color: 'var(--accent-primary)'
                 }}
               >
-                {activeInlineSandbox.icon}
+                <SandboxVectorIcon iconId={activeInlineSandbox.id} size={20} />
               </span>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -373,7 +374,6 @@ export const SandboxHub: React.FC<SandboxHubProps> = ({ onShowToast }) => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
                       <span
                         style={{
-                          fontSize: '1.2rem',
                           width: '36px',
                           height: '36px',
                           borderRadius: '8px',
@@ -381,10 +381,12 @@ export const SandboxHub: React.FC<SandboxHubProps> = ({ onShowToast }) => {
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          border: '1px solid var(--border-color)'
+                          border: '1px solid var(--border-color)',
+                          color: 'var(--accent-primary)',
+                          flexShrink: 0
                         }}
                       >
-                        {item.icon}
+                        <SandboxVectorIcon iconId={item.id} size={18} />
                       </span>
                       <div>
                         <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>

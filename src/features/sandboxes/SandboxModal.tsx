@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { SandboxItem } from './sandboxRegistry';
+import { SandboxVectorIcon } from './SandboxVectorIcon';
 import interactiveRendered from '@/data/projects/interactive-rendered.json';
 
 // Direct Studios Components
@@ -141,7 +142,6 @@ export const SandboxModal: React.FC<SandboxModalProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span
               style={{
-                fontSize: '1.4rem',
                 width: '42px',
                 height: '42px',
                 borderRadius: '10px',
@@ -149,10 +149,12 @@ export const SandboxModal: React.FC<SandboxModalProps> = ({
                 border: '1px solid var(--border-color)',
                 display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                color: 'var(--accent-primary)',
+                flexShrink: 0
               }}
             >
-              {sandbox.icon}
+              <SandboxVectorIcon iconId={sandbox.id} size={22} />
             </span>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

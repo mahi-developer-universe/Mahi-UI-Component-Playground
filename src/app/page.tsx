@@ -212,7 +212,7 @@ export default function HomePage() {
                 transition: 'all 0.15s ease'
               }}
             >
-              Playground ✨
+              Playground
             </button>
             <button
               onClick={() => setActiveTab('projects')}
@@ -244,7 +244,7 @@ export default function HomePage() {
                 transition: 'all 0.15s ease'
               }}
             >
-              Studios 🎨
+              Studios
             </Link>
             <Link
               href="/about"
