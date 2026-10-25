@@ -41,6 +41,8 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.64.0",
+    "@types/jszip": "^3.4.0",
+    "@types/node": "^26.6.5",
     "@types/jszip": "^3.4.1",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
